@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap');
+.app-logo {
+    background-image: url('./assets/logo.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    overflow: visible;
+    width: 56px;
+    height: 56px;
+   
+}
+.logo-text {
+    font-size:clamp(12px,5vw,24px);
+    font-weight: 600;
+
+    z-index: 999;
+    letter-spacing: .25px;
+    white-space: nowrap;
+    font-family: 'Inter';
+    text-shadow: 2px 4px 2px 4px rgba(0,0,0,0.25);
+    transition: all 0.2s linear;
+    background: -webkit-linear-gradient(right,rgb(238, 238, 238), rgb(210, 210, 210));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.logo-text-container {
+    padding-left:4px;
+    align-items: center;
+    padding-top: 2px;
+}
+.logo-container {
+    flex: 1;
+    flex-direction: row;
+    align-items: center;
+    display: flex;
+    height:80px;
+    padding-left: 3.75em;
+    
+}
