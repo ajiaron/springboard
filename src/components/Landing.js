@@ -2,6 +2,7 @@ import React, {useState, useEffect, useRef} from "react"
 import './Landing.scss'
 import Navbar from "./Navbar";
 import SideBar from "./SideBar";
+import { BsStars } from 'react-icons/bs'
 import { Link } from "react-router-dom";
 import { useInView } from 'react-intersection-observer';
 
@@ -47,18 +48,51 @@ export default function Landing() {
                     {/* grid content */}
                     <div className="grid-content">
                         <div className="grid-content-main">
+                            <div className="grid-main-text-container">
+                                <p className="grid-main-text">
+                                    Discover
+                                </p>
+                            </div>
+          
                         </div>
                         <div className="grid-pair">
                             <div className="grid-content-item">
+                                <div className="grid-item-text-container-alt">
+                                    <p className="grid-item-text-alt">
+                                        AI <BsStars className="star-icon"/><br/>Support
+                                    </p>
+                                    
+                                </div>
+                       
                             </div>
                             <div className="grid-content-item">
+                                <div className="grid-item-text-container">
+                                    <p className="grid-item-text">
+                                        Your<br/>Donations
+                                    </p>
+                                </div>
+                
                             </div>
                         </div>
                         <div className="grid-pair">
                             <div className="grid-content-item-low">
+                                
+                                <div className="grid-item-text-container-bottom">
+                                    <p className="grid-item-text-bottom">
+                                      FAQ's<p className="dash-symbol"> —</p><br/>About Us
+                                    </p>
+                                </div>
+                          
                             </div>
+
                             <div className="grid-content-item-low">
+                                <div className="grid-item-text-container-bottom">
+                                    <p className="grid-item-text-alt">
+                                    Future<br/>Releases
+                                    </p>
+                                </div>
                             </div>
+
                         </div>
                     </div>
                     <SideBar/>
@@ -82,14 +116,84 @@ export default function Landing() {
                         </p>
                     </div>
                     <div className="subcontent-container">
-                        <div className="subcontent-item-container">
+
+                        <div className="subcontent-item-container hr-item">
+                            <div className="subcontent-item-category">
+                                <p className="category-text category-hr">
+                                    Human {'&'} Civil Rights
+                                </p>
+                            </div>
+                            <div className="subcontent-item-figure">
+                                <p className="subcontent-figure-text">
+                                    100.0
+                                </p>
+                 
+                            </div>
+                            <div className="subcontent-item-name">
+                                <p className="subcontent-name-text">
+                                    <p className="charity-name">Equal Justice Initiative</p> earned a <br/>perfect financial score of 100.
+                                </p>
+                            </div>
                         </div>
-                        <div className="subcontent-item-container">
+
+                        <div className="subcontent-item-container education-item">
+                            <div className="subcontent-item-category">
+                                    <p className="category-text category-ed">
+                                        Education
+                                    </p>
+                                </div>
+                                <div className="subcontent-item-figure">
+                                    <p className="subcontent-figure-text">
+                                        1st
+                                    </p>
+                     
+                                 
+                                </div>
+                                <div className="subcontent-item-name">
+                                    <p className="subcontent-name-text">
+                                        The <p className="charity-name">Kids In Need Foundation </p> has the lowest administrative expenses, at
+                                        <br/>.2% of their contributions.
+                                    </p>
+                                </div>
+                            </div>
+
+                        <div className="subcontent-item-container health-item">
+                            <div className="subcontent-item-category">
+                                <p className="category-text category-h">
+                                    Health
+                                </p>
+                            </div>
+                            <div className="subcontent-item-figure">
+                                <p className="subcontent-figure-text">
+                                    693M
+                                </p>
+
+                            </div>
+                            <div className="subcontent-item-name">
+                                <p className="subcontent-name-text">
+                                    The <p className="charity-name">American Heart Association </p>has raised over 693m for the highest contribution total.
+                                </p>
+                            </div>
                         </div>
-                        <div className="subcontent-item-container">
+
+                        <div className="subcontent-item-container environment-item">
+                            <div className="subcontent-item-category">
+                                <p className="category-text category-ev">
+                                    Environment
+                                </p>
+                            </div>
+                            <div className="subcontent-item-figure">
+                                <p className="subcontent-figure-text">
+                                    100.0
+                                </p>
+                            </div>
+                            <div className="subcontent-item-name">
+                                <p className="subcontent-name-text">
+                                    <p className="charity-name">Conservation International </p> earned a perfect accountability score of 100.
+                                </p>
+                            </div>
                         </div>
-                        <div className="subcontent-item-container">
-                        </div>
+
                     </div>
                 </div>
 
@@ -109,14 +213,75 @@ export default function Landing() {
                         </p>
                     </div>
                     <div className="subcontent-container-bottom">
+
                         <div className="subcontent-item-container-bottom">
+
+                            <div className="cause-icon-container">
+                                <div className="cause-icon-wrapper hand-wrapper">
+                                    <div className="hand-icon">
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="cause-title-container">
+                                <p className="cause-title">
+                                    Human Rights {'&'} Services
+                                </p>
+                            </div>
+                            <div className="cause-description-container">
+                                <p className="cause-description">
+                                    Charities in this category provide support for shelter and crisis services, youth development, and civil rights advocacy. 
+                                </p>
+                            </div>
+
                         </div>
-                        <div className="subcontent-item-container-bottom">
-                        </div>
-                        <div className="subcontent-item-container-bottom">
-                        </div>
+               
                        
+                      
+          
+                   
+                        <div className="subcontent-item-container-bottom">
+                        <div className="cause-icon-container">
+                                <div className="cause-icon-wrapper sprout-wrapper">
+                                    <div className="sprout-icon">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="cause-title-container">
+                                <p className="cause-title">
+                                    Environment {'&'} Wildlife
+                                </p>
+                            </div>
+                            <div className="cause-description-container">
+                                <div className="cause-description">
+                                    Environmentally focused organizations assist in the conservation of wildlife, as well as our local parks and gardens.
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div className="subcontent-item-container-bottom">
+                            <div className="cause-icon-container">
+                                <div className="cause-icon-wrapper pencil-wrapper">
+                                    <div className="pencil-icon">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="cause-title-container">
+                                <p className="cause-title">
+                                    Education {'&'} Research
+                                </p>
+                            </div>
+                            <div className="cause-description-container">
+                                <div className="cause-description">
+                                    Here, institutions are working to improve scholarships, financial support, and special education programs.
+                                </div>
+                            </div>
+                            
+                        </div>
+
                     </div>
+
                 </div>
 
             </div>
