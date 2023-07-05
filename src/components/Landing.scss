@@ -49,6 +49,11 @@ p {
   flex: 1;
   overflow: visible;
 }
+.main-content-end {
+  min-height: 40vh;
+  min-width: 100%;
+
+}
 .content-container {
   //flex:1;
   display:flex;
@@ -355,7 +360,7 @@ p {
   letter-spacing: -.25px;
   text-shadow: 2px 4px 2px 4px rgba(0,0,0,0.25);
   font-weight: 600;
-  background: -webkit-linear-gradient(-220deg,rgba(255, 255, 255,1),rgba(215, 215, 215,.95));
+  background: -webkit-linear-gradient(-220deg,rgba(255, 255, 255,1),rgba(215, 215, 215,1));
   -webkit-background-clip: text;
    -webkit-text-fill-color: transparent;
 }
@@ -675,4 +680,189 @@ p {
   font-weight: 500;
   color:#bababa;
   line-height: 24px;
+}
+.content-end-container {
+  min-width: 55%;
+  display: block;
+  padding-left: 7.15vw;
+
+}
+.main-content-end-wrapper {
+  //display: flex;
+}
+.content-end-header-wrapper {
+  width: 25%;
+}
+.content-end-header {
+  color:#fff;
+  font-family: 'Inter';
+  font-weight: 600;
+  font-size:clamp(12px, 3vw, 16px)
+}
+.content-end-text-wrapper {
+  min-width: 100%;
+}
+.content-end-text {
+  font-size: clamp(20px, 5vw, 40px);
+  color:#efefef;
+  font-family: 'Inter';
+  font-weight: 700;
+  padding-top:2vh;
+  letter-spacing: -.25px;
+}
+.content-end-subtext-wrapper {
+  min-width: 100%;
+  display: block;
+  padding-top:2.5vh;
+}
+.content-end-subtext {
+  color:#ababab;
+  font-size:clamp(12px, 3.5vw, 18px);
+  font-family: 'Rubik';
+  font-weight: 500;
+}
+.end-button-container {
+  width: 30%;
+  padding-top:4vh;
+  height: 6vh;
+  display: flex;
+  justify-content: space-evenly;
+  padding-left:7.5vw;
+  gap:1.25vw;
+
+}
+.getting-started-button {
+  border-radius: 12px;
+  //border:2px solid rgb(221, 175, 60);
+  background:linear-gradient(-135deg, rgb(214, 146, 50),rgb(232, 177, 95)) ;
+  display: flex;
+  height: 100%;
+  align-items: center;
+  min-width: 48%;
+  justify-content: center;
+}
+.getting-started-text {
+  color:#101010;
+  font-size:clamp(12px, 3vw, 18.5px);
+  font-family: 'Inter';
+  letter-spacing: -.25px;
+  font-weight: 500;
+}
+.explore-else-button {
+  border-radius: 12px;
+ // border:1.5px solid rgb(220, 173, 104);
+  border:1.5px solid rgb(206, 169, 129);
+  min-width: 48%;
+  display: flex;
+  height: 94.5%;
+  margin-left: .375em;
+  align-items: center;
+  justify-content: center;
+}
+.explore-else-text {
+  color:#efefef;
+  font-size:clamp(12px, 3vw, 18px);
+  font-family: 'Inter';
+  letter-spacing: -.5px;
+  font-weight: 500;
+}
+.icon-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 4vw;
+  height: 3vw;
+  width: 92.5%;
+  position: relative;
+  padding-bottom: 3vh;
+  gap:2.65vw;
+
+}
+.git-logo-button {
+  outline: none;
+  border:none;
+  max-width: fit-content;
+  max-height: fit-content;
+  border-radius: 2.2vw;
+  background-color: transparent;
+}
+.mail-button {
+  outline: none;
+  border:none;
+  max-width: fit-content;
+  max-height: fit-content;
+  border-radius: 2.2vw;
+  background-color: transparent;
+}
+.linkedin-button {
+  outline: none;
+  border:none;
+  max-width: fit-content;
+  max-height: fit-content;
+  border-radius: 2.2vw;
+  background-color: transparent;
+}
+.git-logo {
+  background-image: url('./assets/github-white.svg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 2.2vw;
+  height:2.2vw;
+}
+.linkedin-logo {
+  width: 2.2vw;
+  height:2.2vw;
+  background-image: url('./assets/linkedin.svg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.mail-icon{
+  width: 2.25vw;
+  height:2.25vw;
+  color:#fff;
+  background-image: url('./assets/gmail.svg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.logo-border {
+  display: flex;
+  min-width: 100%;
+  overflow: hidden;
+  min-height: 2vh;
+  justify-content: center;
+}
+.app-logo-footer {
+  background-image: url('./assets/logo.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  overflow: hidden;
+  width: 32px;
+  height: 32px; 
+}
+
+.app-logo-footer:before,
+.app-logo-footer:after {
+  background-color:#444444;
+  content: "";
+  display: inline-block;
+  height: 1px;
+  position: relative;
+
+  vertical-align: middle;
+  width: 50%;
+}
+
+.app-logo-footer:before {
+  right: .8em;
+ // height:0px;
+  margin-left: -50%;
+  
+}
+
+.app-logo-footer:after {
+  left: .8em;
+  margin-right: -50%;
 }

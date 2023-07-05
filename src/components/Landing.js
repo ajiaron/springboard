@@ -5,6 +5,7 @@ import SideBar from "./SideBar";
 import { BsStars } from 'react-icons/bs'
 import { Link } from "react-router-dom";
 import { useInView } from 'react-intersection-observer';
+import { FiMail } from "react-icons/fi";
 
 export default function Landing() {
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -196,11 +197,9 @@ export default function Landing() {
 
                     </div>
                 </div>
-
-              
             </div>
             <div className="main-content-bottom">
-            <div className="subcontent-wrapper-bottom">
+                <div className="subcontent-wrapper-bottom">
                     <div className="content-lower-header">
                         <p className="content-lower-text">
                             Find Your Cause
@@ -284,6 +283,59 @@ export default function Landing() {
 
                 </div>
 
+            </div>
+            <div className="main-content-end">
+                <div className="main-content-end-wrapper">
+
+      
+                    <div className="content-end-container">
+                        <div className="content-end-header-wrapper">
+                            <p className="content-end-header">
+                                GETTING STARTED
+                            </p>
+
+                        </div>
+                        <div className="content-end-text-wrapper">
+                            <p className="content-end-text">
+                                A little goes a long way.
+                            </p>
+                        </div>
+                        <div className="content-end-subtext-wrapper">
+                            <p className="content-end-subtext">
+                                Every cent you'll put down in will go the charities or non-profits of your choosing. 
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div className="end-button-container">
+                        <div className="getting-started-button">
+                            <p className="getting-started-text">
+                                Get Started
+                            </p>
+                        </div>
+                        <div className="explore-else-button">
+                            <p className="explore-else-text">
+                                Feedback
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="icon-container">
+                <Link className="git-logo-button" to="https://github.com/ajiaron">
+                <div className="git-logo"></div>
+                </Link>
+                <Link className="mail-button"  to={'#'} onClick={(e)=>{
+                window.location.href = 'mailto:aaronjiang3942@gmail.com';
+                e.preventDefault();
+                }}>
+                <div className="mail-icon"/>
+                </Link>
+                
+                <Link className="linkedin-button" to="https://www.linkedin.com/in/aaronjiang01/">
+                    <div className="linkedin-logo"></div>
+                </Link>
             </div>
     </div>
     )
