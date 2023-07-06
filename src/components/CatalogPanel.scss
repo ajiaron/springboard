@@ -1,0 +1,150 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap');
+p {
+    margin: 0;
+    z-index: 999;
+  }
+  
+  html {
+    width: 100vw;
+    height: 100vh;
+    padding: 0;  
+  }
+.catalog-panel-container {
+    min-width: 100%;
+    height: 70vh;
+    background-color: #252525;
+    border-radius: 16px;
+    padding-top:3.5vh;
+    display: flex;
+
+    flex-direction: column;
+}
+.category-filter-title {
+    color:#eee;
+    font-size:clamp(12px, 2.5vw, 14px);
+    font-family: 'Inter';
+    padding-left: 2vw;
+    font-weight: 600;
+}
+
+.category-filter-container {
+    padding-top:.75vh;
+    min-width: 100%;
+    padding-left: 2vw;
+    display: flex;
+    flex-direction: column;
+
+
+}
+.catalog-category-wrapper {
+    max-width: 80%;
+   // background-color: #4a4a4a;
+    min-height: fit-content;
+    padding-top:1.85vh;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;   
+    align-items: center;
+}
+.catalog-category-text {
+    color:#bcbcbc;
+    line-height: 16px;
+    font-size:clamp(12px, 2.5vw, 15px);
+    font-family: 'Rubik';
+    font-weight: 400;
+}
+.checkbox {
+    width: 16px;
+    height: 16px;
+    background-color: #4a4a4a;
+}
+.category-filter-title {
+    color:#eee;
+    font-size:clamp(12px, 2.5vw, 15px);
+    font-family: 'Inter';
+    padding-left: 2vw;
+    font-weight: 600;
+}
+
+.category-filter-title:before,
+.category-filter-title:after {
+  background-color:#656565;
+  content: "";
+  display: inline-block;
+  height: 1px;
+  position: relative;
+
+  vertical-align: middle;
+  width: 57%;
+}
+
+.category-filter-title:before {
+  right: .8em;
+  height:0px;
+ 
+  margin-left: -57%;
+  
+}
+
+.category-filter-title:after {
+  left: 1em;
+  margin-right: -60%;
+}
+.middle-filter {
+    margin-top:3vh;
+}
+.middle-filter:before,
+.middle-filter:after {
+  background-color:#656565;
+  content: "";
+  display: inline-block;
+  height: 1px;
+  position: relative;
+
+  vertical-align: middle;
+  width: 68%;
+}
+
+.middle-filter:before {
+  right: .5em;
+  height:0px;
+ 
+  margin-left: -68%;
+  
+}
+
+.middle-filter:after {
+  left: 1em;
+  margin-right: -60.5%;
+}
+.bottom-filter {
+    margin-top:3.5vh;
+}
+.bottom-filter:before,
+.bottom-filter:after {
+  background-color:#656565;
+  content: "";
+  display: inline-block;
+  height: 1px;
+  position: relative;
+
+  vertical-align: middle;
+  width: 70%;
+}
+
+.bottom-filter:before {
+  right: .8em;
+  height:0px;
+ 
+  margin-left: -70%;
+  
+}
+
+.bottom-filter:after {
+  left: 1.125em;
+  margin-right: -70%;
+}
+.first-category {
+    padding-top: 1.25vh;
+}

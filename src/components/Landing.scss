@@ -40,7 +40,7 @@ p {
   overflow: visible;
 }
 .main-content-bottom {
-  min-height: 68vh;
+  min-height: 70.5vh;
   align-items: center;
   min-width: 100vw;
   background-color: #151515;
@@ -50,7 +50,7 @@ p {
   overflow: visible;
 }
 .main-content-end {
-  min-height: 40vh;
+  min-height: 38vh;
   min-width: 100%;
 
 }
@@ -100,18 +100,18 @@ p {
 }
 .hero-subtext-container {
   width: 90%;
-  padding-top: 1.25vh;
+  padding-top: 1.2vh;
 }
 .hero-subtext {
-  font-size:clamp(12px, 8vw, 17px);
-  font-weight: 600;
+  font-size:clamp(12px, 8vw, 17.5px);
+  font-weight: 400;
   line-height: 28px;
-  
+  letter-spacing: -.25px;
   font-family: 'Rubik';
   color:#a0a0a0;
 }
 .hero-button-container {
-  max-width: 32.15vw;
+  max-width: 32.175vw;
   height: 5.75vh;
   margin-top: 8.5vh;
   display: flex;
@@ -370,7 +370,7 @@ p {
   font-size: clamp(12px, 4vw, 18px);
   line-height: 28px;
   font-family: 'Rubik';
-  font-weight: 500;
+  font-weight: 300;
 }
 
 
@@ -387,13 +387,15 @@ p {
   display: flex;
   align-items: flex-end;
   padding-left: 1.5vw;
-  padding-top:2vh
+  padding-top:2vh;
 }
 .category-text {
   font-size:clamp(12px, 4vw, 14px);
   font-family: 'Rubik';
-  font-weight:600;
+  font-weight:400;
+  letter-spacing: -.25px;
 
+  transform: scaleY(1.035);
 }
 .subcontent-item-figure {
   width: 100%;
@@ -429,8 +431,9 @@ p {
 .charity-name {
   font-style: italic;
   display: inline;
-  font-weight: 600;
+  font-weight: 400;
   color:#fff;
+  letter-spacing: -.25px;
   padding-right:1.5px;
 
 }
@@ -438,7 +441,7 @@ p {
   font-size:clamp(10px, 3vw, 15px);
   font-family: 'Rubik';
   line-height: 22px;
-  font-weight:500;
+  font-weight:300;
   vertical-align: bottom;
   align-self: flex-end;
   padding-right: 5px;
@@ -446,16 +449,16 @@ p {
   color:#efefef;
 }
 .category-hr {
-  color:cornflowerblue;
+  color:rgb(105, 154, 247);
 }
 .category-ed{
-  color:goldenrod;
+  color:rgb(227, 172, 34);
 }
 .category-h{
-  color:lightcoral;
+  color:rgb(243, 130, 130);
 }
 .category-ev {
-  color:#3dae94;
+  color:#40b499;
 
 }
 
@@ -677,7 +680,7 @@ p {
 .cause-description {
   font-family: 'Rubik';
   font-size: clamp(10px, 4vw, 15px);
-  font-weight: 500;
+  font-weight: 300;
   color:#bababa;
   line-height: 24px;
 }
@@ -719,7 +722,7 @@ p {
   color:#ababab;
   font-size:clamp(12px, 3.5vw, 18px);
   font-family: 'Rubik';
-  font-weight: 500;
+  font-weight: 300;
 }
 .end-button-container {
   width: 30%;
@@ -736,10 +739,14 @@ p {
   //border:2px solid rgb(221, 175, 60);
   background:linear-gradient(-135deg, rgb(214, 146, 50),rgb(232, 177, 95)) ;
   display: flex;
+  transition: all .15s linear;
   height: 100%;
   align-items: center;
   min-width: 48%;
   justify-content: center;
+}
+.getting-started-button:hover {
+  filter: brightness(1.15);
 }
 .getting-started-text {
   color:#101010;
@@ -755,9 +762,13 @@ p {
   min-width: 48%;
   display: flex;
   height: 94.5%;
+  transition: all .15s linear;
   margin-left: .375em;
   align-items: center;
   justify-content: center;
+}
+.explore-else-button:hover {
+  filter:brightness(1.25)
 }
 .explore-else-text {
   color:#efefef;
@@ -806,12 +817,12 @@ p {
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
-  width: 2.2vw;
-  height:2.2vw;
+  width: 2.1vw;
+  height:2.1vw;
 }
 .linkedin-logo {
-  width: 2.2vw;
-  height:2.2vw;
+  width: 2.1vw;
+  height:2.1vw;
   background-image: url('./assets/linkedin.svg');
   background-position: center;
   background-size: cover;
@@ -826,43 +837,6 @@ p {
   background-size: cover;
   background-repeat: no-repeat;
 }
-.logo-border {
-  display: flex;
-  min-width: 100%;
-  overflow: hidden;
-  min-height: 2vh;
-  justify-content: center;
-}
-.app-logo-footer {
-  background-image: url('./assets/logo.svg');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  overflow: hidden;
-  width: 32px;
-  height: 32px; 
-}
-
-.app-logo-footer:before,
-.app-logo-footer:after {
-  background-color:#444444;
-  content: "";
-  display: inline-block;
-  height: 1px;
-  position: relative;
-
-  vertical-align: middle;
-  width: 50%;
-}
-
-.app-logo-footer:before {
-  right: .8em;
- // height:0px;
-  margin-left: -50%;
-  
-}
-
-.app-logo-footer:after {
-  left: .8em;
-  margin-right: -50%;
+.discover-link {
+  text-decoration: none;
 }

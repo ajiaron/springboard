@@ -7,12 +7,16 @@ export default function Navbar() {
     const location = useLocation()
     return (
         <div className="logo-container">
-            <div className="app-logo"/>
+            <Link to ='/' className="landing-link">
+                <div className="app-logo"/>
+
             <div className="logo-text-container">
                 <p className="logo-text">
                     Springboard
                 </p> 
             </div>
+            </Link>
+          
         </div>
     )
 }

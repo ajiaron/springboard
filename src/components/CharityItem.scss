@@ -1,0 +1,131 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;600&display=swap');
+p {
+    margin: 0;
+    z-index: 999;
+}  
+html {
+    width: 100vw;
+    height: 100vh;
+    padding: 0;  
+}
+.charity-item-container {
+    background-color: #252525;
+    display: flex;
+    align-items: center;
+    min-width: 100%;
+    height:16.25vh;
+    border-radius: 30px;
+}
+.charity-item-content {
+    display: flex;
+}
+.charity-item-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 75%;
+    padding-bottom: .25em;
+ //   padding-top: .125em;
+    padding-left: .7vw;
+    justify-content: space-evenly;
+    min-height: 100%;
+
+
+}
+.charity-item-title-wrapper {
+
+    padding-left: 1.375vw;
+    display: flex;
+}
+.charity-tag-title {
+    color:#efefef;
+    font-size:clamp(16px, 4vw, 20px);
+    font-family: "Inter";
+    letter-spacing: -.25px;
+    font-weight: 800;
+}
+.charity-categories-container {
+    border-radius: 5px;
+    background-color: #d75c5c99;
+    align-items: center;
+    max-width: fit-content;
+    height:1.625em;
+    margin-top: .65em;
+    padding-left:12px;
+    padding-right:12px;
+    margin-left: 1.375vw;
+    max-height: fit-content;
+    display: flex;
+    justify-content: center;
+}
+.charity-category-text {
+    font-family: 'Rubik';
+    color:#fff;
+    font-weight: 500;
+    font-size:clamp(10px, 1.75vw, 14px)
+}
+.charity-figure-container {
+    margin-left: auto;
+    margin-right: 6.5%;
+//    margin-right: auto;
+    
+
+    display: flex;
+}
+.charity-score-container {
+    min-width: 6.2vw;
+    
+    background-color: transparent;
+    border:2px solid #6a6a6a;
+    min-height: 6.25vw;
+    border-radius: 6.25vw;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+.overall-score {
+    color:#eee;
+   // letter-spacing: -.5px;
+    font-size:clamp(12px, 2vw, 24px);
+    font-family: "Inter";
+    font-weight: 800;
+}
+.overall-score-text {
+    color:#ababab;
+    font-family: 'Rubik';
+    font-weight: 600;
+    padding-right: .5vw;
+    align-items: center;
+    font-size: clamp(10px, 2vw, 14px);
+}
+.charity-categories-wrapper {
+    display: flex;
+    align-items: center;
+
+    flex-direction: row;
+}
+.size-wrapper {
+//    max-height:1.625em;
+    margin-left: .75vw;
+    align-self: center;
+    background-color: #9b7a27;
+   // margin-bottom:.25px;
+}
+
+.charity-location-wrapper {
+    display: flex;
+
+    padding-left: 1.375vw;
+}
+.charity-location-text {
+    color:#aaaaaa;
+    font-size:clamp(12px, 3.5vw, 14.5px);
+    font-family: 'Rubik';
+    font-weight: 400;
+    line-height: 26px;
+  }
+  .catalog-feedback-link {
+    color:rgb(238, 195, 88);
+    text-decoration: none;
+
+  }

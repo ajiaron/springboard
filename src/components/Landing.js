@@ -41,30 +41,27 @@ export default function Landing() {
                                 </p>
                             </div>
                         </div>
-
-                        
-
                     </div>
 
                     {/* grid content */}
                     <div className="grid-content">
-                        <div className="grid-content-main">
-                            <div className="grid-main-text-container">
-                                <p className="grid-main-text">
-                                    Discover
-                                </p>
+                        <Link className="discover-link" to='/catalog'>
+                            <div className="grid-content-main">
+                                <div className="grid-main-text-container">
+                                    <p className="grid-main-text">
+                                        Discover
+                                    </p>
+                                </div>
                             </div>
-          
-                        </div>
+                        </Link>
+
                         <div className="grid-pair">
                             <div className="grid-content-item">
                                 <div className="grid-item-text-container-alt">
                                     <p className="grid-item-text-alt">
                                         AI <BsStars className="star-icon"/><br/>Support
                                     </p>
-                                    
                                 </div>
-                       
                             </div>
                             <div className="grid-content-item">
                                 <div className="grid-item-text-container">

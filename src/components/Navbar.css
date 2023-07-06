@@ -38,3 +38,8 @@
     padding-left: 3.75em;
     
 }
+.landing-link {
+    display: flex;
+    text-decoration: none;
+    align-items: center;
+}
