@@ -8,43 +8,85 @@ import { Link } from "react-router-dom";
 import { useInView } from 'react-intersection-observer';
 import { FiMail } from "react-icons/fi";
 
+const ToggleSwitch = ({label, onToggleSwitch, onRemoveItem}) => {
+    const [isToggled, setIsToggled] = useState(false)
+    function handleClick() {
+        if (isToggled) {
+            onRemoveItem(label)
+        }
+        else {
+            onToggleSwitch(label)
+        }
+        setIsToggled(!isToggled)
+    }
+        return (
+          <div className="toggle-switch-container">
+            <div className="toggle-switch">
+              <input type="checkbox" className="checkbox" onChange={handleClick}
+                     name={label} id={label} />
+              <label className="label" htmlFor={label}>
+                <span className="inner" />
+                <span className="switch" />
+              </label>
+            </div>
+          </div>
+        );
+}
+
 export default function CatalogPanel() {
+    const [category, setCategory] = useState([])
+    const [size, setSize] = useState([])
+    const [filter, setFilter] = useState([])
+    function handleTest() {
+        console.log(category)
+        console.log(size)
+        console.log(filter)
+    }
     return (
         <div className='catalog-panel-container'>
-            <p className='category-filter-title'>
-                Categories
-            </p>
+ 
+                <p className='category-filter-title'>
+                    Categories
+                </p>
+
+
             <div className='category-filter-container'>
          
                 <div className='catalog-category-wrapper first-category'>
                     <p className='catalog-category-text'>
                         Human Rights {'&'} Services
                     </p>
-                    <input className='checkbox' type='checkbox'/>
+                    <ToggleSwitch label={'Human'} onToggleSwitch={(e)=>setCategory([...category, e])}
+                        onRemoveItem={(e)=>setCategory(category.filter(item=>item !== e))}/>
                 </div>
                 <div className='catalog-category-wrapper'>
                     <p className='catalog-category-text'>
                         Education
                     </p>
-                    <input className='checkbox' type='checkbox'/>
+                    <ToggleSwitch label={'Education'} onToggleSwitch={(e)=>setCategory([...category, e])}
+                        onRemoveItem={(e)=>setCategory(category.filter(item=>item !== e))}/>
                 </div>
                 <div className='catalog-category-wrapper'>
                     <p className='catalog-category-text'>
                         Environment {'&'} Animals
                     </p>
-                    <input className='checkbox' type='checkbox'/>
+                    <ToggleSwitch label={'Environment'} onToggleSwitch={(e)=>setCategory([...category, e])}
+                        onRemoveItem={(e)=>setCategory(category.filter(item=>item !== e))}/>
                 </div>
                 <div className='catalog-category-wrapper'>
                     <p className='catalog-category-text'>
                         Healthcare
                     </p>
-                    <input className='checkbox' type='checkbox'/>
+                    <ToggleSwitch label={'Health'} onToggleSwitch={(e)=>setCategory([...category, e])}
+                        onRemoveItem={(e)=>setCategory(category.filter(item=>item !== e))}/>
+                 {  /* <input className='checkbox' type='checkbox'/> */}
                 </div>
                 <div className='catalog-category-wrapper'>
                     <p className='catalog-category-text'>
                         Research {'&'} Public Policy
                     </p>
-                    <input className='checkbox' type='checkbox'/>
+                    <ToggleSwitch label={'Research'} onToggleSwitch={(e)=>setCategory([...category, e])}
+                        onRemoveItem={(e)=>setCategory(category.filter(item=>item !== e))}/>
                 </div>
             </div>
             <p className='category-filter-title middle-filter'>
@@ -56,19 +98,22 @@ export default function CatalogPanel() {
                         <p className='catalog-category-text'>
                             Small-sized
                         </p>
-                        <input className='checkbox' type='checkbox'/>
+                        <ToggleSwitch label={'small'} onToggleSwitch={(e)=>setSize([...size, e])}
+                            onRemoveItem={(e)=>setSize(size.filter(item=>item !== e))}/>
                     </div>
                     <div className='catalog-category-wrapper'>
                         <p className='catalog-category-text'>
                             Mid-sized
                         </p>
-                        <input className='checkbox' type='checkbox'/>
+                        <ToggleSwitch label={'mid'}  onToggleSwitch={(e)=>setSize([...size, e])}
+                           onRemoveItem={(e)=>setSize(size.filter(item=>item !== e))}/>
                     </div>
                     <div className='catalog-category-wrapper'>
                         <p className='catalog-category-text'>
                             Large-sized
                         </p>
-                        <input className='checkbox' type='checkbox'/>
+                        <ToggleSwitch label={'large'} onToggleSwitch={(e)=>setSize([...size, e])}
+                           onRemoveItem={(e)=>setSize(size.filter(item=>item !== e))}/>
                     </div>
                 </div>
             <p className='category-filter-title bottom-filter'>
@@ -79,20 +124,30 @@ export default function CatalogPanel() {
                         <p className='catalog-category-text'>
                             International
                         </p>
-                        <input className='checkbox' type='checkbox'/>
+                        <ToggleSwitch label={'international'} onToggleSwitch={(e)=>setFilter([...filter, e])}
+                           onRemoveItem={(e)=>setFilter(filter.filter(item=>item !== e))}/>
                     </div>
                     <div className='catalog-category-wrapper'>
                         <p className='catalog-category-text'>
                             Accepting Donations
                         </p>
-                        <input className='checkbox' type='checkbox'/>
+                        <ToggleSwitch label={'accepting'}onToggleSwitch={(e)=>setFilter([...filter, e])}
+                            onRemoveItem={(e)=>setFilter(filter.filter(item=>item !== e))}/>
                     </div>
                     <div className='catalog-category-wrapper'>
                         <p className='catalog-category-text'>
-                            Recommended
+                            Recommended *
                         </p>
-                        <input className='checkbox' type='checkbox'/>
+                        <ToggleSwitch label={'recommended'} onToggleSwitch={(e)=>setFilter([...filter, e])}
+                            onRemoveItem={(e)=>setFilter(filter.filter(item=>item !== e))}/>
                     </div>
+                </div>
+                <div className='test-button-container'>
+                    <button className='test-panel-button' onClick={()=>handleTest()}>
+                        <p className='test-button-text'>
+                            Debug Panel
+                        </p>
+                    </button>
                 </div>
         </div>
     )

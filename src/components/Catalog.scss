@@ -48,21 +48,21 @@
     min-width: 100%;
   }
   .catalog-main-text {
-    font-size: clamp(24px, 6vw, 44px);
+    font-size: clamp(24px, 6vw, 45px);
      color:#efefef;
     font-family: 'Inter';
     font-weight: 700;
-    padding-top:3.5vh;
- 
-    background: -webkit-linear-gradient(220deg,rgba(255, 255, 255,1),rgba(205, 205, 205,.95));
+    padding-top:3vh;
+
+    background: -webkit-linear-gradient(220deg,rgba(255, 255, 255,1),rgba(210, 210, 210,.95));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    letter-spacing: -.35px;
+    letter-spacing: -.5px;
   }
   .catalog-header-subtext-wrapper {
     width: fit-content;
     display: block;
-    padding-top:3.75vh;
+    padding-top:4.25vh;
 
   }
   .catalog-header-subtext {
@@ -70,7 +70,7 @@
     font-size:clamp(12px, 3.5vw, 16px);
     font-family: 'Rubik';
     font-weight: 400;
-    line-height: 30px;
+    line-height: 32px;
   }
   .catalog-feedback-link {
     color:rgb(238, 195, 88);
@@ -78,16 +78,20 @@
 
   }
   .header-space {
-    line-height: 22px;
+    display: block;
+    margin: 22px 0;
+    content:"";
+
   }
+
 .charity-catalog-container {
     min-width: 100vw;
-    min-height:80vh;
-    padding-top:10.5vh;
+    min-height:100vh;
+    padding-top:8.75vh;
     display: flex;
 }
 .charity-tag-container {
-    min-width: 45vw;
+    min-width: 46vw;
     min-height: 100%;
     display: flex;
     flex-direction: column;
@@ -98,7 +102,50 @@
     min-height: fit-content;
 }
 .panel-container {
-    width: 25vw;
+    width: 24vw;
     padding-left: 7vw;
     min-height: 100%;
+}
+.search-catalog-container {
+  display: flex;
+  margin-bottom: .5vh;
+  padding-right: 1.75vw;
+  min-height: 2vh;
+  background-color: #252525;
+  border-radius: 20px;
+  border: rgba(0, 0, 0, 0.15) solid 2px;
+  max-width: 100%;
+}
+.search-catalog {
+  display: block; 
+  height:5.5vh;
+  width: 100%; 
+  border-radius: 20px; 
+  box-shadow: 0 1px 2px 0px rgba(0, 0, 0, 0.1); 
+  border: rgba(0, 0, 0, 0) solid 2px;
+  background-color: #252525;
+  padding-left:1.5vw;
+  outline: none;
+
+  font-size: clamp(12px, 3vw, 14.5px);
+  color:#efefef;
+  font-weight: lighter;
+  padding-top:.25vh;
+  font-family: 'Inter';
+
+ // color:#2a2a2a;
+}
+.search-catalog::placeholder {
+  align-self: center;
+
+
+  font-size: clamp(12px, 3vw, 14.5px);
+}
+.search-icon {
+  color:#8a8a8a;
+  width: 20px;
+  height: 20px;
+  align-self: center;
+
+ // background-color: ;
 }

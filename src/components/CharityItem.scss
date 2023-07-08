@@ -26,7 +26,7 @@ html {
     min-width: 75%;
     padding-bottom: .25em;
  //   padding-top: .125em;
-    padding-left: .7vw;
+    padding-left: .75vw;
     justify-content: space-evenly;
     min-height: 100%;
 
@@ -34,7 +34,7 @@ html {
 }
 .charity-item-title-wrapper {
 
-    padding-left: 1.375vw;
+    padding-left: 1.5vw;
     display: flex;
 }
 .charity-tag-title {
@@ -42,18 +42,17 @@ html {
     font-size:clamp(16px, 4vw, 20px);
     font-family: "Inter";
     letter-spacing: -.25px;
-    font-weight: 800;
+    font-weight: 700;
 }
 .charity-categories-container {
     border-radius: 5px;
-    background-color: #d75c5c99;
     align-items: center;
     max-width: fit-content;
     height:1.625em;
-    margin-top: .65em;
-    padding-left:12px;
-    padding-right:12px;
-    margin-left: 1.375vw;
+    margin-top: .675em;
+    padding-left:11.5px;
+    padding-right:11.5px;
+    margin-left: 1.5vw;
     max-height: fit-content;
     display: flex;
     justify-content: center;
@@ -66,28 +65,45 @@ html {
 }
 .charity-figure-container {
     margin-left: auto;
-    margin-right: 6.5%;
+    margin-right: 5.35%;
 //    margin-right: auto;
-    
-
     display: flex;
 }
 .charity-score-container {
-    min-width: 6.2vw;
-    
-    background-color: transparent;
-    border:2px solid #6a6a6a;
+    min-width: 6.25vw;
+    //background-color: transparent;
+ //   border:2px solid #6a6a6a;
+ //   border:2px solid transparent;
     min-height: 6.25vw;
     border-radius: 6.25vw;
     align-items: center;
     display: flex;
+    box-shadow: 0 0 20px  rgba(100, 100, 100, 0.5); 
     justify-content: center;
+    animation-name: 'animate-ring';
+    animation-duration: 1s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: 1;
+}
+
+  
+
+.progress-ring {
+    border-radius: 6.25vw;
+  //  max-width: 6.25vw;
+  transform: rotateY(180deg) rotate(270deg);
+  //  max-height: 6.25vw;
+    z-index: 1;
+    position: absolute;
+   
 }
 .overall-score {
     color:#eee;
-   // letter-spacing: -.5px;
+    letter-spacing: -.5px;
+
     font-size:clamp(12px, 2vw, 24px);
     font-family: "Inter";
+    z-index: 999;
     font-weight: 800;
 }
 .overall-score-text {
@@ -101,21 +117,21 @@ html {
 .charity-categories-wrapper {
     display: flex;
     align-items: center;
-
+    justify-content: flex-start;
     flex-direction: row;
 }
 .size-wrapper {
-//    max-height:1.625em;
-    margin-left: .75vw;
-    align-self: center;
-    background-color: #9b7a27;
+    max-height:1.625em;
+    margin-left: .75em;
+  //  align-self: center;
    // margin-bottom:.25px;
 }
+
 
 .charity-location-wrapper {
     display: flex;
 
-    padding-left: 1.375vw;
+    padding-left: 1.5vw;
 }
 .charity-location-text {
     color:#aaaaaa;
@@ -125,7 +141,63 @@ html {
     line-height: 26px;
   }
   .catalog-feedback-link {
-    color:rgb(238, 195, 88);
+    color:rgba(238, 195, 88);
     text-decoration: none;
-
   }
+
+.human-container {
+    background-color: rgb(53, 108, 153);
+}  
+.environment-container {
+    background-color: #5abb6fa4;
+}
+.healthcare-container {
+    background-color: #d75c5c99;
+}
+.education-container {
+    background-color: rgba(185, 166, 20, 0.828);
+}
+.research-container {
+    background-color: rgb(50, 114, 110);
+}
+.small-wrapper {
+    background-color: #c875fb99;
+}
+.mid-wrapper {
+    background-color: #f967c199;
+}
+.large-wrapper {
+    background-color: #a76c23;
+}
+.international-wrapper {
+    max-height:1.625em;
+    margin-left: .75em;
+    background-color: #606060;
+}
+
+@keyframes draw-circle {
+    from {
+        stroke-dashoffset: 0; /* Start with fully colored circle */
+      }
+      to {
+        stroke-dashoffset: var(--offset); /* Animate the stroke offset to the given offset */
+      }
+  }
+
+  /*
+  
+  .healthcare-circle {
+    box-shadow: 0 0 20px  rgba(228, 77, 77, 0.4); 
+  }
+  .environment-circle {
+    box-shadow: 0 0 20px  rgba(53, 227, 125, 0.4); 
+  }
+  .human-circle {
+    box-shadow: 0 0 20px  rgba(47, 157, 236, 0.4); 
+  }
+  .education-circle {
+    box-shadow: 0 0 20px  rgba(227, 212, 53, 0.4); 
+  }
+  .research-circle {
+    box-shadow: 0 0 20px rgba(41, 172, 177, 0.4); 
+  }*/
