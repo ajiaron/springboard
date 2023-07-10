@@ -19,7 +19,6 @@ const Circle = ({score, color}) => {
       className="progress-ring"
       width="160"
       height="160">
-
         <circle
         stroke={color}
         fill="transparent"
@@ -48,23 +47,43 @@ const Circle = ({score, color}) => {
         r={radius}
         cx="80"
         cy="80"/>
+          <circle
+        className="back-circle"
+        stroke="#252525" // Choose your desired color
+        fill="transparent"
+        strokeWidth="44"
+        
+        strokeDasharray={`${circumference} ${circumference}`}
+        style={{
+            strokeDashoffset: circumference,
+            animation: `draw-circle 1s ease-in-out forwards`,
+            "--offset": offset, // Set the CSS variable --offset
+            filter: 'url(#circleShadow)',
+          }}
+        r={radius}
+        cx="80"
+        cy="80"/>
     </svg>
   );
 }
 
-export default function CharityItem({title, location, category, size, isInternational, score}) {
+export default function CharityItem({index, charityid, title, location, category, size, isInternational, total, excess, score, url}) {
     function ringColor(category) {
         switch (category) {
             case 'Human':
                 return 'rgb(83, 138, 190)'
             case 'Environment':
                 return 'rgb(48, 162, 97)'
+            case 'Animals':
+                return 'rgb(122, 188, 69)'
             case 'Healthcare':
-                return 'rgb(198, 93, 93)'
+                return 'rgb(198, 83, 93)'
             case 'Education':
                 return 'rgb(200, 153, 35)'
             case 'Research':
                 return 'rgb(63, 159, 152)'
+            case 'Community':
+                return 'rgb(139, 117, 98)'
             default:
                 return '#6a6a6a'
         }
@@ -74,9 +93,11 @@ export default function CharityItem({title, location, category, size, isInternat
             <div className="charity-item-content">
                 <div className="charity-item-info">
                     <div className="charity-item-title-wrapper">
-                        <p className="charity-tag-title">
-                            {title}
-                        </p>
+                        <Link className="charity-link" to={(url !== undefined)?url:'#'}>
+                            <p className="charity-tag-title">
+                                {title}
+                            </p>
+                        </Link>
                     </div>
                     <div className="charity-location-wrapper">
                         <p className="charity-location-text">
@@ -88,7 +109,8 @@ export default function CharityItem({title, location, category, size, isInternat
                         <div className={`charity-categories-container ${category.toLowerCase()}-container`}>
                             <p className="charity-category-text">
                                 {`${category==='Human'?'Human Rights & Services':
-                                (category==='Research')?'Research & Public Policy':category}`}
+                                (category==='Research')?'Research & Public Policy':
+                                (category === "Community")?'Community Development':category}`}
                             </p>
                         </div>
                         <div className={`charity-categories-container size-wrapper ${size.toLowerCase()}-wrapper`}>
@@ -112,12 +134,14 @@ export default function CharityItem({title, location, category, size, isInternat
                     <Circle 
                         score={parseFloat(score)}
                         color={ringColor(category)}
-
                     />   
-        
+                        <div className="blur-wrapper">
+                            <div className={`circle-blur ${category.toLowerCase()}-blur`}/>                
+                    
+                        </div>
                     <p className="overall-score">
-                            {score}
-                        </p>    
+                        {`${parseFloat(score).toFixed(1)}`}
+                    </p>    
                 </div>
             </div>
         </div>

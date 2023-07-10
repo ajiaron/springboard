@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useRef} from "react"
 import './Landing.scss'
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 import SideBar from "./SideBar";
 import { BsStars } from 'react-icons/bs'
 import { Link } from "react-router-dom";
@@ -318,22 +319,7 @@ export default function Landing() {
                     </div>
                 </div>
             </div>
-
-            <div className="icon-container">
-                <Link className="git-logo-button" to="https://github.com/ajiaron">
-                <div className="git-logo"></div>
-                </Link>
-                <Link className="mail-button"  to={'#'} onClick={(e)=>{
-                window.location.href = 'mailto:aaronjiang3942@gmail.com';
-                e.preventDefault();
-                }}>
-                <div className="mail-icon"/>
-                </Link>
-                
-                <Link className="linkedin-button" to="https://www.linkedin.com/in/aaronjiang01/">
-                    <div className="linkedin-logo"></div>
-                </Link>
-            </div>
+          <Footer/>
     </div>
     )
 }

@@ -14,8 +14,14 @@ html {
     display: flex;
     align-items: center;
     min-width: 100%;
+    overflow: hidden;
     height:16.25vh;
+   // border: 1px solid #151515;
     border-radius: 30px;
+    transition: all .15s linear;
+}
+.charity-item-container:hover {
+    filter: brightness(1.125);
 }
 .charity-item-content {
     display: flex;
@@ -23,26 +29,34 @@ html {
 .charity-item-info {
     display: flex;
     flex-direction: column;
-    min-width: 75%;
+    max-width: 100%;
     padding-bottom: .25em;
  //   padding-top: .125em;
     padding-left: .75vw;
+  //  background-color: red;
     justify-content: space-evenly;
     min-height: 100%;
 
 
 }
-.charity-item-title-wrapper {
-
+.charity-item-title-wrapper {   
+ //   background-color: red;
+    max-width: 100%;
     padding-left: 1.5vw;
     display: flex;
 }
 .charity-tag-title {
     color:#efefef;
     font-size:clamp(16px, 4vw, 20px);
+    display: -webkit-box;
+    -webkit-line-clamp: 1; /* number of lines to show */
+            line-clamp: 1; 
+    -webkit-box-orient: vertical;
     font-family: "Inter";
+    transition: all .15s linear;
     letter-spacing: -.25px;
     font-weight: 700;
+    overflow: hidden;
 }
 .charity-categories-container {
     border-radius: 5px;
@@ -65,7 +79,7 @@ html {
 }
 .charity-figure-container {
     margin-left: auto;
-    margin-right: 5.35%;
+    margin-right: 5.25%;
 //    margin-right: auto;
     display: flex;
 }
@@ -77,8 +91,9 @@ html {
     min-height: 6.25vw;
     border-radius: 6.25vw;
     align-items: center;
+    position: relative;
     display: flex;
-    box-shadow: 0 0 20px  rgba(100, 100, 100, 0.5); 
+   // box-shadow: 0 0 20px  rgba(100, 100, 100, 0.5); 
     justify-content: center;
     animation-name: 'animate-ring';
     animation-duration: 1s;
@@ -91,16 +106,16 @@ html {
 .progress-ring {
     border-radius: 6.25vw;
   //  max-width: 6.25vw;
-  transform: rotateY(180deg) rotate(270deg);
+
+    transform: rotateY(180deg) rotate(270deg);
   //  max-height: 6.25vw;
     z-index: 1;
-    position: absolute;
-   
+    position: absolute; 
+
 }
 .overall-score {
     color:#eee;
     letter-spacing: -.5px;
-
     font-size:clamp(12px, 2vw, 24px);
     font-family: "Inter";
     z-index: 999;
@@ -151,14 +166,20 @@ html {
 .environment-container {
     background-color: #5abb6fa4;
 }
+.animals-container {
+    background-color: #7abc45a4;
+}
 .healthcare-container {
     background-color: #d75c5c99;
 }
 .education-container {
-    background-color: rgba(185, 166, 20, 0.828);
+    background-color: rgb(159, 150, 45);
 }
 .research-container {
     background-color: rgb(50, 114, 110);
+}
+.community-container {
+    background-color: #7c634cee;
 }
 .small-wrapper {
     background-color: #c875fb99;
@@ -174,7 +195,112 @@ html {
     margin-left: .75em;
     background-color: #606060;
 }
+.human-blur {
+    animation-name: animate-blue;
+}
+.education-blur {
+    animation-name: animate-gold;
+}
+.environment-blur {
+    animation-name: animate-green;
+}
+.animals-blur {
+    animation-name:animate-lime;
+}
+.healthcare-blur {
+    animation-name: animate-red;
+}
+.community-blur {
+    animation: animate-brown;
+}
+.research-blur {
+    animation-name: animate-teal;
+}
+.blur-wrapper {
+    min-width: 6.25vw;
+    min-height: 6.25vw;
+    position: absolute;
+}
 
+.circle-blur { 
+    min-width: 6.25vw;
+    position: absolute;
+    min-height: 6.25vw;
+    z-index: 0;
+    background-color: transparent;
+    border-radius: 6.25vw;
+   // animation-name: animate-ring;
+    animation-duration: .35s;
+    
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-in-out;
+    animation-delay: .75s;
+}
+@keyframes animate-ring {
+    from {
+        box-shadow: 0 0 0px  rgba(105, 105, 105, 0.5); 
+    }
+    to {   
+        box-shadow: 0 0 20px  rgb(105, 105, 105, 0.5); 
+    }
+}
+@keyframes animate-blue {
+    from {
+        box-shadow: 0 0 0px  rgba(105, 105, 105, 0.5); 
+    }
+    to {   
+        box-shadow: 0 0 20px  rgba(83, 138, 190, 0.5); 
+    }
+}
+@keyframes animate-gold {
+    from {
+        box-shadow: 0 0 0px  rgba(105, 105, 105, 0.5); 
+    }
+    to {   
+        box-shadow: 0 0 20px rgba(200, 153, 35, 0.5); 
+    }
+}
+@keyframes animate-green {
+    from {
+        box-shadow: 0 0 0px rgba(105, 105, 105, 0.5); 
+    }
+    to {   
+        box-shadow: 0 0 20px rgba(48, 162, 97, 0.5); 
+    }
+}
+@keyframes animate-lime {
+    from {
+        box-shadow: 0 0 0px rgba(105, 105, 105, 0.5); 
+    }
+    to {   
+        box-shadow: 0 0 20px rgba(122, 188, 69, 0.5); 
+    }
+}
+
+@keyframes animate-red {
+    from {
+        box-shadow: 0 0 0px rgba(105, 105, 105, 0.5); 
+    }
+    to {   
+        box-shadow: 0 0 20px rgba(198, 83, 93, 0.5); 
+    }
+}
+@keyframes animate-brown {
+    from {
+        box-shadow: 0 0 0px rgba(105, 105, 105, 0.5); 
+    }
+    to {   
+        box-shadow: 0 0 20px rgba(144, 112, 103, 0.6);
+    }
+}
+@keyframes animate-teal {
+    from {
+        box-shadow: 0 0 0px  rgba(105, 105, 105, 0.6); 
+    }
+    to {   
+        box-shadow: 0 0 20px  rgba(63, 159, 152, 0.6); 
+    }
+}
 @keyframes draw-circle {
     from {
         stroke-dashoffset: 0; /* Start with fully colored circle */
@@ -183,7 +309,15 @@ html {
         stroke-dashoffset: var(--offset); /* Animate the stroke offset to the given offset */
       }
   }
+  .circle-blur-container {
+    z-index: 0;
 
+  }
+.back-circle {
+    box-shadow: none;
+    border: 20px solid #252525;
+    overflow: hidden;
+}
   /*
   
   .healthcare-circle {
@@ -201,3 +335,9 @@ html {
   .research-circle {
     box-shadow: 0 0 20px rgba(41, 172, 177, 0.4); 
   }*/
+  .charity-link {
+    text-decoration: none;
+  }
+  .charity-tag-title:hover {
+    color:rgb(238, 195, 88);
+  }

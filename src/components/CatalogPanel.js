@@ -33,7 +33,7 @@ const ToggleSwitch = ({label, onToggleSwitch, onRemoveItem}) => {
         );
 }
 
-export default function CatalogPanel() {
+export default function CatalogPanel({scrollY}) {
     const [category, setCategory] = useState([])
     const [size, setSize] = useState([])
     const [filter, setFilter] = useState([])
@@ -41,17 +41,14 @@ export default function CatalogPanel() {
         console.log(category)
         console.log(size)
         console.log(filter)
+        console.log(scrollY)
     }
     return (
         <div className='catalog-panel-container'>
- 
-                <p className='category-filter-title'>
-                    Categories
-                </p>
-
-
+            <p className='category-filter-title'>
+                Categories
+            </p>
             <div className='category-filter-container'>
-         
                 <div className='catalog-category-wrapper first-category'>
                     <p className='catalog-category-text'>
                         Human Rights {'&'} Services
@@ -86,6 +83,13 @@ export default function CatalogPanel() {
                         Research {'&'} Public Policy
                     </p>
                     <ToggleSwitch label={'Research'} onToggleSwitch={(e)=>setCategory([...category, e])}
+                        onRemoveItem={(e)=>setCategory(category.filter(item=>item !== e))}/>
+                </div>
+                <div className='catalog-category-wrapper'>
+                    <p className='catalog-category-text'>
+                        Community Development
+                    </p>
+                    <ToggleSwitch label={'Community'} onToggleSwitch={(e)=>setCategory([...category, e])}
                         onRemoveItem={(e)=>setCategory(category.filter(item=>item !== e))}/>
                 </div>
             </div>
@@ -139,6 +143,13 @@ export default function CatalogPanel() {
                             Recommended *
                         </p>
                         <ToggleSwitch label={'recommended'} onToggleSwitch={(e)=>setFilter([...filter, e])}
+                            onRemoveItem={(e)=>setFilter(filter.filter(item=>item !== e))}/>
+                    </div>
+                    <div className='catalog-category-wrapper'>
+                        <p className='catalog-category-text'>
+                            Newly Added
+                        </p>
+                        <ToggleSwitch label={'new'} onToggleSwitch={(e)=>setFilter([...filter, e])}
                             onRemoveItem={(e)=>setFilter(filter.filter(item=>item !== e))}/>
                     </div>
                 </div>

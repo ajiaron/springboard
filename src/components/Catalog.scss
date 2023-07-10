@@ -12,10 +12,10 @@
     min-height: 47.5vh;
     min-width: 100vw;
     background-image: url('./assets/background8.svg');
-    background-position: center;
+    background-position:center;
     background-repeat:no-repeat;
     background-size: cover;
-   
+ //   background-color: aqua;
     margin:0;
     //background-color: #151515;
     flex: 1;
@@ -33,6 +33,10 @@
     margin-left: auto;
     margin-right:auto;
     padding-top:5vh;
+  }
+  .catalog-end-container {
+    margin-top: 7.5vh;
+    padding-right: 1.45vw;
   }
   .catalog-header-text {
     color:#efefef;
@@ -62,7 +66,7 @@
   .catalog-header-subtext-wrapper {
     width: fit-content;
     display: block;
-    padding-top:4.25vh;
+    padding-top:4.5vh;
 
   }
   .catalog-header-subtext {
@@ -87,24 +91,36 @@
 .charity-catalog-container {
     min-width: 100vw;
     min-height:100vh;
-    padding-top:8.75vh;
+
+    padding-top:8vh;
     display: flex;
+
 }
 .charity-tag-container {
-    min-width: 46vw;
+    width: 46.5vw;
+    max-width: 46.5vw;
     min-height: 100%;
     display: flex;
     flex-direction: column;
     gap:1em;
     padding-right:8.5vw;
-    
     margin-left:auto;
     min-height: fit-content;
 }
 .panel-container {
     width: 24vw;
     padding-left: 7vw;
-    min-height: 100%;
+    min-height: 100vh;
+    transition: all ease-in-out .5s;
+    max-height: fit-content;
+   // background-color: red;
+ 
+}
+.panel-wrapper {
+  min-width: 100%;
+  transition: all ease-out .4s;
+  //background-color: aqua;
+
 }
 .search-catalog-container {
   display: flex;
@@ -148,4 +164,24 @@
   align-self: center;
 
  // background-color: ;
+}
+
+.catalog-items {
+  padding:0;
+
+  max-height: fit-content;
+}
+.loading-text-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.loading-text {
+  font-family: 'Rubik';
+  color:#ababab;
+  font-size: clamp(12px, 2vw, 14px);
+  font-weight: 400;
+  align-self: center;
 }

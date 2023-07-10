@@ -1,0 +1,72 @@
+.icon-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 4.25vw;
+    height: 3vw;
+    width: 92.5%;
+    position: relative;
+    align-items: center;
+    padding-bottom: 2.75vh;
+    gap:2.75vw;
+  }
+  .git-logo-button {
+    outline: none;
+    border:none;
+    max-width: fit-content;
+    max-height: fit-content;
+   // border-radius: 2.2vw;
+    transition: all .15s linear;
+    background-color: transparent;
+  }
+  .git-logo-button:hover {
+    transform: scale(1.05);
+  }
+  .mail-button {
+    outline: none;
+    border:none;
+    max-width: fit-content;
+    max-height: fit-content;
+//    border-radius: 2.2vw;
+    transition: all .15s linear;
+    background-color: transparent;
+  }
+  .mail-button:hover {
+    transform: scale(1.05);
+  }
+  .linkedin-button {
+    outline: none;
+    border:none;
+    max-width: fit-content;
+    max-height: fit-content;
+ //   border-radius: 2.2vw;
+    transition: all .15s linear;
+    background-color: transparent;
+  }
+  .linkedin-button:hover {
+    transform: scale(1.05);
+  }
+  .git-logo {
+    background-image: url('./assets/github-white.svg');
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 2.1vw;
+    height:2.1vw;
+  }
+  .linkedin-logo {
+    width: 2.1vw;
+    height:2.1vw;
+    background-image: url('./assets/linkedin.svg');
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  .mail-icon{
+    width: 2.25vw;
+    height:2.25vw;
+    color:#fff;
+    background-image: url('./assets/gmail.svg');
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
