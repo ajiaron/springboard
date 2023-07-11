@@ -1,9 +1,11 @@
 const express = require('express');
+const path = require('path');
 const app = express();
 const mysql = require('mysql')
 const cors = require('cors')
 app.use(express.json())
 app.use(cors())
+app.use(express.static(path.join(__dirname, '../client/build')));
 
 const db = mysql.createConnection({
     user:'root',
@@ -13,6 +15,8 @@ const db = mysql.createConnection({
     database:'andale_db',
  }
 )
+
+  
 
 app.get('/catalog/getitems', (req,res)=> {
     db.query('SELECT * FROM charities', (err, result)=> {
@@ -50,4 +54,8 @@ app.get('/catalog/searchbatch/:next/:current/:query', (req,res)=> {
     })
 })
 
-app.listen(3000, () => console.log('Listening on port 3000'))
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/build/index.html'));
+  });
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Listening on port ${port}`))
