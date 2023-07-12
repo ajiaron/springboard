@@ -18,13 +18,41 @@ export default function Catalog() {
     const initialPos = useRef(null)
     const [scrollY, setScrollY] = useState(0)
     const [initPos, setInitPos] = useState(0)
+    const [category, setCategory] = useState([])
+    const [size, setSize] = useState([])
+    const [filter, setFilter] = useState([])
     const [loading, setLoading] = useState(true)
+    const [allCategories, setAllCategories] = useState(['Human', 'Education', 'Environment', 'Animals', 'Healthcare', 'Research', 'Community'])
+    const [allSizes, setAllSizes] = useState(['Small', 'Mid', 'Large'])
     const loadingRef = useRef(null)
     const [page, setPage] = useState(1)
     const pageSize = 10;
     const [entryList, setEntryList] = useState([])
     const [screenWidth, setScreenWidth] = useState(window.innerWidth)
     const [screenHeight, setScreenHeight] = useState(window.innerHeight)
+    const selectCatagory = (e) => {
+        setCategory([...category, e])
+    }
+    const removeCatagory = (e) => {
+        setCategory(category.filter(item=>item !== e))
+    }
+    const selectSizes = (e) => {
+        setSize([...size, e])
+    }
+    const removeSizes = (e) => {
+        setSize(size.filter(item=>item !== e))
+    }
+    const selectFilters = (e) => {
+        setFilter([...filter, e])
+    }
+    const removeFilters = (e) => {
+        setFilter(filter.filter(item=>item !== e))
+    }
+    function handleTest() {
+        console.log(category)
+        console.log(size)
+        console.log(filter)
+    }
     useEffect(() => {
         const updateDimensions = () => {
           setScreenWidth(window.innerWidth);
@@ -61,33 +89,39 @@ export default function Catalog() {
           window.removeEventListener('scroll', updateScrollPos);
         };
       }, [panelInView, topInView]); // If panelInView changes, re-register the effect
-
+    useEffect(()=> {
+        setPage(1)
+        setEntryList([])
+    }, [category, size])
     useEffect(()=> {
         if (query.length > 0) {
             setPage(1)
             setEntryList([])
         }
     }, [query])
-
    
     useEffect(()=> {
         const loadEntries = async() => {
+            setLoading(true)
             try {
                 const url = query
-                ? `http://localhost:3000/catalog/searchbatch/${pageSize}/${(page-1)*pageSize}/${query}`
-                : `http://localhost:3000/catalog/getbatch/${pageSize}/${(page-1)*pageSize}`;
-                const res = await Axios.get(url)
+                ? `http://localhost:3000/catalog/searchfiltered/${pageSize}/${(page-1)*pageSize}/${query}`
+                : `http://localhost:3000/catalog/getfiltered/${pageSize}/${(page-1)*pageSize}`;
+                const res = await Axios.get(url, {
+                    params: {
+                        categories:(category.length > 0)?(category.indexOf("Environment")>-1)?[...category, 'Animals']:category:allCategories,
+                        sizes:(size.length>0)?size:allSizes
+                    }
+                })
                 setEntryList((prev)=> [...prev, ...res.data])
-                console.log(query)
             }
             catch(error) {
                 console.log(error)
             } 
         }
         loadEntries()
-    }, [page, query])
-
-
+        setLoading(false)
+    }, [page, query, category, size])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -96,7 +130,7 @@ export default function Catalog() {
             setPage((prevPageNumber) => prevPageNumber + 1);
           }
         },
-        { threshold: 1 } // Trigger the callback when the observed element is 100% visible.
+        { threshold: 1 } 
       );
     if (loadingRef.current) {
       observer.observe(loadingRef.current);
@@ -144,14 +178,25 @@ export default function Catalog() {
             </div>
                         
             <div className="charity-catalog-container">
-                    <div className="panel-container" >
-                        <div className="panel-wrapper" ref={panelRef}
-                                style={{ transform:`translateY(${scrollY}px)`}}
-                            >
-                            <CatalogPanel scrollY={scrollY}/>
-                        </div>
+                <div className="panel-container" >
+                    <div className="panel-wrapper" ref={panelRef}
+                            style={{ transform:`translateY(${scrollY}px)`}}
+                        >
+                        <CatalogPanel scrollY={scrollY}
+                        selectCategory={(e)=>selectCatagory(e)}
+                        removeCategory={(e)=>removeCatagory(e)}
+                        selectAllCategories={()=>setCategory([])}
+                        selectSizes={(e)=>selectSizes(e)}
+                        removeSizes={(e)=>removeSizes(e)}
+                        selectAllSizes={()=>setSize([])}
+                        selectFilters={(e)=>selectFilters(e)}
+                        removeFilters={(e)=>removeFilters(e)}/>
                     </div>
+                </div>
                 <div className="charity-tag-container">
+                    <div ref={loadingRef} className='showing-text-container' onClick={()=>handleTest()}>
+                            <p className="loading-text"> {`Showing ${entryList.length} of 245 entries`} </p>
+                    </div>
                     <div className="search-catalog-container">
                         <input type="text" name="ownerName" id="ownerName"
                             onChange={(e)=> setQuery(e.target.value)}
@@ -161,33 +206,36 @@ export default function Catalog() {
                         </input>
                         <BsSearch className="search-icon"/>
                     </div>
-                    {
+                    <ul className="charity-list">
+              
+                        {
                         entryList.map((item,index)=> (
-                            <CharityItem
-                                index={index}
-                                charityid={item.charityid}
-                                title={item.charity_name}
-                                location={`${item.city}, ${item.state}, USA`}
-                                category={item.type1}
-                                size={(item.total_contributions < 2646303)?'Small'
-                                :(item.total_contributions > 53903258)?'Large':'Mid'}
-                                isInternational={item === 'International '}
-                                total={item.total_contributions}
-                                excess={item.excess}
-                                assets={item.net_assets}
-                                revenue={item.other_revenue}
-                                progExpense={item.program_expenses}
-                                adminExpense={item.administrative_expenses}
-                                fundExpense={item.fundraising_expenses}
-                                adminRatio={item.admin_expense_ratio}
-                                focus={item.type2}
-                                score={item.overall_score}
-                                url={item.charity_url}
-                            />
-                        ))
-                        }
-                    <div ref={loadingRef} className='loading-text-container'>
-                        <p className="loading-text"> {`Showing ${entryList.length} of 245 entries`} </p>
+                            <li className="charity-list-item">
+                                <CharityItem
+                                    index={index}
+                                    charityid={item.charityid}
+                                    title={item.charity_name}
+                                    location={`${item.city}, ${item.state}, USA`}
+                                    category={item.type1}
+                                    size={item.size}
+                                    isInternational={item === 'International '}
+                                    total={item.total_contributions}
+                                    excess={item.excess}
+                                    assets={item.net_assets}
+                                    revenue={item.other_revenue}
+                                    progExpense={item.program_expenses}
+                                    adminExpense={item.administrative_expenses}
+                                    fundExpense={item.fundraising_expenses}
+                                    adminRatio={item.admin_expense_ratio}
+                                    focus={item.type2}
+                                    score={item.overall_score}
+                                    url={item.charity_url}
+                                />
+                            </li>
+                        ))}
+                        </ul>
+                    <div ref={loadingRef} className='loading-text-container' onClick={()=>handleTest()}>
+                        <p className="loading-text"> {`${(loading)?'Loading...':`Showing all matching results`}`} </p>
                     </div>
                 </div>
             </div> 

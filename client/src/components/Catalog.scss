@@ -19,7 +19,8 @@
     margin:0;
     //background-color: #151515;
     flex: 1;
-    overflow: scroll;
+    overflow: hidden;
+
 }
 
 
@@ -28,6 +29,7 @@
     height:40%;
     //padding-left: 6.25em;
    // display: flex;
+  overflow-x: hidden;
 
     align-self: center;
     margin-left: auto;
@@ -92,7 +94,7 @@
     min-width: 100vw;
     min-height:100vh;
 
-    padding-top:8vh;
+    padding-top:7.5vh;
     display: flex;
 
 }
@@ -102,14 +104,17 @@
     min-height: 100%;
     display: flex;
     flex-direction: column;
-    gap:1em;
     padding-right:8.5vw;
     margin-left:auto;
     min-height: fit-content;
 }
 .panel-container {
-    width: 24.25vw;
+   
+    width: 24.5vw;
+ 
+
     padding-left: 7vw;
+    align-items: center;
     min-height: 100vh;
     transition: all ease-in-out .5s;
     max-height: fit-content;
@@ -118,7 +123,9 @@
 }
 .panel-wrapper {
   min-width: 100%;
+
   transition: all ease-out .4s;
+
   //background-color: aqua;
 
 }
@@ -165,11 +172,26 @@
 
  // background-color: ;
 }
-
+.charity-list {
+  list-style: none;
+  margin: 0;
+  padding:0;
+}
+.charity-list-item {
+  margin-top: 1rem;
+}
 .catalog-items {
   padding:0;
-
   max-height: fit-content;
+}
+.showing-text-container {
+  width: fit-content;
+  display: flex;
+  margin-right: auto;
+  //text-align: right;
+  padding-bottom: .5rem;
+  padding-left:.5rem;
+ 
 }
 .loading-text-container {
   width: 100%;
@@ -177,10 +199,11 @@
   align-items: center;
   justify-content: center;
   text-align: center;
+  margin-top: 1rem;
 }
 .loading-text {
   font-family: 'Rubik';
-  color:#ababab;
+  color:#a0a0a0;
   font-size: clamp(12px, 2vw, 14px);
   font-weight: 400;
   align-self: center;

@@ -457,6 +457,15 @@ html {
    // width: fit-content;
    text-align: left;
   }
+  .charity-item-button {
+    border:0;
+    outline:0;
+    padding:0;
+    margin:0;
+    border-radius: 30px;
+    min-width: 100%;
+    min-height: 100%;
+  }
   .lower-expanded {
     padding-top:3.5vh;
     justify-content: space-between;

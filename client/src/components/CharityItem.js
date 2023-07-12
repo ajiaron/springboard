@@ -101,152 +101,156 @@ export default function CharityItem({
     }
 
     return (
-        <div className={`charity-item-container ${(selected&&expanded)?'selected-container':(!selected && expanded)?'unselected-container':''}`}
-         onClick={()=>handleExpand()}>
-            <div className={`charity-item-content ${(selected&&expanded)?'selected-content':(!selected && expanded)?'unselected-content':''}`}>
-                <div className="charity-item-info">
-                    <div className="charity-item-title-wrapper">
-                        <Link className="charity-link" to={(url !== undefined)?url:'#'}>
-                            <p className="charity-tag-title">
-                                {title}
-                            </p>
-                        </Link>
-                    </div>
-                    <div className="charity-location-wrapper">
-                        <p className="charity-location-text">
-                            {location}
-                        </p>
-                    </div>
-                    <div className={`charity-info-expanded-container ${!selected&&expanded?'info-expand':(!selected && expanded)?'info-shrink':(!expanded)?'info-none':''}`}>
-                        <div className="charity-info-expanded">
-                            <div className="expanded-info-content">
-                                <p className="expanded-info-text"> 
-                                    Organization Focus:
-                                </p>
-                                <p className="expanded-info-data">
-                                    {focus}
-                                </p>
-                            </div>
-                        </div>
-                        <div className="charity-info-expanded lower-expanded">
-                            <div className="expanded-info-content">
-                                <p className="expanded-info-text"> 
-                                    Total Contributions:
-                                </p>
-                                <p className="expanded-info-data">
-                                    {`$${total.toLocaleString()}`}
-                                </p>
-                            </div>
-                            <div className="expanded-info-content">
-                                <p className="expanded-info-text"> 
-                                    Excess/Deficit:
-                                </p>
-                                <p className={`${excess<0?'deficit':'excess'}-info`}>
-                                {`${excess < 0?'-':'+'}$${Math.abs(excess).toLocaleString()}`}
-                                </p>
-                            </div>
-                        </div>
-                        <div className="charity-info-expanded">
-                            <div className="expanded-info-content">
-                                <p className="expanded-info-text"> 
-                                    Net Assets:
-                                </p>
-                                <p className="expanded-info-data">
-                                {`$${assets.toLocaleString()}`}
-                                </p>
-                            </div>
-          
-                            <div className="expanded-info-content">
-                                <p className="expanded-info-text"> 
-                                    Other Revenue:
-                                </p>
-                                <p className="expanded-info-data">
-                                {`$${revenue.toLocaleString()}`}
-                                </p>
-                            </div>
-                        </div>
-                        <div className="charity-info-expanded">
-                            <div className="expanded-info-content">
-                                <p className="expanded-info-text"> 
-                                    Program Expenses:
-                                </p>
-                                <p className="expanded-info-data">
-                                {`$${progExpense.toLocaleString()}`}
-                                </p>
-                            </div>
-                            <div className="expanded-info-content">
-                                <p className="expanded-info-text"> 
-                                    Administrative Expenses:
-                                </p>
-                                <p className="expanded-info-data">
-                                    {`$${adminExpense.toLocaleString()}`}
-                                </p>
-                            </div>
-                        </div>
-       
-                        <div className="charity-info-expanded">
-                            <div className="expanded-info-content">
-                                <p className="expanded-info-text"> 
-                                   Fundraising Expenses:
-                                </p>
-                                <p className="expanded-info-data">
-                                {`$${fundExpense.toLocaleString()}`}
-                                </p>
-                            </div>
-                            <div className="expanded-info-content">
-                                <p className="expanded-info-text"> 
-                                    Admin Expense Ratio:
-                                </p>
-                                <p className="expanded-info-data">
-                                {`${parseFloat(adminRatio).toFixed(2)}`}
-                                </p>
-                            </div>
-                        </div>
+        <span onClick={()=>handleExpand()} className='charity-item-button'>
 
-                    </div>
-                    
 
-                    <div className={`charity-categories-wrapper ${(selected&&expanded)?'selected-categories':(!selected && expanded)?'unselected-categories':''}`}>
-                        <div className={`charity-categories-container ${category.toLowerCase()}-container`}>
-                            <p className="charity-category-text">
-                                {`${category==='Human'?'Human Rights & Services':
-                                (category==='Research')?'Research & Public Policy':
-                                (category === "Community")?'Community Development':category}`}
-                            </p>
-                        </div>
-                        <div className={`charity-categories-container size-wrapper ${size.toLowerCase()}-wrapper`}>
-                            <p className="charity-category-text">
-                                {`${size}-Sized`}
-                            </p>
-                        </div>
-                        {(isInternational)&&
-                            <div className={`charity-categories-container international-wrapper`}>
-                                <p className="charity-category-text">
-                                    International
+            <div className={`charity-item-container ${(selected&&expanded)?'selected-container':(!selected && expanded)?'unselected-container':''}`}>
+                <div className={`charity-item-content ${(selected&&expanded)?'selected-content':(!selected && expanded)?'unselected-content':''}`}>
+                    <div className="charity-item-info">
+                        <div className="charity-item-title-wrapper">
+                            <Link className="charity-link" to={(url !== undefined)?url:'#'}>
+                                <p className="charity-tag-title">
+                                    {title}
                                 </p>
+                            </Link>
+                        </div>
+                        <div className="charity-location-wrapper">
+                            <p className="charity-location-text">
+                                {location}
+                            </p>
+                        </div>
+                        {(selected || expanded)&&
+                        <div className={`charity-info-expanded-container ${!selected&&expanded?'info-expand':(!selected && expanded)?'info-shrink':(!expanded)?'info-none':''}`}>
+                            <div className="charity-info-expanded">
+                                <div className="expanded-info-content">
+                                    <p className="expanded-info-text"> 
+                                        Organization Focus:
+                                    </p>
+                                    <p className="expanded-info-data">
+                                        {focus}
+                                    </p>
+                                </div>
                             </div>
-                        }
-                    </div>
-                </div>
-            </div>
+                            <div className="charity-info-expanded lower-expanded">
+                                <div className="expanded-info-content">
+                                    <p className="expanded-info-text"> 
+                                        Total Contributions:
+                                    </p>
+                                    <p className="expanded-info-data">
+                                        {`$${total.toLocaleString()}`}
+                                    </p>
+                                </div>
+                                <div className="expanded-info-content">
+                                    <p className="expanded-info-text"> 
+                                        Excess/Deficit:
+                                    </p>
+                                    <p className={`${excess<0?'deficit':'excess'}-info`}>
+                                    {`${excess < 0?'-':'+'}$${Math.abs(excess).toLocaleString()}`}
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="charity-info-expanded">
+                                <div className="expanded-info-content">
+                                    <p className="expanded-info-text"> 
+                                        Net Assets:
+                                    </p>
+                                    <p className="expanded-info-data">
+                                    {`$${assets.toLocaleString()}`}
+                                    </p>
+                                </div>
             
+                                <div className="expanded-info-content">
+                                    <p className="expanded-info-text"> 
+                                        Other Revenue:
+                                    </p>
+                                    <p className="expanded-info-data">
+                                    {`$${revenue.toLocaleString()}`}
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="charity-info-expanded">
+                                <div className="expanded-info-content">
+                                    <p className="expanded-info-text"> 
+                                        Program Expenses:
+                                    </p>
+                                    <p className="expanded-info-data">
+                                    {`$${progExpense.toLocaleString()}`}
+                                    </p>
+                                </div>
+                                <div className="expanded-info-content">
+                                    <p className="expanded-info-text"> 
+                                        Administrative Expenses:
+                                    </p>
+                                    <p className="expanded-info-data">
+                                        {`$${adminExpense.toLocaleString()}`}
+                                    </p>
+                                </div>
+                            </div>
+        
+                            <div className="charity-info-expanded">
+                                <div className="expanded-info-content">
+                                    <p className="expanded-info-text"> 
+                                    Fundraising Expenses:
+                                    </p>
+                                    <p className="expanded-info-data">
+                                    {`$${fundExpense.toLocaleString()}`}
+                                    </p>
+                                </div>
+                                <div className="expanded-info-content">
+                                    <p className="expanded-info-text"> 
+                                        Admin Expense Ratio:
+                                    </p>
+                                    <p className="expanded-info-data">
+                                    {`${parseFloat(adminRatio).toFixed(2)}`}
+                                    </p>
+                                </div>
+                            </div>
 
-
-            <div className={`charity-figure-container ${(selected&&expanded)?'selected-score':(!selected && expanded)?'unselected-score':''}`}>
-                <div className={`charity-score-container ${category.toLowerCase()}-circle`}>
-                    <Circle 
-                        score={parseFloat(score)}
-                        color={ringColor(category)}
-                    />   
-                        <div className="blur-wrapper">
-                            <div className={`circle-blur ${category.toLowerCase()}-blur`}/>                
-                    
                         </div>
-                    <p className="overall-score">
-                        {`${parseFloat(score).toFixed(1)}`}
-                    </p>    
+    }
+
+                        <div className={`charity-categories-wrapper ${(selected&&expanded)?'selected-categories':(!selected && expanded)?'unselected-categories':''}`}>
+                            <div className={`charity-categories-container ${category.toLowerCase()}-container`}>
+                                <p className="charity-category-text">
+                                    {`${category==='Human'?'Human Rights & Services':
+                                    (category==='Research')?'Research & Public Policy':
+                                    (category === "Community")?'Community Development':category}`}
+                                </p>
+                            </div>
+                            <div className={`charity-categories-container size-wrapper ${size.toLowerCase()}-wrapper`}>
+                                <p className="charity-category-text">
+                                    {`${size}-Sized`}
+                                </p>
+                            </div>
+                            {(isInternational)&&
+                                <div className={`charity-categories-container international-wrapper`}>
+                                    <p className="charity-category-text">
+                                        International
+                                    </p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                
+
+
+                <div className={`charity-figure-container ${(selected&&expanded)?'selected-score':(!selected && expanded)?'unselected-score':''}`}>
+                    <div className={`charity-score-container ${category.toLowerCase()}-circle`}>
+                        <Circle 
+                            score={parseFloat(score)}
+                            color={ringColor(category)}
+                        />   
+                            <div className="blur-wrapper">
+                                <div className={`circle-blur ${category.toLowerCase()}-blur`}/>                
+                        
+                            </div>
+                        <p className="overall-score">
+                            {`${parseFloat(score).toFixed(1)}`}
+                        </p>    
+                    </div>
                 </div>
             </div>
-        </div>
+        </span>
     )
 }

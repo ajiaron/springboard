@@ -7,16 +7,32 @@ export default function Navbar() {
     const location = useLocation()
     return (
         <div className="logo-container">
-            <Link to ='/' className="landing-link">
-                <div className="app-logo"/>
-
-            <div className="logo-text-container">
-                <p className="logo-text">
-                    Springboard
-                </p> 
+            {/*
+            <div className="navbar-wrapper">
+                <div className="navbar-content">
+                    <Link to ='/' className="landing-link">
+                    
+                    <div className="app-logo"/>
+                    <div className="logo-text-container">   
+                
+                        <p className="logo-text">
+                            Springboard
+                        </p> 
+                    </div>
+                    </Link>
+                </div>               
             </div>
-            </Link>
-          
+    */}
+       <Link to ='/' className="landing-link">
+                    
+                    <div className="app-logo"/>
+                    <div className="logo-text-container">   
+                
+                        <p className="logo-text">
+                            Springboard
+                        </p> 
+                    </div>
+                    </Link>
         </div>
     )
 }

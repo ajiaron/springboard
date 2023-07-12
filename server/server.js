@@ -40,6 +40,20 @@ app.get('/catalog/getbatch/:next/:current', (req,res)=> {
         }
     })
 })
+app.get('/catalog/getfiltered/:next/:current', (req,res)=> {
+    const next = Number(req.params.next)
+    const current = Number(req.params.current)
+    const categories = req.query.categories
+    const sizes = req.query.sizes
+    db.query('SELECT * FROM charities WHERE type1 IN (?) AND size IN (?) LIMIT ? OFFSET ?', [categories, sizes, next, current],
+    (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
 app.get('/catalog/searchbatch/:next/:current/:query', (req,res)=> {
     const next = Number(req.params.next)
     const current = Number(req.params.current)
@@ -53,7 +67,21 @@ app.get('/catalog/searchbatch/:next/:current/:query', (req,res)=> {
         }
     })
 })
-
+app.get('/catalog/searchfiltered/:next/:current/:query', (req,res)=> {
+    const next = Number(req.params.next)
+    const current = Number(req.params.current)
+    const query = String(req.params.query)
+    const categories = req.query.categories
+    const sizes = req.query.sizes
+    db.query('SELECT * FROM charities WHERE type1 IN (?) AND size IN (?) AND charity_name LIKE ? LIMIT ? OFFSET ?', [categories, sizes,`%${query}%`, next, current],
+    (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/build/index.html'));
   });

@@ -30,7 +30,7 @@ p {
     overflow: scroll;
 }
 .main-content-lower {
-  min-height: 68vh;
+  min-height: 67.5vh;
   min-width: 100vw;
   background-color: #151515;
   padding-top:32vh;
@@ -84,7 +84,7 @@ p {
   //margin-bottom:.25em;
   color:#efefef;
   padding-bottom: 8px;
-  z-index: 999;
+  z-index: 997;
   line-height: 66px;
   
   overflow: visible;
@@ -417,15 +417,17 @@ p {
 //  letter-spacing: -0.5px;
 }
 .subcontent-item-name {
-  max-width: 92%;
+  max-width: 88%;
   min-height: fit-content;
   display: flex;
-  padding-left: 1em;
-  padding-top:1.125em;
+
+  margin-left: auto;
+  margin-right: auto;
+  padding-top:1rem;
   align-self: center;
   border-top: 1px dashed #3e3e3e;
   padding-bottom:.5em;
-  align-items: flex-end;
+
 
 }
 .charity-name {
