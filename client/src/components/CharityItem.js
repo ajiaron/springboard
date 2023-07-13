@@ -69,7 +69,8 @@ const Circle = ({score, color}) => {
 
 export default function CharityItem({
     index, charityid, title, location, category, size, isInternational, total, excess,
-    assets, revenue, progExpense, adminExpense, fundExpense, adminRatio, focus, score, url}) {
+    assets, revenue, progExpense, adminExpense, fundExpense, adminRatio, focus, score, url,
+    onHandlePayment}) {
     const [selected, setSelected] = useState(false)
     const money = 653394727;
     const [expanded, setExpanded] = useState(false)
@@ -102,8 +103,6 @@ export default function CharityItem({
 
     return (
         <span onClick={()=>handleExpand()} className='charity-item-button'>
-
-
             <div className={`charity-item-container ${(selected&&expanded)?'selected-container':(!selected && expanded)?'unselected-container':''}`}>
                 <div className={`charity-item-content ${(selected&&expanded)?'selected-content':(!selected && expanded)?'unselected-content':''}`}>
                     <div className="charity-item-info">
@@ -205,6 +204,21 @@ export default function CharityItem({
                                     </p>
                                 </div>
                             </div>
+                            <div className="donation-button-container">
+                                <span className="site-donation-button" onClick={()=>onHandlePayment()}>
+                                    <p className="site-donation-text">
+                                        Direct Donation
+                                    </p>
+                                </span>
+                                <Link className={`link-donation-button`} to={url}>
+                                    <p className="link-donation-text">
+                                        Donate On-Site
+                                    </p>
+                                </Link>
+           
+        
+                            </div>
+
 
                         </div>
     }

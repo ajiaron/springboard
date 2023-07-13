@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;600&display=swap');
 p {
     margin: 0;
-    z-index: 999;
+    z-index: 998;
 }  
 html {
     width: 100vw;
@@ -12,11 +12,12 @@ html {
 .charity-item-container {
     background-color: #252525;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     min-width: 100%;
     overflow: hidden;
     min-height:16.25vh;
     border:none;
+   
     padding:0;
     outline:none;
     border-radius: 30px;
@@ -39,12 +40,12 @@ html {
         min-height:16.25vh;
     }
     to {   
-        min-height:46vh;
+        min-height:52vh;
     }
 }
 @keyframes animate-shrink {
     from {
-        min-height:46vh;
+        min-height:52vh;
     }
     to {   
         min-height:16.25vh;
@@ -56,7 +57,7 @@ html {
 }
 .charity-item-content {
     display: flex;
-
+    padding-top: 2.875%;
 }
 .selected-content {
     animation-name:animate-align;
@@ -75,12 +76,12 @@ html {
         transform: translateY(0);
     }
     to {   
-        transform: translateY(-127%);
+        transform: translateY(0);
     }
 }
 @keyframes animate-center {
     from {
-        transform: translateY(-127%);
+        transform: translateY(0%);
     }
     to {   
         transform: translateY(0);
@@ -91,7 +92,7 @@ html {
     flex-direction: column;
     max-width: 100%;
     padding-bottom: .25em;
- //   padding-top: .125em;
+   // padding-top: .125em;
     padding-left: .75vw;
    // background-color: rebeccapurple;
     justify-content: space-evenly;
@@ -120,7 +121,7 @@ html {
     align-items: center;
     max-width: fit-content;
     height:1.625em;
-    margin-top: .65em;
+    margin-top: .7em;
     padding-left:11.5px;
     padding-right:11.5px;
     z-index: 1;
@@ -139,6 +140,7 @@ html {
     margin-left: auto;
     margin-right: 5.25%;
     display: flex;
+    padding-top:2.75%;
 }
 .selected-score {
     animation-name:animate-score-align;
@@ -157,12 +159,12 @@ html {
         transform: translateY(0);
     }
     to {   
-        transform: translateY(-130%);
+        transform: translateY(0);
     }
 }
 @keyframes animate-score-center {
     from {
-        transform: translateY(-130%);
+        transform: translateY(0);
     }
     to {   
         transform: translateY(0);
@@ -192,7 +194,7 @@ html {
     letter-spacing: -.5px;
     font-size:clamp(12px, 2vw, 24px);
     font-family: "Inter";
-    z-index: 999;
+    z-index: 99;
     font-weight: 800;
 }
 .overall-score-text {
@@ -226,12 +228,12 @@ html {
         transform: translateY(0);
     }
     to {   
-        transform: translateY(29.5vh);
+        transform: translateY(35.75vh);
     }
 }
 @keyframes animate-categories-center {
     from {
-        transform: translateY(29.5vh);
+        transform: translateY(35.75vh);
     }
     to {   
         transform: translateY(0);
@@ -444,6 +446,8 @@ html {
     position: absolute;
     transition-delay: .25s;
     min-width: 39.25vw;
+    min-height:31.75vh;
+    //background-color: green;
     top:75%;
     z-index: 0;
    // border: 1px solid white;
@@ -539,3 +543,66 @@ html {
     display: inline;
     font-weight: 400;
   }
+.donation-button-container {
+    min-width: 100%;
+    height: 5vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding-left: 0%;
+    gap:3.5%;
+   // margin-left:.75vw;
+   // background-color: red;
+    padding-top:4.5%;
+    align-items: center;
+}
+.site-donation-button {
+    min-width: 35%;
+    min-height: 100%;
+    align-items: center;
+    border-radius: 32px;
+    transition: all .15s linear;
+    display: flex;
+    z-index: 1;
+    justify-content: center;
+    background-color: #ddd;
+    text-align: center;
+}
+.site-donation-button:hover {
+    transform: scale(1.05);
+}
+.site-donation-text {
+    color:#252525;
+    font-family: 'Inter';
+    font-weight: 600;
+    
+
+    font-size: clamp(10px, 3vw, 16px);
+}
+.link-donation-button {
+    min-width: 35%;
+    outline: 1px solid #454545;
+   // margin-top:1px;
+   transition: all .15s linear;
+   z-index: 1;
+
+    border-radius: 32px;
+    background-color: #151515;
+    display: flex;
+    text-decoration: none;
+    border:0.5px solid #151515;
+    justify-content: center;
+    align-items: center;
+    min-height: 100%;
+    text-align: center;
+}
+.link-donation-button:hover {
+    transform: scale(1.05);
+}
+.link-donation-text {
+    color:#eee;
+    font-family: 'Rubik';
+    font-weight: 400;
+    padding-top: 1px;
+    font-size: clamp(10px, 3vw, 16px);
+}

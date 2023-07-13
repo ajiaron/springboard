@@ -17,12 +17,17 @@
     background-size: cover;
  //   background-color: aqua;
     margin:0;
+    transition: all .15s linear;
     //background-color: #151515;
     flex: 1;
     overflow: hidden;
 
 }
-
+.dim-container {
+  
+  transition: all .15s linear;
+  filter: brightness(.6);
+}
 
 .catalog-header-container {
     width: 86.125%;
@@ -207,4 +212,16 @@
   font-size: clamp(12px, 2vw, 14px);
   font-weight: 400;
   align-self: center;
+}
+.payment-info-container {
+  position: absolute;
+  background-color: #252525;
+  max-height: 100vh;
+  max-width: 40vw;
+  //min-width: 55vw;
+  right: auto;
+  align-self: center;
+  left: auto;
+
+ // background-color: red;  // min-width: 1;
 }

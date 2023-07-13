@@ -1,0 +1,273 @@
+textarea {
+    resize: none;
+  }
+.payment-screen-wrapper {
+    position: absolute;
+    height: 75%;
+    width: 30%;
+    z-index: 999;
+    border-radius: 30px;
+    background-color: #202020;
+    left:50%;
+
+    padding:1.5rem;
+    align-self: center;
+    //filter:brightness(1.5);
+
+    transform: translate(-50%, 0);
+    
+   // background-color: #353535;
+}
+
+.payment-header-container {
+    width: 100%;
+    height: 5%;
+    flex-direction: column;
+    display: flex;
+   
+    //background-color: rgba(0, 255, 255, 0.374);
+    align-items: center;
+    text-align: center;
+}
+.payment-header-text {
+    font-size: clamp(12px, 3vw, 22px);
+    font-family: "Inter";
+    margin-left: auto;
+    margin-right: auto;
+    letter-spacing: -.25px;
+    font-weight: 600;
+    color:#eee;
+}
+.payment-header-subtext {
+    font-size: clamp(12px, 3vw, 16px);
+    font-family: "Rubik";
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 8px;
+    line-height: 26px;
+    font-weight: 400;
+    color:#bbbbbb;
+}
+
+.payment-header-subtext:before,
+.payment-header-subtext:after {
+  background-color:#454545;
+  content: "";
+  display: inline-block;
+  height: 1px;
+  position: relative;
+  vertical-align: middle;
+  width: 45%;
+}
+
+.payment-header-subtext:before {
+  right: 1.5em;
+  margin-left: -45%;
+}
+
+.payment-header-subtext:after {
+  left: 1.5em;
+  margin-right: -45%;
+}
+
+.payment-options-container {
+    min-width: 100%;
+    padding-top: 8%;
+    //background-color: azure;
+    display: flex;
+    flex-direction: column;
+}
+.payment-option-top-row {
+    flex-direction: row;
+    display: flex;
+    height: fit-content;
+    margin-top:1.5rem;
+    transform: scale(1.0);
+    gap:1rem;
+    justify-content: center;
+}
+.payment-option-bottom-row {
+    flex-direction: row;
+    margin-top: 1.25rem;
+    transform: scale(1.0);
+    display: flex;
+    height: fit-content;
+    justify-content: center;
+    gap:1.125rem;
+}
+.payment-option {
+    //background-color: rgba(45, 194, 179, 0.641);
+    border:1px solid #ccc;
+    background-color: #1a1a1a;
+    //background-color: rgba(238, 238, 238, 0.897);
+    width: 4.5em;
+    border-radius: 20px;
+    height: 2.35em;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    transition: all .15s linear;
+
+    text-align: center;
+}
+.payment-option:hover {
+    background-color: rgb(148, 86, 183);
+    border:1px solid rgb(148, 86, 183);
+}
+.payment-option-text {
+ 
+    font-family: "Inter";
+    margin-left: auto;
+    align-self: center;
+    margin-right: auto;
+    font-size: clamp(12px, 3vw, 16px);
+    letter-spacing: -.25px;
+    font-weight: 600;
+    color:#eee;
+}
+.payment-info-container {
+    min-width: 100%;
+
+    max-height: 30%;
+    display:flex;
+}
+
+.payment-description-header {
+    min-height: 100%;
+    min-width: 100%;
+}
+.payment-description-wrapper {
+    min-width: 100%;
+    min-height:90%;
+    display: flex;
+}
+.payment-description-text {
+    font-size: clamp(12px, 3vw, 15px);
+
+    font-family: "Inter";
+    font-weight: 600;
+    color:#eee;
+}
+.payment-option-header {
+    font-size: clamp(12px, 3vw, 15px);
+    margin-left: .875em;
+    font-family: "Rubik";
+    font-weight: 400;
+    color:#eeeeee;
+}
+.payment-confirm-container {
+    min-width: 100%;
+    min-height: 20%;
+    
+    align-self: flex-end;
+    display: flex;
+    text-align: center;
+    height: fit-content;
+}
+.payment-custom-container {
+    width: 100%;
+    margin-top: 2.25rem;
+    padding-left: .75em;
+
+}
+.message-custom-container {
+    width: 100%;
+    margin-top: 1.25rem;
+    padding-left: .75em;
+
+}
+.custom-container-text {
+    font-size: clamp(12px, 3vw, 15px);
+ 
+    font-family: "Rubik";
+    font-weight: 400;
+    color:#eee;
+}
+
+.custom-donate::placeholder {
+    font-size: clamp(12px, 3vw, 14px);
+ 
+    font-family: "Rubik";
+    font-weight: 400;
+    color:#656565;
+}
+.custom-donate {
+    font-size: clamp(12px, 3vw, 14px);
+    font-family: "Rubik";
+
+    font-weight: 400;
+    background-color: transparent;
+    width: 100%;
+    min-height: 100%;
+}
+.custom-input-container {
+    border-radius: 16px;
+    padding-left: 1.5em;
+    margin-top: .75em;
+    outline:none;
+    border:none;
+    width: 89%;
+    color:#efefef;
+    background-color: #1a1a1a;
+    align-self: center;
+    min-height:2.5em;
+}
+
+.message-input-container {
+    border-radius: 16px;
+    padding-left: 1.5em;
+    margin-top: .75em;
+    padding-top:1em;
+    outline:none;
+    font-family: 'Rubik';
+    border:none;
+    width: 89%;
+    color:#efefef;
+    background-color: #1a1a1a;
+    align-self: center;
+    min-height:12em;
+}
+.message-input-container::placeholder {
+    color:#656565;
+    font-family: 'Rubik';
+    resize:none;
+    font-weight: 400;
+    text-align: start;
+    
+}
+.custom-input-container::placeholder {
+    color:#656565;
+    font-family: 'Rubik';
+    font-weight: 400;
+}
+.payment-confirm-button {
+    border-radius: 32px;
+    align-self: center;
+   // background-color: rgb(214, 178, 87);
+   background-color: rgba(238, 238, 238, 0.879);
+   // background: linear-gradient(135deg, rgba(159, 99, 195, 0.9), rgba(112, 77, 207, 0.9));
+    min-width: 65%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 1.5em;
+    //outline: 1px solid rgba(208, 206, 202, 0.9);
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    min-height: 2.75em;
+    //border:1px solid #eee;
+    transition: all .15s linear;
+}
+.payment-confirm-button:hover {
+    transform: scale(1.025);
+}
+.payment-confirm-text {
+    font-size: clamp(12px, 3vw, 18px);
+    font-family: "Inter";
+  
+    font-weight: 600;
+    margin-left: auto;
+
+    margin-right: auto;
+    color:#0a0a0a;
+}

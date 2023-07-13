@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useRef, useCallback} from "react"
 import './Catalog.scss'
 import Navbar from "./Navbar";
+import Payment from "./Payment";
 import {BsSearch} from 'react-icons/bs'
 import SideBar from "./SideBar";
 import { BsStars } from 'react-icons/bs'
@@ -22,6 +23,7 @@ export default function Catalog() {
     const [size, setSize] = useState([])
     const [filter, setFilter] = useState([])
     const [loading, setLoading] = useState(true)
+    const [openPayment, setOpenPayment] = useState(false)
     const [allCategories, setAllCategories] = useState(['Human', 'Education', 'Environment', 'Animals', 'Healthcare', 'Research', 'Community'])
     const [allSizes, setAllSizes] = useState(['Small', 'Mid', 'Large'])
     const loadingRef = useRef(null)
@@ -47,6 +49,9 @@ export default function Catalog() {
     }
     const removeFilters = (e) => {
         setFilter(filter.filter(item=>item !== e))
+    }
+    const handlePayment = () => {
+        setOpenPayment(!openPayment)
     }
     function handleTest() {
         console.log(category)
@@ -143,7 +148,7 @@ export default function Catalog() {
     };
   }, []);
     return (
-        <div className="catalog-main-container">
+        <div className={`catalog-main-container`}>
             <div className="catalog-main-content">
             <Navbar/>
                 <div className="catalog-header-container" ref={topRef}>
@@ -178,6 +183,9 @@ export default function Catalog() {
             </div>
                         
             <div className="charity-catalog-container">
+                {/*(openPayment)&&
+                    <Payment/>
+                            */}
                 <div className="panel-container" >
                     <div className="panel-wrapper" ref={panelRef}
                             style={{ transform:`translateY(${scrollY}px)`}}
@@ -206,6 +214,7 @@ export default function Catalog() {
                         </input>
                         <BsSearch className="search-icon"/>
                     </div>
+
                     <ul className="charity-list">
               
                         {
@@ -230,6 +239,7 @@ export default function Catalog() {
                                     focus={item.type2}
                                     score={item.overall_score}
                                     url={item.charity_url}
+                                    onHandlePayment={handlePayment}
                                 />
                             </li>
                         ))}

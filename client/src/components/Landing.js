@@ -48,6 +48,7 @@ export default function Landing() {
                     <div className="grid-content">
                         <Link className="discover-link" to='/catalog'>
                             <div className="grid-content-main">
+                                <div className="discover-scene"/>
                                 <div className="grid-main-text-container">
                                     <p className="grid-main-text">
                                         Discover
@@ -59,7 +60,7 @@ export default function Landing() {
                         <div className="grid-pair">
                             <div className="grid-content-item">
                                 <div className="grid-item-text-container-alt">
-                                    <p className="grid-item-text-alt">
+                                    <p className="grid-item-text-left">
                                         AI <BsStars className="star-icon"/><br/>Support
                                     </p>
                                 </div>
