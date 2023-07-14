@@ -40,6 +40,17 @@ app.get('/catalog/getbatch/:next/:current', (req,res)=> {
         }
     })
 })
+app.get('/donate/getcharity/:charityid', (req,res)=> {
+    const charityid = Number(req.params.charityid)
+    db.query('SELECT * FROM charities WHERE charityid = ?', [charityid],
+    (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
 app.get('/catalog/getfiltered/:next/:current', (req,res)=> {
     const next = Number(req.params.next)
     const current = Number(req.params.current)

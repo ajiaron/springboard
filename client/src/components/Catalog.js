@@ -216,7 +216,6 @@ export default function Catalog() {
                     </div>
 
                     <ul className="charity-list">
-              
                         {
                         entryList.map((item,index)=> (
                             <li className="charity-list-item">

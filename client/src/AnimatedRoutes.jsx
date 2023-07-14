@@ -3,6 +3,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import {AnimatePresence } from 'framer-motion'
 import Landing from './components/Landing'
 import Catalog from './components/Catalog';
+import Donate from './components/Donate';
 import CharityItem from './components/CharityItem';
 
 function AnimatedRoutes() {
@@ -12,6 +13,7 @@ function AnimatedRoutes() {
         <Routes location={location} key={location.pathname}>
             <Route path='/' element={<Landing />} />
             <Route path='/catalog' element={<Catalog/>}/>
+            <Route path='/donate/:charityid' element={<Donate/>}/>
         </Routes>
     </AnimatePresence>
     )

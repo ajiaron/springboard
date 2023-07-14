@@ -107,11 +107,11 @@ export default function CharityItem({
                 <div className={`charity-item-content ${(selected&&expanded)?'selected-content':(!selected && expanded)?'unselected-content':''}`}>
                     <div className="charity-item-info">
                         <div className="charity-item-title-wrapper">
-                            <Link className="charity-link" to={(url !== undefined)?url:'#'}>
+  
                                 <p className="charity-tag-title">
                                     {title}
                                 </p>
-                            </Link>
+                   
                         </div>
                         <div className="charity-location-wrapper">
                             <p className="charity-location-text">
@@ -205,24 +205,19 @@ export default function CharityItem({
                                 </div>
                             </div>
                             <div className="donation-button-container">
-                                <span className="site-donation-button" onClick={()=>onHandlePayment()}>
+                                <Link className="site-donation-button" to={`/donate/${charityid}`}>
                                     <p className="site-donation-text">
                                         Direct Donation
                                     </p>
-                                </span>
+                                </Link>
                                 <Link className={`link-donation-button`} to={url}>
                                     <p className="link-donation-text">
                                         Donate On-Site
                                     </p>
                                 </Link>
-           
-        
                             </div>
-
-
                         </div>
     }
-
                         <div className={`charity-categories-wrapper ${(selected&&expanded)?'selected-categories':(!selected && expanded)?'unselected-categories':''}`}>
                             <div className={`charity-categories-container ${category.toLowerCase()}-container`}>
                                 <p className="charity-category-text">
@@ -246,8 +241,6 @@ export default function CharityItem({
                         </div>
                     </div>
                 </div>
-                
-
 
                 <div className={`charity-figure-container ${(selected&&expanded)?'selected-score':(!selected && expanded)?'unselected-score':''}`}>
                     <div className={`charity-score-container ${category.toLowerCase()}-circle`}>
@@ -257,7 +250,6 @@ export default function CharityItem({
                         />   
                             <div className="blur-wrapper">
                                 <div className={`circle-blur ${category.toLowerCase()}-blur`}/>                
-                        
                             </div>
                         <p className="overall-score">
                             {`${parseFloat(score).toFixed(1)}`}

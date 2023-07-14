@@ -1,0 +1,33 @@
+.donate-page {
+    min-width: 100vw;
+    min-height: 100vh;
+    background-image: url('./assets/background5.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin:0;
+    //background-color: #151515;
+    flex: 1;
+    overflow: hidden;
+}
+.test-text {
+    color:#eee;
+    font-size: clamp(16px, 5vw, 32px);
+    font-family: 'Inter';
+    font-weight: 800;
+    align-self: center;
+}
+.loading-text {
+    font-size: clamp(12px, 5vw, 16px);
+    font-family: 'Rubik';
+    font-weight: 400;
+    align-self: center;
+}
+.loading-container {
+    align-self: center;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    width: fit-content;
+    height: fit-content;
+}
