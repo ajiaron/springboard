@@ -20,12 +20,28 @@
     //background-color: #151515;
     flex: 1;
     overflow: hidden;
-
+    transition: all .25s linear;
 }
+.active-container {
+  animation-name:animate-lighten;
+  animation-timing-function:linear;
+  animation-duration: .25s;
+  animation-fill-mode: forwards;
+  transition: all .25s linear;
+}
+@keyframes animate-lighten {
+  from {
+      filter: brightness(.6) blur(4px);
+  }
+  to {   
+      filter: brightness(1) blur(0px);
+  }
+}
+
 .dim-container {
-  
   transition: all .15s linear;
-  filter: brightness(.6);
+  filter: brightness(.6) blur(4px);
+  overflow: hidden;
 }
 
 .catalog-header-container {
@@ -33,7 +49,7 @@
     height:40%;
     //padding-left: 6.25em;
    // display: flex;
-  overflow-x: hidden;
+  overflow: hidden;
 
     align-self: center;
     margin-left: auto;
@@ -193,11 +209,13 @@
   display: flex;
   margin-right: auto;
   //text-align: right;
+  z-index: 1;
   padding-bottom: .5rem;
   padding-left:.5rem;
  
 }
 .loading-text-container {
+  z-index: 1;
   width: 100%;
   display: flex;
   align-items: center;

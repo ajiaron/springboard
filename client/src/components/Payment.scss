@@ -2,24 +2,39 @@ textarea {
     resize: none;
   }
 .payment-screen-wrapper {
-    position: absolute;
-    min-height:76%;
+    position: fixed;
+    height:77.25%;
    // overflow: hidden;
-    min-width: 30%;
+    width: 30%;
+    margin: auto;
+    top: 0; 
+    bottom: 0; 
     z-index: 999;
-    border-radius: 26px;
-    background-color: #202020;
+    border-radius: 28px;
+    background-color: #252525dd;
     left:50%;
     padding-left:1.5rem;
     padding-right:1.5rem;
-    padding-top:1.5rem;
+    padding-top:.5rem;
     padding-bottom: .5rem;
     align-self: center;
-    //filter:brightness(1.5);
-    transform: translate(-50%, 0);
+    animation-name:animate-payment;
+    animation-timing-function: ease-in-out;
+    animation-duration: .2s;
+    animation-fill-mode: forwards;
+   // filter:brightness(1.5);
+   // transform: translate(-50%, 0);
    // background-color: #353535;
 }
 
+@keyframes animate-payment {
+    from {
+        transform: translateX(100%) ;
+    }
+    to {   
+        transform: translateX(-50%);
+    }
+}
 .payment-header-container {
     width: 100%;
    // height: 5%;
@@ -84,7 +99,7 @@ textarea {
     flex-direction: row;
     display: flex;
     height: fit-content;
-    margin-top:1.5rem;
+    margin-top:1.35rem;
     list-style: none;
     transform: scale(1.0);
     gap:1.25rem;
@@ -92,7 +107,7 @@ textarea {
 }
 .payment-option-bottom-row {
     flex-direction: row;
-    margin-top: 1.25rem;
+    margin-top: 1rem;
     transform: scale(1.0);
     list-style: none;
     display: flex;
@@ -106,7 +121,7 @@ textarea {
     background-color: #1a1a1a;
     //background-color: rgba(238, 238, 238, 0.897);
     width: 4.5em;
-    border-radius: 20px;
+    border-radius: 16px;
     height: 2.5em;
     align-items: center;
     justify-content: center;
@@ -120,13 +135,13 @@ textarea {
 }
 .payment-option-text {
  
-    font-family: "Inter";
+    font-family: "Rubik";
     margin-left: auto;
     align-self: center;
     margin-right: auto;
     font-size: clamp(12px, 3vw, 16px);
-    letter-spacing: -.25px;
-    font-weight: 600;
+    letter-spacing: .25px;
+    font-weight: 400;
     color:#eee;
 }
 .payment-info-container {
@@ -215,7 +230,7 @@ textarea {
     align-items: center;
     background-color: #1a1a1a;
     align-self: center;
-    min-height:2.5em;
+    min-height:2.75em;
 }
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
@@ -231,7 +246,7 @@ input[type="number"] {
 .message-input-container {
     border-radius: 16px;
     padding-left: 1.5em;
-    margin-top: .75em;
+    margin-top: 1em;
     padding-top:1em;
     outline:none;
     font-family: 'Rubik';
@@ -240,7 +255,7 @@ input[type="number"] {
     color:#efefef;
     background-color: #1a1a1a;
     align-self: center;
-    min-height:7.5em;
+    min-height:10.5em;
 }
 .message-input-container::placeholder {
     color:#656565;
@@ -259,10 +274,11 @@ input[type="number"] {
     border-radius: 32px;
     align-self: center;
    // background-color: rgb(214, 178, 87);
-     background-color: rgba(238, 238, 238, 0.879);
+     background-color: rgba(228, 228, 228, 0.875);
   //   background: linear-gradient(135deg, rgba(159, 99, 195, 0.9), rgba(112, 77, 207, 0.9));
     min-width: 65%;
     margin-left: auto;
+    text-decoration: none;
     margin-right: auto;
     margin-bottom: 1.5em;
     //outline: 1px solid rgba(208, 206, 202, 0.9);
@@ -315,18 +331,52 @@ input[type="number"] {
 .arrow-icon {
     padding-right: 1em;
     transform: translateX(-.15em);
+    color: #0a0a0a;
     width: 1.5em;
     padding-bottom: .05em;
     height: 1.5em;
 }
 .paypal-button {
-    max-width: 70%;
-    transform: scale(.95);
+
     //min-height: 2.75em;
+  //  opacity:0;
     margin-top: 1.25em;
-    border-radius: 32px;
-    align-self: center;
+    border-radius: 5px;
+    min-width: 100%;
+    padding-top: .05em;
+
+    display: flex;
+  
+    background-color: #fff;
+}
+.card-button {
+
+    //min-height: 2.75em;
+  //  opacity:0;
+    margin-top: 1.125em;
+    border-radius: 5px;
+    min-width: 100%;
+    padding-top: .05em;
+    display: flex;  
+    background-color: #2e2e2e;
+}
+.exit-container {
+    max-width: fit-content;
+    max-height: fit-content;
+    //background-color: red;
+    padding-left: .25em;
+    transform: translateY(.75em);
+    padding-top: .35em;
     margin-left: auto;
-    margin-right: auto;
-   // background-color: #efefef;
+}
+.exit-icon {
+    padding: 0;
+    color:#a0a0a0;
+
+    transform: scale(1.4);
+  //  margin-top: .75em;
+    padding-right: .5em;
+   
+   // margin-left: auto;
+    align-self: flex-end;
 }

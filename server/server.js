@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express');
 const path = require('path');
 const app = express();
@@ -6,6 +7,10 @@ const cors = require('cors')
 app.use(express.json())
 app.use(cors())
 app.use(express.static(path.join(__dirname, '../client/build')));
+app.use(express.static("public"))
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
 
 const db = mysql.createConnection({
     user:'root',
@@ -15,7 +20,15 @@ const db = mysql.createConnection({
     database:'andale_db',
  }
 )
-
+/*
+app.get('/paypal/:description/:value', (req, res) => {
+    const description = req.params.description;
+    const value = Number(req.params.value); 
+    console.log(description)
+    console.log(value)
+    res.render('paypal', { description, value }); // pass them into the view
+});
+*/
   
 
 app.get('/catalog/getitems', (req,res)=> {

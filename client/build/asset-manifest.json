@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/static/css/main.945de3c5.css",
+    "main.js": "/static/js/main.20e42cb0.js",
+    "static/media/handshake.svg": "/static/media/handshake.311bb5a089073063b63f.svg",
+    "static/media/planetscene2.svg": "/static/media/planetscene2.f298fe12e33745fa9e24.svg",
+    "static/media/pencil3.svg": "/static/media/pencil3.bd45d780b86ed85b741b.svg",
+    "static/media/leaves2.svg": "/static/media/leaves2.ec1649fc5017818db9de.svg",
+    "static/media/background5.svg": "/static/media/background5.0cbcb3fa0838addfc731.svg",
+    "static/media/logo.svg": "/static/media/logo.695b4d38896082c5a555.svg",
+    "static/media/github-white.svg": "/static/media/github-white.97ed8e7eef60d61ca469.svg",
+    "index.html": "/index.html",
+    "static/media/linkedin.svg": "/static/media/linkedin.5ac60f763d67801ffb98.svg",
+    "static/media/background8.svg": "/static/media/background8.7f7257f35341beebbd32.svg",
+    "static/media/gmail.svg": "/static/media/gmail.602ec983b2324da702f8.svg",
+    "main.945de3c5.css.map": "/static/css/main.945de3c5.css.map",
+    "main.20e42cb0.js.map": "/static/js/main.20e42cb0.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.945de3c5.css",
+    "static/js/main.20e42cb0.js"
+  ]
+}

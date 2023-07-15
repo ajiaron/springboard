@@ -9,27 +9,28 @@ import { useInView } from 'react-intersection-observer';
 import { FiMail } from "react-icons/fi";
 import {GoArrowRight} from 'react-icons/go'
 import {AiOutlineArrowRight} from 'react-icons/ai'
+import {LiaTimesSolid} from 'react-icons/lia'
 import { debounce } from "lodash";
 import Paypal from "./Paypal";
 import styled from 'styled-components'
 
 
-export default function Payment({charityid}) {
-    const [value, setValue] = useState(0)
-    const [charityName, setCharityName] = useState('')
+export default function Payment({charityid, onClose}) {
+    const [value, setValue] = useState(1)
     const [message, setMessage] = useState('')
+    const modalRef = useRef(null);
     const [selected, setSelected] = useState(false)
     const [customValue, setCustomValue] = useState(0)
     const [loading, setLoading] = useState(true)
     const [charityInfo, setCharityInfo] = useState([])
     function handleTest() {
-        console.log(charityName)
+        console.log(charityid)
     }
     const PaymentOption = styled.span`
         border: ${props => props.primary?'1px solid rgb(148, 86, 183)':'1px solid #ccc'};
         background-color: ${props=>props.primary?'rgb(148, 86, 183)':'#1a1a1a'};
         width: 4.5em;
-        border-radius: 22px;
+        border-radius: 18px;
         height: 2.5em;
         display: flex;
         align-items: center;
@@ -52,7 +53,6 @@ export default function Payment({charityid}) {
             setLoading(true)
             try {
                 const res = await axios.get(`http://localhost:3000/donate/getcharity/${charityid}`)
-                setCharityName(res.data[0].charity_name)
                 setCharityInfo(res.data)
             }
             catch(error) {
@@ -73,10 +73,29 @@ export default function Payment({charityid}) {
             setValue(0)
         }
     }, [customValue])
+    
+
+    const handleOutsideClick = (event) => {
+        if (modalRef.current && !modalRef.current.contains(event.target)) {
+            onClose();
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleOutsideClick);
+        return () => {
+        document.removeEventListener('mousedown', handleOutsideClick);
+        };
+    }, []);
     return (
  
-            <div className="payment-screen-wrapper">
+            <div className="payment-screen-wrapper" ref={modalRef}>
+      
                 <div className="payment-header-container">
+                    <span className="exit-container" onClick={()=>onClose()}>
+                        <LiaTimesSolid className="exit-icon"/>
+                    </span>
+   
                     <p className="payment-header-text">
                         Your Donation Details
                     </p>
@@ -101,13 +120,13 @@ export default function Payment({charityid}) {
                                 $10
                             </p>
                         </PaymentOption>
-                    </div>
-                    <div className="payment-option-bottom-row">
                         <PaymentOption primary={(value===20)&&!customValue} onClick={()=>setValue((value !== 20)?20:0)}>
                             <p className="payment-option-text">
                                 $20
                             </p>
                         </PaymentOption>
+                    </div>
+                    <div className="payment-option-bottom-row">
                         <PaymentOption primary={(value===50)&&!customValue} onClick={()=>setValue((value!==50)?50:0)}>
                             <p className="payment-option-text">
                                 $50
@@ -121,6 +140,11 @@ export default function Payment({charityid}) {
                         <PaymentOption primary={(value===200)&&!customValue} onClick={()=>setValue((value!==200)?200:0)}>
                             <p className="payment-option-text">
                                 $200
+                            </p>
+                        </PaymentOption>
+                        <PaymentOption primary={(value===500)&&!customValue} onClick={()=>setValue((value!==500)?500:0)}>
+                            <p className="payment-option-text">
+                                $500
                             </p>
                         </PaymentOption>
                     </div>
@@ -150,23 +174,27 @@ export default function Payment({charityid}) {
                             placeholder={`Share a comment...`}
                             className="message-input-container" />
                 </div>
-            {!loading ?
-              <Paypal 
-                charityid={charityid}
-                name={charityInfo.length > 0 ? charityInfo[0].charity_name : 'No charity info'}
-                amount={customValue>0?customValue:value}
-              />
-            :
-               <div className="payment-confirm-container">
-                    <span className="payment-confirm-button" onClick={()=>handleTest()}>
+        
+                {/*
+                    <Paypal 
+                    charityid={charityid}
+                    name={charityInfo.length > 0 ? charityInfo[0].charity_name : 'No charity info'}
+                    amount={customValue>0?customValue:value}
+                  />*/
+                }
+                {
+                <div className="payment-confirm-container">
+                    <Link className="payment-confirm-button" 
+                    to={(loading)?'#':`/donate/${charityid}/${charityInfo[0].charity_name}/${customValue>0?customValue:value}`}>
                         <p className="payment-confirm-text">
-                            Confirm Your Donation
+                            {
+                            `${loading?'Loading...':'Confirm Your Donation'}`
+                            }
                         </p>
                         <GoArrowRight className="arrow-icon"/>
-                    </span>
+                    </Link>
                 </div>
-            }
+                }
             </div>
-
     )
 }

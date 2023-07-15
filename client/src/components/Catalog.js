@@ -29,6 +29,7 @@ export default function Catalog() {
     const loadingRef = useRef(null)
     const [page, setPage] = useState(1)
     const pageSize = 10;
+    const [paymentActive, setPaymentActive] = useState(null)
     const [entryList, setEntryList] = useState([])
     const [screenWidth, setScreenWidth] = useState(window.innerWidth)
     const [screenHeight, setScreenHeight] = useState(window.innerHeight)
@@ -50,8 +51,11 @@ export default function Catalog() {
     const removeFilters = (e) => {
         setFilter(filter.filter(item=>item !== e))
     }
-    const handlePayment = () => {
-        setOpenPayment(!openPayment)
+    const handlePayment = (charityid) => {
+        setPaymentActive(charityid)
+    }
+    const onClosePayment = () => {
+        setPaymentActive(null)
     }
     function handleTest() {
         console.log(category)
@@ -147,10 +151,22 @@ export default function Catalog() {
       }
     };
   }, []);
+  useEffect(()=>{
+    if (paymentActive !== null) {
+        document.body.style.overflow='hidden'
+    }
+    else {
+        document.body.style.overflow='auto'
+    }
+  }, [paymentActive])
     return (
-        <div className={`catalog-main-container`}>
-            <div className="catalog-main-content">
+        <div className={`catalog-main-container `}>
+                {
+                    (paymentActive!==null)&&<Payment charityid={paymentActive} onClose={onClosePayment}/>
+                }
+            <div className={`catalog-main-content  ${paymentActive!== null?'dim-container':''}`}>
             <Navbar/>
+     
                 <div className="catalog-header-container" ref={topRef}>
                     <div className="catalog-header-wrapper">
                         <p className="catalog-header-text">
@@ -182,10 +198,8 @@ export default function Catalog() {
                 </div>
             </div>
                         
-            <div className="charity-catalog-container">
-                {/*(openPayment)&&
-                    <Payment/>
-                            */}
+            <div className={`charity-catalog-container  ${paymentActive!== null?'dim-container':''}`}>
+          
                 <div className="panel-container" >
                     <div className="panel-wrapper" ref={panelRef}
                             style={{ transform:`translateY(${scrollY}px)`}}

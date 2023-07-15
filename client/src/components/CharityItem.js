@@ -205,11 +205,11 @@ export default function CharityItem({
                                 </div>
                             </div>
                             <div className="donation-button-container">
-                                <Link className="site-donation-button" to={`/donate/${charityid}`}>
+                                <span className="site-donation-button" onClick={()=>onHandlePayment(charityid)}>
                                     <p className="site-donation-text">
                                         Direct Donation
                                     </p>
-                                </Link>
+                                </span>
                                 <Link className={`link-donation-button`} to={url}>
                                     <p className="link-donation-text">
                                         Donate On-Site
