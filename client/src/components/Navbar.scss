@@ -13,6 +13,19 @@
     align-items: center;
    
 }
+.app-logo-alt {
+    background-image: url('./assets/logo-alt.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    overflow: visible;
+    width: 45px;
+    filter: brightness(.9);
+    transform: scale(.9) scaleX(1.1) translateY(.7em) translateX(-.75em);
+    height: 45px;
+    align-items: center;
+   
+}
 .logo-text {
     font-size:clamp(12px,5vw,24px);
     font-weight: 600;

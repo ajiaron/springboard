@@ -60,8 +60,7 @@ export default function Payment({charityid, onClose}) {
             } 
             setLoading(false)
         }
-        loadCharity()
-        
+        loadCharity()  
     }, [charityid])
     useEffect(()=> {
         if (value) {
@@ -73,29 +72,24 @@ export default function Payment({charityid, onClose}) {
             setValue(0)
         }
     }, [customValue])
-    
-
     const handleOutsideClick = (event) => {
         if (modalRef.current && !modalRef.current.contains(event.target)) {
             onClose();
         }
     };
-
     useEffect(() => {
         document.addEventListener('mousedown', handleOutsideClick);
         return () => {
         document.removeEventListener('mousedown', handleOutsideClick);
         };
     }, []);
+    
     return (
- 
             <div className="payment-screen-wrapper" ref={modalRef}>
-      
                 <div className="payment-header-container">
                     <span className="exit-container" onClick={()=>onClose()}>
                         <LiaTimesSolid className="exit-icon"/>
                     </span>
-   
                     <p className="payment-header-text">
                         Your Donation Details
                     </p>

@@ -20,15 +20,39 @@ p {
     min-width: 100vw;
     background-image: url('./assets/background5.svg');
     background-position: center;
-  
     background-repeat: no-repeat;
-
+    transition: all .25s linear;
     background-size: cover;
     margin:0;
     //background-color: #151515;
     flex: 1;
-    overflow: scroll;
+   // overflow: hidden;
 }
+.dim-landing-container {
+  transition: all .15s linear;
+  filter: brightness(.6) blur(4px);
+  pointer-events: none;
+ // overflow: hidden;
+}
+
+.inactive-landing-container {
+  animation-name:animate-dimming;
+  animation-timing-function:linear;
+  animation-duration: .25s;
+  pointer-events: none;
+  animation-fill-mode: forwards;
+
+  //transition: all .25s linear;
+}
+@keyframes animate-dimming {
+  from {
+      filter: brightness(1) blur(0px);
+  }
+  to {   
+      filter: brightness(.6) blur(4px);
+  }
+}
+
 .main-content-lower {
   min-height: 67.5vh;
   min-width: 100vw;
@@ -120,7 +144,7 @@ p {
   align-items: center;
 }
 
-.hero-button-left {
+.register-button {
   width: 48%;
   height:100%;
   border-radius: 8px;
@@ -132,10 +156,10 @@ p {
   background-color:#a27caf;
   background-image: linear-gradient(45deg,#945aa6, #a27caf);
 }
-.hero-button-left:hover {
+.register-button:hover {
   transform: scale(1.05);
 }
-.hero-button-right {
+.login-button {
   width: 48%;
   align-items: center;
   border-radius: 8px;
@@ -148,7 +172,7 @@ p {
   background-image: linear-gradient(75deg,#d0a434, #cdad5c);
  // background-color:#c1a04b;
 }
-.hero-button-right:hover {
+.login-button:hover {
   transform: scale(1.05);
 }
 .hero-button-text {
@@ -229,6 +253,17 @@ p {
     background-image: linear-gradient(175deg,#318c77, #246264);
   }
 }
+.test-content-item {
+  min-width: 48%;
+  transition: all .15s linear;
+  min-height:100%;
+  align-items: flex-end;
+  display: flex;
+  box-shadow: 3px 3px 2px 4px rgba(0,0,0,0.15);
+  border-radius: 28px;
+  background-image: linear-gradient(175deg,#318c77, #246264);
+}
+
 .grid-item-text {
   font-size: clamp(20px, 3vw, 38px);
   color:#8ad3cd;
@@ -276,7 +311,7 @@ p {
   text-shadow: 3px 2px 1px rgba(28, 28, 28, 0.15);
 }
 .grid-item-text-left {
-  font-size: clamp(22px, 3vw, 42px);
+  font-size: clamp(22px, 3vw, 40px);
   color:#151515;
   letter-spacing: .5px;
   z-index: 1;
@@ -395,10 +430,10 @@ p {
 
 
 .star-icon {
-  transform: rotate(90deg) scale(1.0);
+  transform: rotate(90deg) scale(.975);
   color:#151515;
   padding-left:12px;
-  padding-top:10px;
+  padding-top:12px;
 }
 .subcontent-item-category {
   width: fit-content;
@@ -414,7 +449,7 @@ p {
   font-family: 'Rubik';
   font-weight:400;
   letter-spacing: -.25px;
-
+  z-index: 1;
   transform: scaleY(1.035);
 }
 .subcontent-item-figure {

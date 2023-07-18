@@ -160,11 +160,11 @@ export default function Catalog() {
     }
   }, [paymentActive])
     return (
-        <div className={`catalog-main-container `}>
+        <div className={`catalog-main-container`}>
                 {
                     (paymentActive!==null)&&<Payment charityid={paymentActive} onClose={onClosePayment}/>
                 }
-            <div className={`catalog-main-content  ${paymentActive!== null?'dim-container':''}`}>
+            <div className={`catalog-main-content ${paymentActive!== null?'dim-container':''}`}>
             <Navbar/>
      
                 <div className="catalog-header-container" ref={topRef}>

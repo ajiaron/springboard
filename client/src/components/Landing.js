@@ -3,21 +3,48 @@ import './Landing.scss'
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import SideBar from "./SideBar";
+import Signin from "./Signin";
 import { BsStars } from 'react-icons/bs'
 import { Link } from "react-router-dom";
 import { useInView } from 'react-intersection-observer';
 import { FiMail } from "react-icons/fi";
 
 export default function Landing() {
-    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-    const [screenHeight, setScreenHeight] = useState(window.innerHeight);
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth)
+    const [screenHeight, setScreenHeight] = useState(window.innerHeight)
+    const [signInActive, setSignInActive] = useState(null)
+    const [firstRender, setFirstRender] = useState(true)
+    const [isActive, setIsActive] = useState(true)  // background is active
+    const handleSignIn = (type) => {
+        setFirstRender(false)
+        setSignInActive(type)
+        setIsActive(false)
+    }
+    const handleBlur = () => {
+        setIsActive(true)
+    }
+    const closeSignIn = () => {
+        setSignInActive(null)
+    }
+    function handleTest() {
+        console.log(signInActive)
+    }
+    useEffect(()=>{
+        if (signInActive !== null) {
+            document.body.style.overflow='hidden'
+        }
+        else {
+            document.body.style.overflow='auto'
+        }
+      }, [signInActive])
     return (
         <div className="landing-container">
-            <div className="main-content">
+        {
+            (signInActive!==null)&&<Signin type={signInActive} onClose={closeSignIn} onBlur={handleBlur}/>
+        }
+            <div className={`main-content ${!isActive?(!firstRender)?'inactive-landing-container':'dim-landing-container':(!firstRender)?'active-container':''}`}>
                 <Navbar/>
                 <div className="content-container">
-
-        
                     <div className="hero-text-container">
                         <div className="hero-header-container">
                             <p className="hero-header">
@@ -31,16 +58,16 @@ export default function Landing() {
                         </div>
                         
                         <div className="hero-button-container">
-                            <div className="hero-button-left">
+                            <span className="register-button" onClick={()=>handleSignIn('register')}>
                                 <p className="hero-button-text">
                                     Create Account
                                 </p>
-                            </div>
-                            <div className="hero-button-right">
+                            </span>
+                            <span className="login-button" onClick={()=>handleSignIn('login')}>
                                 <p className="hero-button-text">
                                     Sign In
                                 </p>
-                            </div>
+                            </span>
                         </div>
                     </div>
 
@@ -58,20 +85,19 @@ export default function Landing() {
                         </Link>
 
                         <div className="grid-pair">
-                            <div className="grid-content-item">
+                            <span className="grid-content-item" onClick={()=>handleTest()}>
                                 <div className="grid-item-text-container-alt">
                                     <p className="grid-item-text-left">
                                         AI <BsStars className="star-icon"/><br/>Support
                                     </p>
                                 </div>
-                            </div>
-                            <div className="grid-content-item">
+                            </span>
+                            <div className="test-content-item">
                                 <div className="grid-item-text-container">
                                     <p className="grid-item-text">
                                         Your<br/>Donations
                                     </p>
                                 </div>
-                
                             </div>
                         </div>
                         <div className="grid-pair">
@@ -101,7 +127,7 @@ export default function Landing() {
 
             </div>
 
-            <div className="main-content-lower">
+            <div className={`main-content-lower`}>
 
                 <div className="subcontent-wrapper">
                     <div className="content-lower-header">

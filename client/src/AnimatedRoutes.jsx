@@ -4,6 +4,7 @@ import {AnimatePresence } from 'framer-motion'
 import Landing from './components/Landing'
 import Catalog from './components/Catalog';
 import Donate from './components/Donate';
+import Profile from './components/Profile'
 import CharityItem from './components/CharityItem';
 
 function AnimatedRoutes() {
@@ -13,6 +14,7 @@ function AnimatedRoutes() {
         <Routes location={location} key={location.pathname}>
             <Route path='/' element={<Landing />} />
             <Route path='/catalog' element={<Catalog/>}/>
+            <Route path='/profile' element={<Profile/>}/>
             <Route path='/donate/:charityid/:charityname/:amount' element={<Donate/>}/>
         </Routes>
     </AnimatePresence>

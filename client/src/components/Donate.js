@@ -22,7 +22,7 @@ export default function Donate() {
 
     return (
         <div className="donate-page">
-               <Navbar/>
+               <Navbar route={'donate'}/>
             <div className="donate-page-container">
         
                 <div className={`checkout-container`}>
@@ -47,7 +47,7 @@ export default function Donate() {
                             </p>
                             <div className="dedication-container">
                                 <p className="dedication-text">
-                                    smile too much they call me Giddey
+                                    not a chef but boyardeez expensive
                                 </p>
                             </div>
                         </div>
@@ -118,19 +118,16 @@ export default function Donate() {
                                         </p>
                                         <p className="cart-item-text">
                                             SKU: XYZ-1364570
-                                        </p>
-                                
+                                        </p>   
                                   <div className="cart-item-type-wrapper">
                                      <p className="cart-item-type-text">
                                         Education
                                     </p>
                                   </div>
-                             
-                            
                                 </div>
                                 <div className="cart-item-price">
                                     <p className="item-price-text">
-                                        ${params.amount}
+                                        {`$${parseFloat(params.amount).toFixed(2)}`}
                                     </p>
                                 </div>
                             </div>
@@ -145,9 +142,6 @@ export default function Donate() {
                             </div>
                         </div>
                     </div>
-                  
-                 
-
                 </div>
             </div>        
         </div>

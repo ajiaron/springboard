@@ -3,8 +3,9 @@ import { Link, useLocation } from "react-router-dom"
 import {BiMenu, BiHome} from 'react-icons/bi'
 import {BsFillArrowUpLeftCircleFill} from 'react-icons/bs'
 import './Navbar.scss'
-export default function Navbar() {
+export default function Navbar({route}) {
     const location = useLocation()
+    const [currentPage, setCurrentPage] = useState(route?route:'')
     return (
         <div className="logo-container">
             {/*
@@ -22,17 +23,21 @@ export default function Navbar() {
                     </Link>
                 </div>               
             </div>
-    */}
-       <Link to ='/' className="landing-link">
-                    
+          */}
+            <Link to ='/' className="landing-link">    
+            {((route && route === 'donate') || (route && route === 'profile'))?
+                <div className="app-logo-alt"/>:
+                <>
                     <div className="app-logo"/>
                     <div className="logo-text-container">   
-                
                         <p className="logo-text">
                             Springboard
                         </p> 
                     </div>
-                    </Link>
+                </>
+                
+            }
+            </Link>
         </div>
     )
 }
