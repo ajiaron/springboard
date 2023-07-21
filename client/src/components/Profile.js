@@ -4,58 +4,57 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import CharityItem from './CharityItem'
 import SideBar from "./SideBar";
+import Favorites from "./Favorites";
 import { BsStars } from 'react-icons/bs'
 import { Link } from "react-router-dom";
 import { AiOutlineLink, AiOutlineEdit,AiOutlineClockCircle } from 'react-icons/ai'
 
-const DonationIten = ({name, type}) => {
+
+
+const DonationItem = ({name, type, index}) => {
     return (
-        <div className="profile-donation-item">
+    <div className={`profile-donation-item ${index===2?'donation-item-last':''}`}>
         <div className="profile-donation-item-info">
-                <p className="profile-donation-item-title">
-                    {name}
-                </p>
-                <div className="profile-donation-text-wrapper">
-                    <AiOutlineClockCircle className="profile-clock-icon"/>
+            <p className="profile-donation-item-title">
+                {name}
+            </p>
+            <div className="profile-donation-text-wrapper">
+                <AiOutlineClockCircle className="profile-clock-icon"/>
                 <p className="profile-donation-item-text">
                     3 weeks ago
                 </p>   
-                </div>
+            </div>
 
-          <div className={`profile-donation-item-type-wrapper profile-${type.toLowerCase()}`}>
-             <p className="profile-donation-item-type-text">
-                {type==='Human'?'Human Rights & Services':
-                type==='Research'?'Research & Public Policy':
-                type==='Community'?'Community Development'
-            :type}
-            </p>
-          </div>
+            <div className={`profile-donation-item-type-wrapper profile-${type.toLowerCase()}`}>
+                <p className="profile-donation-item-type-text">
+                    {type==='Human'?'Human Rights & Services':
+                    type==='Research'?'Research & Public Policy':
+                    type==='Community'?'Community Development'
+                :type}
+                </p>
+            </div>
         </div>
-       
     </div>
     )
 }
 const FriendsItem = ({name, status}) => {
     return (
-        <div className="profile-friends-item">
-            <div className="profile-friends-image-container">
-                <div className="profile-friends-image-wrapper">
+    <div className="profile-friends-item">
+        <div className="profile-friends-image-container">
+            <div className="profile-friends-image-wrapper">
 
-                </div>
             </div>
-            <div className="profile-friends-item-info">
-                    <p className="profile-friends-item-title">
-                        {name}
-                    </p>
-                    <div className="profile-friends-text-wrapper">
-                       
-                    <p className="profile-donation-item-text">
-                        Follows you
-                    </p>   
-                    </div>
-
-            
+        </div>
+        <div className="profile-friends-item-info">
+            <p className="profile-friends-item-title">
+                {name}
+            </p>
+            <div className="profile-friends-text-wrapper">
+                <p className="profile-donation-item-text">
+                    Follows you
+                </p>   
             </div>
+        </div>
     </div>
     )
 }
@@ -63,6 +62,11 @@ const FriendsItem = ({name, status}) => {
 
 export default function Profile() {
   const [nickname, setNickname] = useState('')
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth)
+  const [screenHeight, setScreenHeight] = useState(window.innerHeight)
+  function handleTest() {
+      console.log('W:', screenWidth, 'H:',screenHeight)
+  }
   return (
     <div className="profile-page-container">
         <Navbar route={'profile'}/>
@@ -75,7 +79,7 @@ export default function Profile() {
                 </div>
                 <div className="profile-header-wrapper">
                     <p className="profile-header-text">
-                        Aaron Jiang
+                        {`Aaron Jiang`}
                     </p>
                     <div className="profile-link-container">
                         <AiOutlineLink className="link-icon"/>
@@ -127,14 +131,23 @@ export default function Profile() {
                             value={nickname}
                             onChange={(e)=>setNickname(e.target.value)}
                             placeholder="Enter a display name"/>
-                   
-                        
                         </div>
-                  
                     </div>
                 </div>
             </div>
-            
+            <div className="profile-favorites-wrapper">
+                 <div className="donation-details-container">
+                        <p className="donation-details-text">
+                            Favorite Charities
+                        </p>
+                        <p className="donation-details-subtext">
+                            Your collection of charities to be displayed on your profile.
+                        </p>
+                </div>
+                <div className="profile-favorites-container">
+                    <Favorites/>
+                </div>
+            </div>
             <div className="account-container">
                 <div className="account-donations-container">
                     <div className="donation-details-container">
@@ -148,9 +161,9 @@ export default function Profile() {
 
                     <div className="account-donations-list">
                         <div className="account-donations-list-content">
-                            <DonationIten name={'American Heart Association'} type={'Healthcare'}/>
-                            <DonationIten name={'Nevada Conservation Fund'} type={'Environment'}/>
-                            <DonationIten name={'Open Source Foundation'} type={'Research'}/>
+                            <DonationItem name={'American Heart Association'} type={'Healthcare'} index={0}/>
+                            <DonationItem name={'Nevada Conservation Fund'} type={'Environment'} index={1}/>
+                            <DonationItem name={'Open Source Foundation'} type={'Research'} index={2}/>
                         </div>
                     </div>
                 </div>
@@ -173,8 +186,8 @@ export default function Profile() {
                     </div>
                 </div>
             </div>
+            <Footer route={'profile'}/>
         </div>
-        <Footer/>
     </div>
   )
 }

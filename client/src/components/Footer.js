@@ -1,13 +1,13 @@
 import React, {useState, useEffect, useRef} from "react"
 import { Link } from "react-router-dom";
 import './Footer.scss'
-export default function Footer() {
+export default function Footer({route}) {
     return (
-        <div className="icon-container">
+        <div className={`${route && (route === 'profile' || route==='settings')?'icon-container-profile':'icon-container'}`}>
             <Link className="git-logo-button" to="https://github.com/ajiaron">
                 <div className="git-logo"></div>
             </Link>
-            <Link className="mail-button"  to={'#'} onClick={(e)=>{
+            <Link className="mail-button" to={'#'} onClick={(e)=>{
                 window.location.href = 'mailto:aaronjiang3942@gmail.com';
                 e.preventDefault();
             }}>

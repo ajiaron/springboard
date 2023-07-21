@@ -47,7 +47,7 @@ export default function Donate() {
                             </p>
                             <div className="dedication-container">
                                 <p className="dedication-text">
-                                    not a chef but boyardeez expensive
+                                    call me abusive the way i beat the odds
                                 </p>
                             </div>
                         </div>

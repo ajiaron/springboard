@@ -4,11 +4,12 @@ import {BsFillSuitHeartFill} from 'react-icons/bs'
 import {HiSpeakerphone} from 'react-icons/hi'
 import { Link, useParams } from "react-router-dom";
 
-export default function SideBar() {
+export default function SideBar({}) {
     return (
-        <div className="side-navigation">
+        <div 
+        className={`side-navigation`}>
         <div className="navigation-item-container">
-            <Link className="navigation-item" to={'/profile'}>
+            <Link className="navigation-item" to={'/settings'}>
                 <FiSettings className='settings-icon'/>
             </Link>
             <p className="navigation-item-text">
@@ -17,17 +18,21 @@ export default function SideBar() {
 
         </div>
         <div className="navigation-item-container">
-            <div className="navigation-item">
+            <Link className="navigation-item" to={'/cart'}>
                 <BsFillSuitHeartFill className='archive-icon'/>
-            </div>
+            </Link>
             <p className="navigation-item-text">
                 Archive
             </p>
         </div>
         <div className="navigation-item-container">
-            <div className="navigation-item">
+            <span className="navigation-item" 
+             onClick={(e)=>{
+             window.location.href = 'mailto:aaronjiang3942@gmail.com';
+             e.preventDefault();
+             }}>
                 <HiSpeakerphone className='feedback-icon'/>
-            </div>
+            </span>
             <p className="navigation-item-text">
                 Feedback
             </p>

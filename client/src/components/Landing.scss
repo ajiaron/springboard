@@ -265,26 +265,27 @@ p {
 }
 
 .grid-item-text {
-  font-size: clamp(20px, 3vw, 38px);
+  font-size: clamp(20px, 3vw, 37px);
   color:#8ad3cd;
   //color:#92d8d2;
-  letter-spacing: .5px;
+  //letter-spacing: .5px;
+  letter-spacing:-.5px;
   z-index: 1;
   //text-shadow: 3px 3px 2px rgba(28, 28, 28, 0.25);
 
-  line-height: 46px;
+  line-height: 44px;
   font-family: 'Inter';
   font-weight: 600;
 
 
 }
 .grid-item-text-container {
-  padding-left:1.35vw;
+  padding-left:1.5vw;
   padding-bottom:2.0vh;
 }
 .grid-item-text-container-alt {
-  padding-left:1.25vw;
-  padding-bottom:2.25vh;
+  padding-left:1.5vw;
+  padding-bottom:2vh;
 }
 .grid-item-text-container-bottom {
   padding-left:1.5vw;
@@ -299,7 +300,7 @@ p {
   -webkit-background-clip: text;
   -moz-background-clip: text;
        background-clip: text;
-  line-height: 40px;
+  line-height: 38px;
   font-family: 'Inter';
   font-weight: 600;
 }
@@ -311,9 +312,10 @@ p {
   text-shadow: 3px 2px 1px rgba(28, 28, 28, 0.15);
 }
 .grid-item-text-left {
-  font-size: clamp(22px, 3vw, 40px);
-  color:#151515;
-  letter-spacing: .5px;
+  font-size: clamp(22px, 3vw, 38px);
+  //color:#fcee99ee;
+  color:#0a0a0a;
+  letter-spacing:-.5px;
   z-index: 1;
   text-shadow: 3px 2px 1px rgba(28, 28, 28, 0.15);
   -webkit-background-clip: text;
@@ -325,15 +327,16 @@ p {
   font-weight: 600;
 }
 .grid-item-text-alt {
-  font-size: clamp(22px, 3vw, 38px);
+  font-size: clamp(22px, 3vw, 37px);
   color:#151515;
   letter-spacing: .5px;
+
   z-index: 1;
   text-shadow: 3px 2px 1px rgba(28, 28, 28, 0.15);
   -webkit-background-clip: text;
   -moz-background-clip: text;
        background-clip: text;
-  line-height: 44px;
+  line-height: 42px;
   
   font-family: 'Inter';
   font-weight: 600;
@@ -410,7 +413,7 @@ p {
 }
 .content-lower-text {
   font-size: clamp(16px, 3vw, 36px);
-  color:#fff;
+  color:#eee;
   font-family: 'Inter';
   letter-spacing: -.25px;
   text-shadow: 2px 4px 2px 4px rgba(0,0,0,0.25);
@@ -421,7 +424,7 @@ p {
 }
 .content-lower-subtext {
   padding-top: 2.5vh;
-  color: #a0a0a0;
+  color: #eee;
   font-size: clamp(12px, 4vw, 18px);
   line-height: 28px;
   font-family: 'Rubik';
@@ -430,10 +433,14 @@ p {
 
 
 .star-icon {
-  transform: rotate(90deg) scale(.975);
+  transform: rotate(90deg) scaleX(1.05) translateX(2.4em);
+  position: relative;
+  left: 75%;
+
   color:#151515;
-  padding-left:12px;
-  padding-top:12px;
+  align-self: flex-end;
+  min-width: 2em;
+  min-height: 2em;
 }
 .subcontent-item-category {
   width: fit-content;
@@ -776,7 +783,7 @@ p {
   padding-top:2.5vh;
 }
 .content-end-subtext {
-  color:#ababab;
+  color:#eee;
   font-size:clamp(12px, 3.5vw, 18px);
   font-family: 'Rubik';
   font-weight: 300;

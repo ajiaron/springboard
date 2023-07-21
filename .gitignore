@@ -26,3 +26,7 @@ yarn-error.log*
 .eslintcache
 
 /log
+.pack
+/.apck
+
+client/node_modules/.cache

@@ -25,6 +25,7 @@
     justify-content: center;
     transition: all .15s linear;
     height:4vw;
+    z-index: 999;
     border-radius: 90px;
     transition: all .15s linear;
     background-color: #4a4a4a;
@@ -56,6 +57,7 @@
     transition: all .125s linear;
     width: 1.8vw;
     padding-top: 1.5px;
+    z-index: 1;
     padding-right:2px;
     transform: rotate(-20deg);
     height:1.8vw;

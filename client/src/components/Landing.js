@@ -87,18 +87,21 @@ export default function Landing() {
                         <div className="grid-pair">
                             <span className="grid-content-item" onClick={()=>handleTest()}>
                                 <div className="grid-item-text-container-alt">
+                                    
+                                    {/*<BsStars className="star-icon"/>*/}
                                     <p className="grid-item-text-left">
-                                        AI <BsStars className="star-icon"/><br/>Support
+                                         
+                                        Recent<br/>Donations
                                     </p>
                                 </div>
                             </span>
-                            <div className="test-content-item">
+                            <span className="grid-content-item">
                                 <div className="grid-item-text-container">
                                     <p className="grid-item-text">
                                         Your<br/>Donations
                                     </p>
                                 </div>
-                            </div>
+                            </span>
                         </div>
                         <div className="grid-pair">
                             <div className="grid-content-item-low">
@@ -128,7 +131,6 @@ export default function Landing() {
             </div>
 
             <div className={`main-content-lower`}>
-
                 <div className="subcontent-wrapper">
                     <div className="content-lower-header">
                         <p className="content-lower-text">
@@ -138,11 +140,9 @@ export default function Landing() {
                             All presented data has been sourced from www.charitynavigator.org. Entries are curated<br>
                             </br>
                             based on their accountability and financial scores, as provided by Charity Navigator. 
-
                         </p>
                     </div>
                     <div className="subcontent-container">
-
                         <div className="subcontent-item-container hr-item">
                             <div className="subcontent-item-category">
                                 <p className="category-text category-hr">
@@ -153,7 +153,6 @@ export default function Landing() {
                                 <p className="subcontent-figure-text">
                                     100.0
                                 </p>
-                 
                             </div>
                             <div className="subcontent-item-name">
                                 <p className="subcontent-name-text">
@@ -161,7 +160,6 @@ export default function Landing() {
                                 </p>
                             </div>
                         </div>
-
                         <div className="subcontent-item-container education-item">
                             <div className="subcontent-item-category">
                                     <p className="category-text category-ed">
@@ -172,8 +170,6 @@ export default function Landing() {
                                     <p className="subcontent-figure-text">
                                         1st
                                     </p>
-                     
-                                 
                                 </div>
                                 <div className="subcontent-item-name">
                                     <p className="subcontent-name-text">
@@ -182,7 +178,6 @@ export default function Landing() {
                                     </p>
                                 </div>
                             </div>
-
                         <div className="subcontent-item-container health-item">
                             <div className="subcontent-item-category">
                                 <p className="category-text category-h">
@@ -201,7 +196,6 @@ export default function Landing() {
                                 </p>
                             </div>
                         </div>
-
                         <div className="subcontent-item-container environment-item">
                             <div className="subcontent-item-category">
                                 <p className="category-text category-ev">
@@ -219,7 +213,6 @@ export default function Landing() {
                                 </p>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -256,15 +249,10 @@ export default function Landing() {
                                     Charities in this category provide support for shelter and crisis services, youth development, and civil rights advocacy. 
                                 </p>
                             </div>
-
                         </div>
                
-                       
-                      
-          
-                   
                         <div className="subcontent-item-container-bottom">
-                        <div className="cause-icon-container">
+                            <div className="cause-icon-container">
                                 <div className="cause-icon-wrapper sprout-wrapper">
                                     <div className="sprout-icon">
 
@@ -281,7 +269,6 @@ export default function Landing() {
                                     Environmentally focused organizations assist in the conservation of wildlife, as well as our local parks and gardens.
                                 </div>
                             </div>
-                            
                         </div>
                         <div className="subcontent-item-container-bottom">
                             <div className="cause-icon-container">
@@ -301,24 +288,17 @@ export default function Landing() {
                                     Here, institutions are working to improve scholarships, financial support, and special education programs.
                                 </div>
                             </div>
-                            
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
             <div className="main-content-end">
                 <div className="main-content-end-wrapper">
-
-      
                     <div className="content-end-container">
                         <div className="content-end-header-wrapper">
                             <p className="content-end-header">
                                 GETTING STARTED
                             </p>
-
                         </div>
                         <div className="content-end-text-wrapper">
                             <p className="content-end-text">

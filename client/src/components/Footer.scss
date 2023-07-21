@@ -9,6 +9,21 @@
     padding-bottom: 2.75vh;
     gap:2.75vw;
   }
+  .icon-container-profile {
+    display: flex;
+    justify-content: flex-end;
+   // background-color: rgba(255, 0, 0, 0.231);
+    height: 7vh;
+ //   transform: translateX(-1em);
+    max-width:94.25%;
+    position: relative;
+    transform: scale(.925);
+    align-items: center;
+    filter: brightness(.7);
+   // padding-bottom: 2vh;
+
+    gap:2.875vw;
+  }
   .git-logo-button {
     outline: none;
     border:none;
