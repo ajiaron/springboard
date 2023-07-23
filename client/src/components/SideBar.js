@@ -18,7 +18,7 @@ export default function SideBar({}) {
 
         </div>
         <div className="navigation-item-container">
-            <Link className="navigation-item" to={'/cart'}>
+            <Link className="navigation-item" to={'/charity'}>
                 <BsFillSuitHeartFill className='archive-icon'/>
             </Link>
             <p className="navigation-item-text">

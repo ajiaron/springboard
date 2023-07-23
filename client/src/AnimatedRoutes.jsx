@@ -7,6 +7,8 @@ import Cart from './components/Cart'
 import Donate from './components/Donate';
 import Profile from './components/Profile'
 import Settings from './components/Settings';
+import Charity from './components/Charity';
+
 import CharityItem from './components/CharityItem';
 
 function AnimatedRoutes() {
@@ -18,6 +20,7 @@ function AnimatedRoutes() {
             <Route path='/catalog' element={<Catalog/>}/>
             <Route path='/profile' element={<Profile/>}/>
             <Route path='/settings' element={<Settings/>}/>
+            <Route path='/charity' element={<Charity/>}/>
             <Route path='/cart' element={<Cart/>}/>
             <Route path='/donate/:charityid/:charityname/:amount' element={<Donate/>}/>
         </Routes>
