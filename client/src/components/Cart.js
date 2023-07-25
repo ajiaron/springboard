@@ -18,15 +18,29 @@ import { FiMail } from "react-icons/fi";
 export default function Cart() {
   return (
     <div className="cart-page">
-        <Navbar route={'cart'}/>
+        <Navbar route={'settings'}/>
         <div className="cart-page-container">
 
                 <div className={`cart-page-wrapper`}>
+                    <p className="cart-page-header-text">
+                                Your Donation Items
+                    </p>
                     <div className={`cart-page-content`}>
                         <div className="cart-page-header-container">
-                            <p className="cart-page-header-text">
-                                Donation Cart
-                            </p>
+
+                            <div className="cart-header-wrapper" >
+                            <div style={{width:"85%"}}>
+                                <p className="cart-page-header-title">
+                                    Recipient Organization
+                                </p>
+                            </div>
+                            <div style={{width:"15%", display:"flex", alignItems:"center", justifyContent:"center"}}>
+                                <p className="cart-page-header-title">
+                                    Amount
+                                </p>
+                            </div>
+             
+                            </div>
                         </div>
                         <div className={`cart-page-item-list`}>
                             <div className="cart-page-item first-item">

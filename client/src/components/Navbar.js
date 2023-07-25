@@ -4,6 +4,7 @@ import {BiMenu, BiHome, BiSolidUser} from 'react-icons/bi'
 import {AiOutlineUser} from 'react-icons/ai'
 import {BsFillArrowUpLeftCircleFill,BsFillSuitHeartFill} from 'react-icons/bs'
 import {FiSettings} from 'react-icons/fi'
+import {FaShoppingBasket, FaShoppingCart} from 'react-icons/fa'
 import {FaUserFriends,FaUserCircle} from 'react-icons/fa'
 import {RiSettings5Fill} from 'react-icons/ri'
 import './Navbar.scss'
@@ -18,10 +19,10 @@ export default function Navbar({route}) {
     }
     return (
         <div className={`${(route&&(route==='profile'))
-        ?'logo-profile-container':route==='settings'
-        ?'logo-settings-container':'logo-container'}`}>
+        ?'logo-profile-container':route==='settings'||route==='charity-page'
+        ?`logo-settings-container`:'logo-container'}`}>
         {
-            route!=='profile' && route!=='settings'?
+            route!=='profile' && route!=='settings' && route!=='charity-page'?
              <div className="landing-link">    
              {((route && route === 'donate'))?
                  <Link className="landing-link" to='/'>
@@ -35,21 +36,24 @@ export default function Navbar({route}) {
                              Springboard
                          </p> 
                      </Link>
-                     <Link className={`${route==='cart'?'profile-cart-nav':'profile-nav-item'}`} to='/profile'>
-                        
-                        <div className={`navigation-item-alt ${route==='cart'?'cart-nav':''}`}>
-                            <p className={`${route==='cart'?'cart-nav-text':'navigation-item-text-alt'}`}>
-                                A
-                            </p>
-                        </div>
-                        
-                    </Link>
+                    
+            
+
+                        <Link className={`${route==='cart'?'profile-cart-nav':'profile-nav-item'}`} to='/profile'>
+                            <div className={`navigation-item-alt ${route==='cart'?'cart-nav':''}`}>
+                                <p className={`${route==='cart'?'cart-nav-text':'navigation-item-text-alt'}`}>
+                                    A
+                                </p>
+                            </div>
+                        </Link>
+           
+
                 </div>
              }
              </div>
              :
              <>
-                {route==='settings'&&
+                {(route==='settings' || route ==='charity-page') &&
                 <Link className="profile-nav-item-settings" to='/profile'>
                    <div className="settings-profile-item-alt">
                        <p className="navigation-item-text-alt settings-item-text">
@@ -61,12 +65,12 @@ export default function Navbar({route}) {
                  <Link to='/' className="landing-link">   
                     <div className="app-logo-alt"/>
                 </Link>
-                <Link className="settings-navigation-side-item" to={`/settings`}>
+                <Link className={`settings-navigation-side-item ${route==='charity-page'?'charity-side-item-alt':''}}`} to={`/settings`}>
                     <RiSettings5Fill className="settings-profile-icon"/>
                 </Link>
-                <span className="profile-navigation-side-item" onClick={()=>handleTest()}>
+                <Link className={`profile-navigation-side-item ${route==='charity-page'?'charity-side-item':''}`} to='/donations'>
                     <FaUserFriends className="friends-profile-icon"/>
-                </span>
+                </Link>
              </>
         }  
         </div>

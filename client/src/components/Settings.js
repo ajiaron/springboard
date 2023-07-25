@@ -4,6 +4,7 @@ import './Settings.scss'
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import CharityItem from './CharityItem'
+import DonationItem from "./DonationItem";
 import SideBar from "./SideBar";
 import Favorites from "./Favorites";
 import { BsStars } from 'react-icons/bs'
@@ -271,7 +272,7 @@ export default function Settings() {
                        
    
                         
-
+                  
                     </div>
                 </div>
                 <div className="settings-footer-container">

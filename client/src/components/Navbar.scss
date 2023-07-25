@@ -134,7 +134,7 @@
 .logo-settings-container {
   display: flex;
   flex-direction: column;
-  padding-top:4.125em;
+  padding-top:4.25em;
   align-items: center;
   //transform: translateX(.1em);
   //transform: scale(.975);
@@ -218,7 +218,6 @@
   z-index: 1;
   height:2.65vw;
   border-radius: 90px;
-
 //    background-color: #4a4a4a;
 }
 .profile-side-navigation {
@@ -247,10 +246,11 @@
   .settings-profile-icon {
     transition: all .15s linear;
     width: 2.65vw;
-    padding-top: .7em;
+    padding-top: .75em;
     height:2.65vw;
     color:rgba(216,216,216,1);
     transform: scale(.95);
+  
 
   }
   .settings-profile-icon:hover {
@@ -291,6 +291,7 @@
   // border-radius: 15px;
   // background-color: #252525;
    text-decoration: none;
+ 
    transform: translateY(2.5vh);
   }
   .profile-nav-item-settings {
@@ -304,3 +305,13 @@
    text-decoration: none;
    transform: translateX(.115em);
   }
+  .charity-side-item {
+    opacity: 0;
+
+  }
+  .charity-side-item-alt {
+    transform:scale(1.0) translateX(.125em);
+  }
+
+
+  
