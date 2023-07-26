@@ -204,6 +204,7 @@ export default function CharityItem({
                                     </p>
                                 </div>
                             </div>
+                            {/* 
                             <div className="donation-button-container">
                                 <span className="site-donation-button" onClick={()=>onHandlePayment(charityid)}>
                                     <p className="site-donation-text">
@@ -216,6 +217,7 @@ export default function CharityItem({
                                     </p>
                                 </Link>
                             </div>
+                            */}
                         </div>
     }
                         <div className={`charity-categories-wrapper ${(selected&&expanded)?'selected-categories':(!selected && expanded)?'unselected-categories':''}`}>

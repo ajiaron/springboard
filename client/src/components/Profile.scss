@@ -4,9 +4,11 @@
     overflow-y: scroll;
    // background-color: rgba(70, 180, 132, 0.274);
     overflow-x: hidden;
+    background-color: #151515bb;
     display: flex;
-  
+  z-index: 1;
 }
+
 .profile-page-content {
     min-height: 100vh;
     width: 90%;
@@ -135,6 +137,34 @@
  // border:1px solid #454545;
  // align-items: center;
  // background-color: rgba(218, 165, 32, 0.244);
+}
+.profile-chart-container {
+    display: flex;
+    position: relative;
+    max-width: 92.25%;
+    padding-top: 1.25em;
+  //  padding-bottom: .75em;
+   // border-bottom: 1px dashed #5a5a5a;
+    min-height: 36vh;
+ // border:1px solid #454545;
+ // align-items: center;
+ // background-color: rgba(218, 165, 32, 0.244);
+}
+.profile-chart-wrapper {
+    min-height:100%;
+   // background-color: rgba(255, 0, 0, 0.211);
+    width: 45%;
+   // margin-top: .25em;
+    display: flex;
+}
+.profile-chart-insights-wrapper {
+    margin-top: 1.25em;
+    width: 100%;
+    border-radius: 20px;
+   // background-color: rgba(70, 131, 180, 0.27);
+   height:83%;
+
+   // height:57.25%
 }
 .nickname-details-container {
     width: 22.5%;
@@ -303,10 +333,10 @@
    // min-height:fit-content;
 }
 .account-container {
-    padding-top: .5em;
+   // padding-top: .25em;
     width: 92.25%;
     height: 60vh;
-   // padding-left: .125em;
+    padding-left: .125em;
   //  background-color: rgba(0, 139, 139, 0.228);
     display: flex;
   
@@ -471,7 +501,8 @@
     background-color: #7abc45a4;
 }
 .profile-education {
-    background-color: rgba(161, 135, 42, 0.837);
+    background-color: rgba(233, 209, 100, 0.837);
+    //background-color: rgba(161, 135, 42, 0.837);
 }
 .profile-research {
     transform: scale(.925) translateX(-.45em);
@@ -566,3 +597,91 @@
     //background-color: rgba(221, 160, 221, 0.247);
     //align-items: flex-start;
   }
+
+  .profile-chart-legend {
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+    gap:1em;
+    
+    min-height: 100%;
+   // align-self: center;
+   // margin-top: .875em;
+  //  align-items: flex-end;
+    z-index: 1;
+    transform: translateX(-1em);
+    width: 50%;
+    padding-bottom: .35em;
+
+   // background-color: rgba(255, 0, 0, 0.239);
+}
+.profile-chart-legend-wrapper {
+    border-top: 1px dashed #454545;
+    display: flex;
+    flex-direction: column;
+    gap:1em;
+    width: 85%;
+    padding-top: 1.5em;
+//    padding-bottom: 1em;
+
+  //  background-color: seagreen;
+}
+
+.profile-chart-legend-item {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1.65em;
+    min-width: 100%;
+    //padding-right: 15%;
+    
+    margin-left: auto;
+    height: 5%;
+   // background-color: red;
+    align-items: center;
+    //padding-right: .75em;
+}
+
+.profile-chart-legend-color {
+    min-width: 1.3em;
+    border-radius: 5px;
+
+   // outline: 1px solid #959595;
+    min-height: 1.3em;
+    outline: 1px dashed #bbb;
+    background: rgba(214, 72, 86, 0.8);
+}
+.profile-chart-legend-color-avg {
+    min-width: 1.3em;
+    border-radius: 5px;
+    outline: 1px dashed #bbb;
+   // border:1px dashed rgba(214, 72, 86, 0.6);
+   // outline: 1px solid #959595;
+    min-height: 1.3em;
+  //  background: rgba(214, 72, 86, 0.7);
+    background: rgba(64, 64, 64, .8);
+}
+.profile-chart-hr {
+    background: rgba(63, 118, 163, .8),
+}
+.profile-chart-ev {
+    background: rgba(76, 173, 115,.8),
+}
+.profile-chart-ed {
+    background: rgba(218, 194, 85, 0.8),
+}
+.profile-chart-details-text {
+    font-size: clamp(8px, 3vw, 19px);
+    font-family: "Inter";
+    letter-spacing: -.25px;
+    font-weight: 700;
+    color:#eee;
+   // line-height:22px;
+   // transform: translateX(-1em);
+    margin-left: auto;
+    text-align: right;
+    width: 85%;
+  //  background-color: red;
+// padding-
+    padding-right: 15%;
+
+}

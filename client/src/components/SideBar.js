@@ -12,11 +12,11 @@ export default function SideBar({}) {
        
 
        <div className="navigation-item-container">
-            <Link className="navigation-item" to={'/cart'}>
+            <Link className="navigation-item" to={'/feed'}>
                 <FaShoppingCart className='cart-side-icon'/>
             </Link>
             <p className="navigation-item-text">
-                Cart
+                Basket
             </p>
         </div>
         <div className="navigation-item-container">

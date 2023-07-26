@@ -447,10 +447,10 @@ html {
     padding-left: 1.5vw;
     position: absolute;
     transition-delay: .25s;
-    min-width: 39.25vw;
-    min-height:31.75vh;
+    min-width: 40.5vw;
+    height:31.75vh;
     //background-color: green;
-    top:75%;
+    top:85%;
     z-index: 0;
    // border: 1px solid white;
     flex-direction: column;
@@ -459,7 +459,7 @@ html {
     display: flex;
     justify-content: space-between;
     min-width: 100%;
-    padding-top: 2.25vh;
+    padding-top:2.875vh;
    // width: fit-content;
    text-align: left;
   }
@@ -473,7 +473,7 @@ html {
     min-height: 100%;
   }
   .lower-expanded {
-    padding-top:3.5vh;
+    padding-top:5vh;
     justify-content: space-between;
   }
   .info-none {
@@ -552,10 +552,10 @@ html {
     flex-direction: row;
     justify-content: flex-start;
     padding-left: 0%;
-    gap:3.5%;
+    gap:3%;
    // margin-left:.75vw;
    // background-color: red;
-    padding-top:4.5%;
+    padding-top:5%;
     align-items: center;
 }
 .site-donation-button {

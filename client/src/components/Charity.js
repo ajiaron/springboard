@@ -220,9 +220,7 @@ export default function Charity() {
 
   return (
     <div className="charity-page">
-      <div className='header-blur'>
-
-      </div>
+      <div className='header-blur'/>
         <Navbar route={'charity-page'}/>
         <div className="charity-page-container">
             <div className="charity-header-container">
