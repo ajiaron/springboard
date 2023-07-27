@@ -1,5 +1,4 @@
 import React, {useState, useEffect, useRef} from "react"
-
 import './CharityItem.scss'
 import Navbar from "./Navbar";
 import SideBar from "./SideBar";
@@ -7,7 +6,10 @@ import { BsStars } from 'react-icons/bs'
 import { Link } from "react-router-dom";
 import { useInView } from 'react-intersection-observer';
 import { FiMail } from "react-icons/fi";
-
+import {HiArrowTrendingUp} from 'react-icons/hi'
+import {AiOutlineHeart, AiFillHeart} from 'react-icons/ai'
+import {FaArrowRight,FaShoppingBasket, FaShoppingCart} from 'react-icons/fa'
+import { AiOutlineLink, AiOutlineEdit } from 'react-icons/ai'
 const Circle = ({score, color}) => {
   const radius = 45;
   const circumference = 2 * Math.PI * radius;
@@ -204,20 +206,36 @@ export default function CharityItem({
                                     </p>
                                 </div>
                             </div>
-                            {/* 
+                   
                             <div className="donation-button-container">
-                                <span className="site-donation-button" onClick={()=>onHandlePayment(charityid)}>
-                                    <p className="site-donation-text">
-                                        Direct Donation
-                                    </p>
-                                </span>
+      
+                      
+                                <div className="like-icon-wrapper">
+                                    <AiFillHeart className="charity-like-icon"/>
+                                </div>
+                    
+                                <div className="like-icon-wrapper">
+                                    <FaShoppingBasket className="charity-basket-icon"/>
+                                </div>
+                                <div className="like-icon-wrapper">
+                                    <AiOutlineLink className="charity-linkto-icon"/>
+                                </div>
+
+                      
+                  
+                                <div className="like-icon-wrapper">
+                                    <FaArrowRight className="charity-arrow-icon"/>
+                                </div>
+                   
+                                {/*
                                 <Link className={`link-donation-button`} to={url}>
                                     <p className="link-donation-text">
                                         Donate On-Site
                                     </p>
                                 </Link>
+                        */}
                             </div>
-                            */}
+                   
                         </div>
     }
                         <div className={`charity-categories-wrapper ${(selected&&expanded)?'selected-categories':(!selected && expanded)?'unselected-categories':''}`}>

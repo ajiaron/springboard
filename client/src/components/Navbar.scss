@@ -304,14 +304,31 @@
   // background-color: #252525;
    text-decoration: none;
    transform: translateX(.115em);
+  // padding-bottom: .25em;
   }
   .charity-side-item {
     opacity: 0;
 
   }
   .charity-side-item-alt {
-    transform:scale(1.0) translateX(.125em);
+    transform:scale(1.05) translateX(.0em);
+   // visibility: hidden;
+   opacity: 1;
+  // background-color: red;
+
   }
 
 
   
+  .landing-link-alt {
+    display: flex;
+    width: fit-content;
+    transform: translateY(.25em) translateX(-.05em);
+    z-index: 1;
+   // padding-top: .5em;
+    height: fit-content;
+    text-decoration: none;
+    //background-color: red;
+    justify-content: center;
+    align-items: center;
+  }

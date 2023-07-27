@@ -13,7 +13,8 @@ p {
 .landing-container {
     min-height: 100vh;
     min-width: 100vw;
-    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 .main-content {
     min-height: 100vh;
@@ -179,6 +180,7 @@ p {
   font-family: 'Inter';
   font-weight: 500;
   color:#151515;
+  z-index: 1;
   font-size:clamp(12px, 3vw, 18px);
   align-self: center;
 }
@@ -242,6 +244,7 @@ p {
   min-width: 48%;
   transition: all .15s linear;
   min-height:100%;
+  text-decoration: none;
   align-items: flex-end;
   display: flex;
   box-shadow: 3px 3px 2px 4px rgba(0,0,0,0.15);
@@ -499,7 +502,7 @@ p {
   color:#fff;
   letter-spacing: -.25px;
   padding-right:1.5px;
-
+  z-index: 1;
 }
 .subcontent-name-text {
   font-size:clamp(10px, 3vw, 15px);
@@ -509,6 +512,7 @@ p {
   vertical-align: bottom;
   align-self: flex-end;
   padding-right: 5px;
+  z-index: 1;
   align-self: center;
   color:#efefef;
 }
@@ -816,6 +820,7 @@ p {
   color:#101010;
   font-size:clamp(12px, 3vw, 18.5px);
   font-family: 'Inter';
+  z-index: 1;
   letter-spacing: -.25px;
   font-weight: 500;
 }

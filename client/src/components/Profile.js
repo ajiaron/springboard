@@ -339,8 +339,7 @@ const barOptions = {
                     </div>
                 </div>
             </div>
-                  
-          
+            
             <Footer route={'profile'}/>
         </div>
     </div>

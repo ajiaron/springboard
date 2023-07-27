@@ -12,7 +12,7 @@ export default function SideBar({}) {
        
 
        <div className="navigation-item-container">
-            <Link className="navigation-item" to={'/feed'}>
+            <Link className="navigation-item" to={'/cart'}>
                 <FaShoppingCart className='cart-side-icon'/>
             </Link>
             <p className="navigation-item-text">
@@ -20,7 +20,7 @@ export default function SideBar({}) {
             </p>
         </div>
         <div className="navigation-item-container">
-            <Link className="navigation-item" to={'/settings'}>
+            <Link className="navigation-item" to={'/dashboard'}>
                 <FiSettings className='settings-icon'/>
             </Link>
             <p className="navigation-item-text">

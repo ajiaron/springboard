@@ -1,0 +1,154 @@
+.side-console-container {
+    min-height: 100vh;
+    position: fixed;
+    left:0;
+    width: 17.5vw;
+    overflow: hidden;
+    background-color: #252525bb;
+    z-index: 999;
+}
+.console-header-container {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    padding-left: 1.75em;
+    padding-top:1.25em;
+    justify-content: flex-start;
+   
+}
+.console-logo-text-container {
+    display: flex;
+    align-items: center;
+    padding-top: .375em;
+    text-decoration: none;
+    gap: .825em;
+
+//   padding-left: .65rem;
+}
+.console-logo-text {
+    font-size:clamp(12px,4vw,22px);
+    font-weight: 600;
+    padding-top:.1875em;
+    z-index: 999;
+    letter-spacing: -.25px;
+    //white-space: nowrap;
+    font-family: 'Inter';
+   // text-shadow: 2px 4px 2px 4px rgba(0,0,0,0.25);
+    transition: all 0.2s linear;
+    color:#eee;
+   // background: -webkit-linear-gradient(right,rgb(238, 238, 238), rgb(210, 210, 210));
+   // -webkit-background-clip: text;
+   // -webkit-text-fill-color: transparent;
+}
+.console-app-logo {
+    background-image: url('./assets/logo-alt.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    overflow: visible;
+    width: 1.75em;
+    height: 1.75em;
+    filter: brightness(.9);
+    transform: scaleX(1.05) translateY(.065em);
+    align-items: center;
+}
+.console-content-container {
+    display: flex;
+    flex-direction: column;
+    gap:1.5em;
+    min-width: 100%;
+    padding-top: 2.6em;
+    min-height:30%;
+}
+.first-content {
+    padding-top: 2.5em;
+}
+.console-content-wrapper {
+    display: flex;
+   // flex-direction: column;
+   //padding-left: 1.75em;
+    width: 77.5%;
+    justify-content: flex-start;
+    gap:.775em;
+    
+    align-items: flex-end;
+    align-self: center;
+  //  padding-top: .75em;
+ //   padding-bottom: .75em;
+    //border-radius: 10px;
+   // background-color: red;
+   transition: all .15s linear;
+}
+.console-content-wrapper:hover {
+    filter: brightness(1.25);
+}
+.console-item-text {
+    font-size: clamp(14px, 3vw, 14px);
+    font-family: "Rubik";
+    letter-spacing: -.25px;
+    font-weight: 800;
+    white-space: nowrap;
+    color:#6a6a6a;
+   // padding-left: 1.875em;
+   // line-height:38px;
+   transform: translateY(.125em);
+}
+.first-subtext {
+    padding-top: .125em;
+}
+.console-item-subtext {
+    font-size: clamp(10px, 3vw, 15px);
+    font-family: "Rubik";// padding-left: .025em;
+   // line-height: 20px;
+  //  letter-spacing: .25px;
+  //  align-self: flex-end;
+   // line-height: 1.5em;
+    font-weight: 400;
+    padding-top: .05em;
+    color: #aaa;
+}
+.console-link-subtext {
+    font-size: clamp(10px, 3vw, 15px);
+    font-family: "Rubik";// padding-left: .025em;
+   // line-height: 20px;
+  //  letter-spacing: .25px;
+  //  align-self: flex-end;
+   // line-height: 1.5em;
+    font-weight: 400;
+    padding-top: .075em;
+    color: #757575;
+}
+.side-settings-subtext {
+   // transform: translateY(-.025em);
+}
+.home-icon {
+    width: 1.125em;
+    height: 1.125em;
+    align-self: center;
+    color:#aaa;
+}
+.console-settings-icon {
+    width: 1.025em;
+    height: 1.025em;
+    align-self: center;
+    color:#aaa;
+}
+.console-link-icon {
+    width: 1.125em;
+    height: 1.125em;
+    align-self: center;
+    color:#757575;
+}
+.console-link-wrapper {
+    display: flex;
+    // flex-direction: column;
+    //padding-left: 1.75em;
+     width: 77.5%;
+     justify-content: flex-start;
+     gap:.75em;
+     align-items: flex-end;
+     position: absolute;
+   //  transform: translateX(-.1em);
+     align-self: center;
+     bottom:5%;
+}

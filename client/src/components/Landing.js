@@ -6,6 +6,7 @@ import SideBar from "./SideBar";
 import Signin from "./Signin";
 import { BsStars } from 'react-icons/bs'
 import { Link } from "react-router-dom";
+import SideNavigation from "./SideNavigation";
 import { useInView } from 'react-intersection-observer';
 import { FiMail } from "react-icons/fi";
 
@@ -85,7 +86,7 @@ export default function Landing() {
                         </Link>
 
                         <div className="grid-pair">
-                            <span className="grid-content-item" onClick={()=>handleTest()}>
+                            <Link className="grid-content-item" to='/feed'>
                                 <div className="grid-item-text-container-alt">
                                     
                                     {/*<BsStars className="star-icon"/>*/}
@@ -94,14 +95,14 @@ export default function Landing() {
                                         Recent<br/>Donations
                                     </p>
                                 </div>
-                            </span>
-                            <span className="grid-content-item">
+                            </Link>
+                            <Link className="grid-content-item" to={'/donations'}>
                                 <div className="grid-item-text-container">
                                     <p className="grid-item-text">
                                         Your<br/>Donations
                                     </p>
                                 </div>
-                            </span>
+                            </Link>
                         </div>
                         <div className="grid-pair">
                             <div className="grid-content-item-low">

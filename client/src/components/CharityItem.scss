@@ -448,9 +448,9 @@ html {
     position: absolute;
     transition-delay: .25s;
     min-width: 40.5vw;
-    height:31.75vh;
+    //height:31.75vh;
     //background-color: green;
-    top:85%;
+    top:82%;
     z-index: 0;
    // border: 1px solid white;
     flex-direction: column;
@@ -459,7 +459,7 @@ html {
     display: flex;
     justify-content: space-between;
     min-width: 100%;
-    padding-top:2.875vh;
+    padding-top:2.8vh;
    // width: fit-content;
    text-align: left;
   }
@@ -547,19 +547,19 @@ html {
   }
 .donation-button-container {
     min-width: 100%;
-    height: 5vh;
+    min-height:5vh;
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: flex-end;
     padding-left: 0%;
-    gap:3%;
-   // margin-left:.75vw;
+    gap:4%;
+    margin-left:.4vw;
    // background-color: red;
-    padding-top:5%;
+    padding-top:6.75%;
     align-items: center;
 }
 .site-donation-button {
-    min-width: 35%;
+    min-width: 32.5%;
     min-height: 100%;
     align-items: center;
     border-radius: 32px;
@@ -608,4 +608,38 @@ html {
     font-weight: 400;
     padding-top: 1px;
     font-size: clamp(10px, 3vw, 16px);
+}
+.charity-like-icon {
+    color:#eee;
+    width:1.35em;
+    height: 1.35em;
+    transform: translateY(.05em);
+}
+
+.like-icon-wrapper {
+    width: 2.5em;
+    height: 2.5em;
+    background-color: #5a5a5a;
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+    border-radius: 2em;
+}
+.charity-basket-icon {
+    color:#eee;
+    width:1.375em;
+    height: 1.375em;
+}
+.charity-linkto-icon {
+    color:#eee;
+    width:1.35em;
+    height: 1.35em;
+}
+.charity-arrow-icon {
+    color:#eee;
+    width:1.325em;
+    transform: rotate(-45deg) translateY(.025em);
+    height: 1.325em;
+
 }
