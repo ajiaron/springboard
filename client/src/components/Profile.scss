@@ -501,7 +501,8 @@
     background-color: #7abc45a4;
 }
 .profile-education {
-    background-color: rgba(233, 209, 100, 0.837);
+   // background-color: rgba(233, 209, 100, 0.837);
+    background-color: rgba(230, 184, 93, 0.8);
     //background-color: rgba(161, 135, 42, 0.837);
 }
 .profile-research {
@@ -671,7 +672,7 @@
     background: rgba(76, 173, 115,.8),
 }
 .profile-chart-ed {
-    background: rgba(234, 211, 99, 0.8),
+    background: #f4c567dd,
 }
 .profile-chart-details-text {
     font-size: clamp(8px, 3vw, 19px);

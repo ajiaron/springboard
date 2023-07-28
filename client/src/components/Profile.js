@@ -232,61 +232,7 @@ const barOptions = {
                     </p>
                 </div>
             </div>
-            {/*
-            <div className="profile-chart-container">
-                <div className='profile-chart-wrapper'>
-                    
-    
-                    <div className='profile-chart-insights-wrapper'>
-                        <div className="charity-insight-container">
-                            <div className="charity-chart-wrapper">
-                                <div className='chart-container'>
-                                    <Doughnut data={data} options={doughOptions} className='charity-chart'/>
-                                    <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
-                                        <p className="charity-insight-figure-score">
-                                            14
-                                        </p>
-                                        <p className={`charity-chart-details-text`}>
-                                            Donations
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className='profile-chart-legend'>
-                                <p className="profile-chart-details-text">
-                                    Cause Distribution
-                                </p>
-                                <div className='profile-chart-legend-wrapper'>
-                                    <div className='profile-chart-legend-item'>
-                                        <p className='charity-legend-text'>
-                                            Environment
-                                        </p>
-                                        <div className='profile-chart-legend-color  profile-chart-ev'/>
-                                    </div>
-                                    <div className='profile-chart-legend-item'>
-                                        <p className='charity-legend-text'>
-                                            Human Rights {'&'} Services
-                                        </p>
-                                        <div className='profile-chart-legend-color profile-chart-hr'/>
-                                    </div>
-                                    <div className='profile-chart-legend-item'>
-                                        <p className='charity-legend-text'>
-                                            Education
-                                        </p>
-                                        <div className='profile-chart-legend-color profile-chart-ed'/>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                    
-                </div>
-
-            </div>
-            
-  */}
+          
             <div className="profile-favorites-wrapper">
                  <div className="donation-details-container">
                         <p className="donation-details-text">

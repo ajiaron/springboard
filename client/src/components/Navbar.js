@@ -62,7 +62,7 @@ export default function Navbar({route}) {
                    </div>
                </Link>
                 }
-                 <Link to='/' className={`${route!=='charity-page'?'landing-link':'landing-link-alt'}`}>   
+                 <Link to='/dashboard' className={`${route!=='charity-page'?'landing-link':'landing-link-alt'}`}>   
                     <div className="app-logo-alt"/>
                 </Link>
                 {
@@ -70,7 +70,7 @@ export default function Navbar({route}) {
                     <RiSettings5Fill className="settings-profile-icon"/>
                 </Link>
                 }
-                <Link className={`profile-navigation-side-item ${route==='charity-page'?'charity-side-item':''}`} to='/donations'>
+                <Link className={`profile-navigation-side-item ${route==='charity-page'?'charity-side-item':''}`} to='/friends'>
                     <FaUserFriends className="friends-profile-icon"/>
                 </Link>
              </>

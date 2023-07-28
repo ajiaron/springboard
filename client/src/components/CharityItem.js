@@ -74,7 +74,6 @@ export default function CharityItem({
     assets, revenue, progExpense, adminExpense, fundExpense, adminRatio, focus, score, url,
     onHandlePayment}) {
     const [selected, setSelected] = useState(false)
-    const money = 653394727;
     const [expanded, setExpanded] = useState(false)
     function ringColor(category) {
         switch (category) {
@@ -223,9 +222,9 @@ export default function CharityItem({
 
                       
                   
-                                <div className="like-icon-wrapper">
+                                <Link className="like-icon-wrapper" to={`/charity/${charityid}/${title}/${category.toLowerCase()}`}>
                                     <FaArrowRight className="charity-arrow-icon"/>
-                                </div>
+                                </Link>
                    
                                 {/*
                                 <Link className={`link-donation-button`} to={url}>

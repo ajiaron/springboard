@@ -5,7 +5,7 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import SideBar from "./SideBar";
 import Signin from "./Signin";
-import { BsStars } from 'react-icons/bs'
+import { BsCheck2,BsCheckLg } from 'react-icons/bs'
 import { Link } from "react-router-dom";
 import SideNavigation from "./SideNavigation";
 import Doughchart from "./Doughchart";
@@ -13,9 +13,9 @@ import { AiFillHeart } from "react-icons/ai";
 import { useInView } from 'react-intersection-observer';
 import { FiMail } from "react-icons/fi";
 
-const RecentDonation = ({name, charity, status, caption, date, last}) => {
+const RecentDonation = ({name, charity, status, caption, date, index}) => {
     return (
-        <div className={`${last?'last-dashboard-item':'dashboard-feed-friends-item'}`}>
+        <div className={`${index===3?'last-dashboard-item':index===0?'first-dashboard-item':'dashboard-feed-friends-item'}`}>
         <div className="feed-friends-image-container">
             <div className="feed-friends-image-wrapper">
 
@@ -37,6 +37,9 @@ const RecentDonation = ({name, charity, status, caption, date, last}) => {
                 <p className="feed-dashboard-item-text">
                     Follows you
                 </p>   
+                
+                <BsCheckLg className="dashboard-check-icon"/>
+    
             </div>
             {(caption.length > 0)&&
             <div className="feed-donation-dashboard-caption">
@@ -59,22 +62,7 @@ export default function Dashboard() {
     const [screenWidth, setScreenWidth] = useState(window.innerWidth)
     const [screenHeight, setScreenHeight] = useState(window.innerHeight)
     const [signInActive, setSignInActive] = useState(null)
-    const [firstRender, setFirstRender] = useState(true)
-    const [isActive, setIsActive] = useState(true)  // background is active
-    const handleSignIn = (type) => {
-        setFirstRender(false)
-        setSignInActive(type)
-        setIsActive(false)
-    }
-    const handleBlur = () => {
-        setIsActive(true)
-    }
-    const closeSignIn = () => {
-        setSignInActive(null)
-    }
-    function handleTest() {
-        console.log(signInActive)
-    }
+
     useEffect(()=>{
         if (signInActive !== null) {
             document.body.style.overflow='hidden'
@@ -85,16 +73,9 @@ export default function Dashboard() {
       }, [signInActive])
     return (
         <div className="dashboard-container">
-        {
-            (signInActive!==null)&&<Signin type={signInActive} onClose={closeSignIn} onBlur={handleBlur}/>
-        }
-        <SideNavigation/>
+            <SideNavigation route={'dashboard'}/>
             <div className={`dashboard-main-content`}>
-  
-           
                 <div className="dashboard-content-container ">
-
-
                     <div className="dashboard-text-container  ">
                         <div className="dashboard-header-container">
                             <p className="dashboard-header">
@@ -103,67 +84,37 @@ export default function Dashboard() {
                         </div>
                     </div>
                     <div className="dashboard-chart-container ">
-                       
-                            <Doughchart/>
-             
-             
+                        <Doughchart/>
                         <div className="dashboard-grid-wrapper">
-                        <div className="dashboard-grid-pair">
-                            <Link className="dashboard-grid-content-item" to='/feed'>
-                                <div className="dashboard-grid-item-text-container-alt">
-                              
-                                    <p className="dashboard-grid-item-text-left">
-                                        Recent<br/>Donations
-                                    </p>
-                                </div>
-                            </Link>
-                            <Link className="dashboard-grid-content-item" to={'/donations'}>
-                                <div className="dashboard-grid-item-text-container">
-                                    <p className="dashboard-grid-item-text">
-                                        Your<br/>Donations
-                                    </p>
-                                </div>
-                            </Link>
-                        </div>
-                        </div>
-                     
-                    </div>
-
-              
-                    {/* grid content 
-                
-                    <div className="dashboard-grid-content">
-                        <Link className="discover-link" to='/catalog'>
-                            <div className="dashboard-grid-content-main">
-                                <div className="discover-scene"/>
-                                <div className="dashboard-grid-main-text-container">
-                                    <p className="dashboard-grid-main-text">
-                                        Discover
-                                    </p>
-                                </div>
+                            <div className="dashboard-grid-pair ">
+                                <Link className="dashboard-grid-content-item" to='/feed'>
+                                        <div className="dashboard-grid-button-wrapper">
+                                            <p className="dashboard-grid-button-text">
+                                                View page
+                                            </p>
+                                        </div>
+                                    <div className="dashboard-grid-item-text-container-alt">
+                               
+                                        <p className="dashboard-grid-item-text-left">
+                                            Explore<br/>Charities
+                                        </p>
+                                    </div>
+                                </Link>
+                                <Link className="dashboard-grid-content-item" to={'/donations'}>
+                                        <div className="dashboard-grid-button-wrapper-alt">
+                                            <p className="dashboard-grid-button-text-alt">
+                                                View page
+                                            </p>
+                                        </div>
+                                    <div className="dashboard-grid-item-text-container">
+                                        <p className="dashboard-grid-item-text">
+                                            Your<br/>Donations
+                                        </p>
+                                    </div>
+                                </Link>
                             </div>
-                        </Link>
-                        <div className="dashboard-grid-pair">
-                            <Link className="dashboard-grid-content-item" to='/feed'>
-                                <div className="dashboard-grid-item-text-container-alt">
-                              
-                                    <p className="dashboard-grid-item-text-left">
-                                        Recent<br/>Donations
-                                    </p>
-                                </div>
-                            </Link>
-                            <Link className="dashboard-grid-content-item" to={'/donations'}>
-                                <div className="dashboard-grid-item-text-container">
-                                    <p className="dashboard-grid-item-text">
-                                        Your<br/>Donations
-                                    </p>
-                                </div>
-                            </Link>
                         </div>
-           
                     </div>
-                     */}
-            
                 </div>
             <div className="dashboard-content-lower">
                 <div className="dashboard-header-container-alt">
@@ -172,10 +123,10 @@ export default function Dashboard() {
                     </p>
                 </div>
                  <div className="dashboard-feed-list-container">
-                    <RecentDonation name={'Henry Zheng'} charity={'American Heart Association'} status={'approved'} caption={"ballin like a pacer"} date={'34m'} last={false}/>  
-                    <RecentDonation name={'An Truong'} charity={'The Conservation Fund'} status={'approved'} caption={"🗿"} date={'2d'} last={false}/>
-                    <RecentDonation name={'Thompson Nguyen'} charity={'#TeamTrees'} status={'approved'} caption={"mr beast give me an m"} date={'1w'} last={false}/>
-                    <RecentDonation name={'Jason Damasco'} charity={'Kids In Need Foundation'} status={'approved'} caption={""} date={'2w'} last={true}/>
+                    <RecentDonation name={'Henry Zheng'} charity={'American Heart Association'} status={'approved'} caption={"ballin like a pacer"} date={'34m'} index={0}/>  
+                    <RecentDonation name={'An Truong'} charity={'The Conservation Fund'} status={'approved'} caption={"🗿"} date={'2d'} index={1}/>
+                    <RecentDonation name={'Thompson Nguyen'} charity={'#TeamTrees'} status={'approved'} caption={"mr beast give me an m"} date={'1w'} index={2}/>
+                    <RecentDonation name={'Jason Damasco'} charity={'Kids In Need Foundation'} status={'approved'} caption={"smile to much they call me giddey"} date={'2w'} index={3}/>
                 </div>
             </div>
         </div>

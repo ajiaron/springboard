@@ -1,16 +1,17 @@
 import React, {useState, useEffect, useRef} from 'react'
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import { Link } from "react-router-dom";
+import { Link, useParams, useLocation } from "react-router-dom";
 import {AiOutlineHeart, AiFillHeart} from 'react-icons/ai'
 import './Charity.scss'
 import {GoArrowRight} from 'react-icons/go'
+import Axios from "axios";
 import { PolarArea, Doughnut, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, RadialLinearScale, BarElement, ArcElement, Tooltip, Legend, CategoryScale, LinearScale } from "chart.js";
 import { AiOutlineLink, AiOutlineEdit, AiOutlineClockCircle } from 'react-icons/ai'
 ChartJS.register(RadialLinearScale, CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend);
 
-const CharityDonation = ({name, location, index}) => {
+const CharityDonation = ({name, location, category, index}) => {
   return (
   <div className={`profile-donation-item ${index===2?'donation-item-last':''}`}>
       <div className="profile-donation-item-info" style={{paddingLeft:'.125em'}}>
@@ -24,8 +25,8 @@ const CharityDonation = ({name, location, index}) => {
               </p>   
           </div>
 
-          <div className={`profile-donation-item-type-wrapper profile-healthcare`}>
-              <p className="profile-donation-item-type-text">
+          <div className={`profile-donation-item-type-wrapper profile-${category}`}>
+              <p className={`profile-donation-item-type-text ${category==='education'?'donation-item-type-text-alt':''}`}>
                 {location}
               </p>
           </div>
@@ -36,7 +37,7 @@ const CharityDonation = ({name, location, index}) => {
 const InsightItem = ({name, value}) => {
   return (
 
-      <div className="charity-stats-item-info">
+      <div className={`charity-stats-item-info ${name==='Location'?'location-insight-wrapper':''}`}>
           <p className="profile-friends-item-title">
               {name}
           </p>
@@ -45,7 +46,7 @@ const InsightItem = ({name, value}) => {
               <p className={`profile-donation-item-text ${name==='Excess/Deficit'?value>=0?'excess-text':'deficit-text':''}`} style={{paddingTop:'.175em', paddingLeft:'.125em'}}>
                   {`${name==='Excess/Deficit'?(value>=0)?'+':'-':''}$${Math.abs(value).toLocaleString()}`}
               </p>  :
-              <p className={`profile-donation-item-text ${name==='Excess/Deficit'?value>=0?'excess-text':'deficit-text':''}`} style={{paddingTop:'.175em', paddingLeft:'.125em'}}>
+              <p className={`profile-donation-item-text ${name==='Excess/Deficit'?value>=0?'excess-text':'deficit-text':name==='Location'?'location-insight-text':''}`} style={{paddingTop:'.175em', paddingLeft:'.125em'}}>
                 {(name==='Admin Exp. Ratio')? parseFloat(value).toFixed(2): value}
               </p>
             }
@@ -53,15 +54,32 @@ const InsightItem = ({name, value}) => {
       </div>
   )
 }
-const barData = {
+
+export default function Charity() {
+  const { pathname } = useLocation();
+  const params = useParams()
+  const [loading, setLoading] = useState(true)
+  const [charityInfo, setCharityInfo] = useState(null)
+  const { charityid, charityname, category: categoryColor } = useParams();
+  const themeColors = {
+    healthcare: 'rgba(214, 72, 86, ',
+    environment: 'rgba(66, 160, 110, ',
+    education: 'rgba(230, 184, 93, ',
+    human: 'rgba(73, 128, 173, ',
+    research: 'rgba(78, 142, 138, ',
+    animals: 'rgba(122, 188, 69, ',
+    community: 'rgba(154, 129, 106, '
+  };  
+  const [theme, setTheme] = useState(themeColors[categoryColor] || 'rgba(90,90,90,0.75)');
+  const barData = {
     labels: ['Overall', 'Healthcare', 'Large', 'California', 'Personal'],
     datasets: [
       {
           label: 'Dataset 2',
           data: [30, 55, 20, 38, 35],
-          backgroundColor: 'rgba(60, 60, 60, .8)',
+          backgroundColor: 'rgba(62, 62, 62, .75)',
           // backgroundColor: 'rgba(255, 99, 132, 0.1)',
-          borderColor: 'rgba(255, 99, 132, .8)',
+          borderColor: 'rgba(255, 99, 132, .75)',
           borderWidth: 0,
           borderRadius: {
               topLeft:20,
@@ -73,11 +91,11 @@ const barData = {
       {
           label: 'Dataset 1',
           data: [50, 20, 30, 45, 25],
-          backgroundColor: 'rgba(214, 72, 86, 0.8)',
-          borderColor: 'rgba(214, 72, 86, 0.8)',
+          backgroundColor: `${theme}${categoryColor==='healthcare'||categoryColor==='education'||categoryColor==='animals'?'0.75)':'.8)'}`,
+          borderColor: `${theme}0.75)`,
           borderWidth: 0,
           hoverBackgroundColor: [
-            'rgba(234, 72, 86, .95)',
+            `${theme}.95)`,
           ],
           borderRadius: {
               topLeft:20,
@@ -98,7 +116,7 @@ const barOptions = {
         grid: {
             display:false,
             color: function(context) {
-                return context.tick.value === 0 ? 'rgba(255, 99, 132, 0.6)' : 'rgba(0, 0, 0, 0)';
+                return context.tick.value === 0 ? 'rgba(214, 72, 86, 0.6)' : 'rgba(0, 0, 0, 0)';
             },
        
             borderColor: 'rgba(255, 99, 132, 0.6)', // sets color of axis line
@@ -146,64 +164,34 @@ const data = {
     datasets: [
       {
         label: '# of Votes',
-        data: [90,10],
+        data: [charityInfo?parseFloat(charityInfo[0].overall_score).toFixed(1):0,
+        charityInfo?charityInfo[0].overall_score < 100?
+        102-parseFloat(charityInfo[0].overall_score).toFixed(1):
+        100-parseFloat(charityInfo[0].overall_score).toFixed(1):0.0],
         backgroundColor: [
-          'rgba(214, 72, 86, 0.75)',
-          'rgba(88, 88, 88, 0.8)',
+          `${theme}${categoryColor==='healthcare'||categoryColor==='education'||categoryColor==='animals'?'0.75)':'.775)'}`,
+          'rgba(92, 92, 92, 0.8)',
        //   'rgba(255, 99, 132, 0.15)',
         ],
         borderColor: ['#252525bb','#252525bb'],
         borderWidth:0,
-        spacing:3,
+        spacing:charityInfo?charityInfo[0].overall_score<100?3:0:3,
         hoverBackgroundColor: [
-          'rgba(214, 72, 86, .95)',
-          'rgba(99, 92, 92, .75)',
+          `${theme}0.95)`,
+          'rgba(92, 92, 92, .75)',
         ],
         borderRadius: {
-          outerEnd:20,
-          innerEnd:20,
-          outerStart:20,
-          innerStart:20,
+          outerEnd:charityInfo?charityInfo[0].overall_score<100?20:0:20,
+          innerEnd:charityInfo?charityInfo[0].overall_score<100?20:0:20,
+          outerStart:charityInfo?charityInfo[0].overall_score<100?20:0:20,
+          innerStart:charityInfo?charityInfo[0].overall_score<100?20:0:20,
         },
       },
     ],
 }
-
-const polarOptions = {
-    scales: {
-      r: {
-        grid: {
-        display:false,
-          color: '#3a3a3a',  
-        },
-        ticks: {
-          color: 'transparent',  
-          backgroundColor:'#151515',
-          stepSize:1.5,
-          backdropColor: 'transparent',
-        },
-        pointLabels: {
-          color: '#151515', 
-          display: false,
-          font: {
-            size: 13,
-          }
-        }
-      },
-    },
-    plugins: {
-      legend: {
-        display:false,
-        labels: {
-          color: '#151515'  
-        }
-      }
-    }
-  };
-
-export default function Charity() {
   const doughOptions = {
     cutout:'80%',
+   // rotation:'180',
     responsive:true,
     plugins: {
         legend: {
@@ -216,52 +204,85 @@ export default function Charity() {
           enabled:false
         }
       }
-}
+  }
+
+  function handleTest() {
+    console.log(charityInfo)
+  }
+  useEffect(()=> {
+    const loadCharity = async() => {
+      setLoading(true)
+      try {
+        const url = `http://localhost:3000/charity/getcharity/${charityid}`;
+        const res = await Axios.get(url, {
+          params: {
+              charityid:charityid
+          }
+        })
+        setCharityInfo(res.data)
+      }
+      catch(e) {
+        console.log(e)
+      }
+    }
+    loadCharity()
+    setLoading(false)
+  },[])
+  
 
   return (
     <div className="charity-page">
-      <div className='header-blur'/>
+      <div className={`header-blur blur-${categoryColor}`}/>
         <Navbar route={'charity-page'}/>
         <div className="charity-page-container">
             <div className="charity-header-container">
                 <div style={{display:"flex", justifyContent:"center", height:"fit-content", alignItems:"center", gap:"2em", width:"fit-content"}}>
-                  <div className="profile-image-wrapper" style={{backgroundColor:'rgba(214, 72, 86, 0.7)'}}>
+                  <span className="profile-image-wrapper" style={{backgroundColor:`${theme}0.7)`}} onClick={()=>handleTest()}>
                       <p className="profile-image-text">
-                          A
+                      {`${charityname?charityname.charAt(0).toUpperCase():'P'}`}
                       </p>
-                  </div>
+                  </span>
                   <div className="profile-header-wrapper">
                       <p className="profile-header-text">
-                          {`American Heart Association`}
+                          {`${charityname?charityname:'No Charity Info'}`}
                       </p>
                       <div className="profile-link-container">
                           <AiOutlineLink className="link-icon"/>
                           <p className="profile-header-subtext">
-                              link.springboard.app/american-heart-association
+                              link.springboard.app/{charityname?charityname.replace(/\s+/g, '-').toLowerCase():''}
                           </p>
                       </div>
                   </div>
                 </div>
-                <div className='charity-page-donate-button'>
-                    <Link className="donate-page-link-button" to={'#'}>
-                        <p className="charity-confirm-checkout-text">
-                            {
-                              "Donate"
-                            }
+               
+            </div>
+            <div className="manage-charity-container">
+                <div className="manage-charity-header-container">
+                    <div style={{display:'flex', flexDirection:'column'}}>
+                        <p className="manage-header-text">
+                            Organization Profile
                         </p>
-                    </Link>
+                        <p className="manage-header-subtext">
+                            Learn about the impact of this organization.
+                        </p>
+                    </div>
+              
+                    <div className='charity-page-donate-button'>
+                      <Link className="donate-page-link-button" to={'#'}>
+                          <p className="charity-confirm-checkout-text">
+                              {
+                                "Donate"
+                              }
+                          </p>
+                      </Link>
+                  </div>
                 </div>
+
             </div>
-            <div className="manage-profile-container">
-                <div className="manage-header-container">
-                    <p className="manage-header-text">
-                        Organization Profile
-                    </p>
-                    <p className="manage-header-subtext">
-                        Learn about the impact of this organization.
-                    </p>
-                </div>
-            </div>
+            {(loading)?    
+            <div className='loading-text-container' onClick={()=>handleTest()}>
+                <p className="loading-text"> {`${(loading)?'Loading...':`Showing all matching results`}`} </p>
+            </div>:
             <div className="charity-details-container">
                 <div className="charity-page-donations-container">
                   {/*
@@ -282,7 +303,7 @@ export default function Charity() {
                                   <Doughnut data={data} options={doughOptions} className='charity-chart'/>
                                   <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
                                       <p className="charity-insight-figure-score">
-                                          97.4
+                                          {charityInfo?parseFloat(charityInfo[0].overall_score).toFixed(1):0.0}
                                       </p>
                                       <p className={`charity-chart-details-text`}>
                                         Overall
@@ -296,7 +317,7 @@ export default function Charity() {
                                         Financial Score
                                     </p>
                                     <p className='charity-insights-subcontent-text'>
-                                        92.3
+                                    {charityInfo?parseFloat(charityInfo[0].financial_score).toFixed(1):0.0}
                                     </p>
                                 </div>
                                 <div style={{display:'flex', flexDirection:'column', width:'100%', gap:'.25em', alignItems:'flex-end', paddingTop:'1.25em'}}>
@@ -304,7 +325,7 @@ export default function Charity() {
                                         Accountability Score
                                     </p>
                                     <p className='charity-insights-subcontent-text'>
-                                        98.7
+                                    {charityInfo?parseFloat(charityInfo[0].accountability_score).toFixed(1):0.0}
                                     </p>
                                 </div>
                             </div>
@@ -322,7 +343,7 @@ export default function Charity() {
                                         <p className='charity-legend-text'>
                                             Current Organization
                                         </p>
-                                        <div className='charity-legend-color'/>
+                                        <div className={`charity-legend-color charity-legend-${categoryColor}`}/>
                                     </div>
                                     <div className='charity-legend-item'>
                                         <p className='charity-legend-text'>
@@ -339,6 +360,7 @@ export default function Charity() {
                     </div>
                 </div>
               </div>
+            }
             <div className="charity-details-container-low">
                 <div className="account-donations-container">
                     <div className="donation-details-container">
@@ -351,9 +373,9 @@ export default function Charity() {
                     </div>
                     <div className="account-donations-list" style={{paddingTop:'.2em'}}>
                       <div className="account-donations-list-content">
-                          <CharityDonation name={'Henry Zheng'} location={'Riverside, CA'} index={0}/>
-                          <CharityDonation name={'An Truong'} location={'Irvine, CA'} index={1}/>
-                          <CharityDonation name={'Thompson Nguyen'} location={'San Francisco, CA'} index={2}/>
+                          <CharityDonation name={'Henry Zheng'} location={'Riverside, CA'} category={categoryColor} index={0}/>
+                          <CharityDonation name={'An Truong'} location={'Irvine, CA'} category={categoryColor} index={1}/>
+                          <CharityDonation name={'Thompson Nguyen'} location={'San Francisco, CA'} category={categoryColor} index={2}/>
                       </div>
                    </div>
                 </div>
@@ -369,24 +391,24 @@ export default function Charity() {
                     <div style={{display:"flex", flexDirection:"column"}}>
                       <div className='charity-stats'>
                         <div className='charity-stat-col'>
-                          <InsightItem name={'Total Compensation'} value={693094040}/>          
-                          <InsightItem name={'Program Expense'} value={653394727}/>  
-                          <InsightItem name={'Fundraising Expense'} value={95811767}/>    
+                          <InsightItem name={'Total Compensation'} value={charityInfo?charityInfo[0].total_contributions:0}/>          
+                          <InsightItem name={'Program Expense'} value={charityInfo?charityInfo[0].program_expenses:0}/>  
+                          <InsightItem name={'Fundraising Expense'} value={charityInfo?charityInfo[0].fundraising_expenses:0}/>    
                         </div>
                         <div className='charity-stat-col'>
-                          <InsightItem name={'Net Assets'} value={889410491}/>  
-                          <InsightItem name={'Admin Expense'} value={62254399}/>     
-                          <InsightItem name={'Admin Exp. Ratio'} value={0.09}/>              
+                          <InsightItem name={'Net Assets'} value={charityInfo?charityInfo[0].net_assets:0}/>  
+                          <InsightItem name={'Admin Expense'} value={charityInfo?charityInfo[0].administrative_expenses:0}/>     
+                          <InsightItem name={'Admin Exp. Ratio'} value={charityInfo?charityInfo[0].admin_expense_ratio:0}/>              
                         </div>
                         <div className='charity-stat-col'>
-                          <InsightItem name={'Excess/Deficit'} value={18344321}/>     
-                          <InsightItem name={'Other Revenue'} value={107712293 }/>  
-                          <InsightItem name={'Affiliate Payments'} value={0}/> 
+                          <InsightItem name={'Excess/Deficit'} value={charityInfo?charityInfo[0].excess:0}/>     
+                          <InsightItem name={'Other Revenue'} value={charityInfo?charityInfo[0].other_revenue:0 }/>  
+                          <InsightItem name={'Affiliate Payments'} value={charityInfo?charityInfo[0].payments_to_affiliates:0}/> 
                         </div>
                       </div>
                       <div style={{paddingTop:'2.125em', display:"flex", width:"70%",justifyContent:"space-between"}}>
-                        <InsightItem name={'Organization Focus'} value={"Diseases, Disorders, and Disciplines"}/> 
-                        <InsightItem name={'Location'} value={"Dallas TX, USA"}/> 
+                        <InsightItem name={'Organization Focus'} value={charityInfo?charityInfo[0].type2:"n/a"}/> 
+                        <InsightItem name={'Location'} value={charityInfo?`${charityInfo[0].city} ${charityInfo[0].state}, USA`:"n/a"}/> 
                       </div>
                     </div>
                 </div>

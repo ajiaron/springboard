@@ -55,13 +55,15 @@
 .console-content-container {
     display: flex;
     flex-direction: column;
-    gap:1.5em;
+ //   gap:1.5em;
     min-width: 100%;
-    padding-top: 2.6em;
+ //   padding-top: 2.6em;
+   padding-top: 1.6em;
     min-height:30%;
 }
 .first-content {
-    padding-top: 2.5em;
+    padding-top: 1.5em;
+    //padding-top: 2.5em;
 }
 .console-content-wrapper {
     display: flex;
@@ -73,14 +75,18 @@
     
     align-items: flex-end;
     align-self: center;
-  //  padding-top: .75em;
- //   padding-bottom: .75em;
-    //border-radius: 10px;
+    padding-top: .75em;
+    padding-bottom: .75em;
+    text-decoration: none;
+    border-radius: 10px;
    // background-color: red;
+   padding-left: .75em;
+   padding-right: .75em;
    transition: all .15s linear;
 }
 .console-content-wrapper:hover {
     filter: brightness(1.25);
+    background-color: #252525dd;
 }
 .console-item-text {
     font-size: clamp(14px, 3vw, 14px);
@@ -145,10 +151,49 @@
     //padding-left: 1.75em;
      width: 77.5%;
      justify-content: flex-start;
-     gap:.75em;
+     gap:.65em;
      align-items: flex-end;
      position: absolute;
    //  transform: translateX(-.1em);
      align-self: center;
-     bottom:5%;
+     bottom:4.25%;
+}
+
+@media (max-width: 1146px) {
+    .console-logo-text {
+        display: none;
+    }
+    .console-app-logo {
+        background-image: url('./assets/logo-alt.svg');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        overflow: visible;
+        width: 1.75em;
+        height: 1.75em;
+        filter: brightness(.9);
+        transform: scaleX(1.05) translateY(.065em) translateX(-.25em);
+        align-items: center;
+    }
+    .console-logo-text-container {
+        display: flex;
+        align-items: center;
+        padding-top: .375em;
+        text-decoration: none;
+       // gap: .825em;
+    
+    //   padding-left: .65rem;
+    }
+    .console-link-wrapper {
+        display: none;
+    }
+    .console-content-container {
+        display: flex;
+        flex-direction: column;
+     //   gap:1.5em;
+        min-width: 100%;
+     //   padding-top: 2.6em;
+       padding-top: 1.375em;
+        min-height:30%;
+    }
 }

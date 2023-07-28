@@ -12,14 +12,12 @@ import {LiaShoppingBasketSolid,LiaUserFriendsSolid} from 'react-icons/lia'
 import {BiBookmarks, BiBookHeart} from 'react-icons/bi'
 import {HiOutlineNewspaper} from 'react-icons/hi'
 import {CiSettings} from 'react-icons/ci'
-
 import './Navbar.scss'
 import './SideNavigation.scss'
 
-export default function SideNavigation() {
+export default function SideNavigation({route}) {
   return (
     <div className="side-console-container">
-
         <div className="console-header-container">
             <Link className="console-logo-text-container" to='/'>   
                 <div className="console-app-logo"/>
@@ -29,45 +27,43 @@ export default function SideNavigation() {
             </Link>
         </div>
         <div className="console-content-container ">
-            <div className="console-content-wrapper ">
+            <Link className="console-content-wrapper " to={'/dashboard'} 
+            style={{filter:(route==='dashboard')?'brightness(1.25)':'brightness(1)'}}>
                 <AiOutlineHome className="home-icon"/>
                 <p className="console-item-subtext">
                     Dashboard
                 </p>
-            </div>  
-            <div className="console-content-wrapper ">
+            </Link>  
+            <Link className="console-content-wrapper " to={'/feed'}>
                 <HiOutlineNewspaper className="home-icon"/>
                 <p className="console-item-subtext">
                     Recent activity
                 </p>
-            </div>
-            <div className="console-content-wrapper ">
+            </Link>
+            <Link className="console-content-wrapper " to={'/catalog'}>
                 <BiBookmarks className="home-icon"/>
                 <p className="console-item-subtext">
                     Catalog
                 </p>
-            </div>
-         
-
-            <div className="console-content-wrapper ">
+            </Link>
+            <Link className="console-content-wrapper " to={'/donations'}>
                 <AiOutlineGift className="home-icon"/>
                 <p className="console-item-subtext">
                     Donations
                 </p>
-            </div>
-            <div className="console-content-wrapper ">
+            </Link>
+            <Link className="console-content-wrapper " to={'/profile'}>
                 <BiBookHeart className="home-icon"/>
                 <p className="console-item-subtext">
                     Archive
                 </p>
-            </div>
-            <div className="console-content-wrapper ">
+            </Link>
+            <Link className="console-content-wrapper " to={'/cart'}>
                 <LiaShoppingBasketSolid className="home-icon"/>
                 <p className="console-item-subtext">
                     Your basket
                 </p>
-            </div>
-          
+            </Link>
         </div>
 
         <div className="console-content-container first-content ">
@@ -76,24 +72,25 @@ export default function SideNavigation() {
                     ACCOUNT
                 </p>
             </div>
-            <div className="console-content-wrapper ">
-                <BsPerson className="home-icon"/>
+            <Link className="console-content-wrapper " to={'/profile'}>
+                <BsPerson className="home-icon" />
                 <p className="console-item-subtext">
                     Your profile
                 </p>
-            </div>
-            <div className="console-content-wrapper ">
+            </Link>
+            <Link className="console-content-wrapper " to={'/friends'}
+            style={{filter:(route==='friends')?'brightness(1.25)':'brightness(1)'}}>
                 <LiaUserFriendsSolid className="home-icon"/>
                 <p className="console-item-subtext ">
                     Friends 
                 </p>
-            </div>
-            <div className="console-content-wrapper ">
+            </Link>
+            <Link className="console-content-wrapper " to={'/settings'}>
                 <FiSettings className="console-settings-icon"/>
                 <p className="console-item-subtext side-settings-subtext">
                     Settings
                 </p>
-            </div>
+            </Link>
         </div>
 
         <div className="console-content-container first-content ">
@@ -102,20 +99,18 @@ export default function SideNavigation() {
                     SUPPORT
                 </p>
             </div>
-            <div className="console-content-wrapper ">
-                <AiOutlineStar className="home-icon"/>
+            <Link className="console-content-wrapper ">
+                <AiOutlineStar className="home-icon" to={'https://github.com/ajiaron'}/>
                 <p className="console-item-subtext">
                      Updates
                 </p>
-            </div>
-            <div className="console-content-wrapper ">
+            </Link>
+            <span className="console-content-wrapper ">
                 <AiOutlineQuestionCircle className="home-icon"/>
                 <p className="console-item-subtext">
                     Help {'&'} feedback
                 </p>
-            </div>
-
-
+            </span>
         </div>
         <div className="console-content-container first-content ">
             <div className="console-content-wrapper">
@@ -123,20 +118,13 @@ export default function SideNavigation() {
         
                 </p>
             </div>
-  
             <div className="console-link-wrapper ">
                 <AiOutlineLink className="console-link-icon"/>
                 <p className="console-link-subtext">
                     link.springboard.app
                 </p>
             </div>
-
-
-        </div>
-
-
-
-                    
+        </div>                    
     </div>
   )
 }

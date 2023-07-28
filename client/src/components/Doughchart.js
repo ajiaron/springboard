@@ -4,23 +4,23 @@ import { Chart as ChartJS, RadialLinearScale, BarElement, ArcElement, Tooltip, L
 ChartJS.register(RadialLinearScale, CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend);
 
 const data = {
-    labels: ['Red', 'Blue'],
+    labels: ['Education', 'Human Services', 'Environment'],
     datasets: [
       {
         label: '# of Votes',
         data: [90,40,50],
         backgroundColor: [
-          'rgba(234, 211, 99, 0.75)',
-          'rgba(73, 128, 173, 0.75)',
-          'rgba(76, 173, 115,.75)',
+          'rgba(230, 184, 93, 0.8)',
+          'rgba(73, 128, 173, 0.8)',
+          'rgba(66, 160, 105, 0.8)',
 
         ],
         borderColor: ['#252525bb','#252525bb'],
         borderWidth:0,
         spacing:6,
         hoverBackgroundColor: [
-          'rgba(233, 203, 52, 0.75)',
-          'rgba(53, 108, 153,.95)',
+          '#e6b85dff',
+          'rgba(73, 128, 173, 0.95)',
           'rgba(90, 187, 111,.95)',
     
         ],
