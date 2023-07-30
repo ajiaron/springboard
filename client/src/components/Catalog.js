@@ -3,6 +3,7 @@ import './Catalog.scss'
 import Navbar from "./Navbar";
 import Payment from "./Payment";
 import {BsSearch} from 'react-icons/bs'
+import SideNavigation from "./SideNavigation";
 import SideBar from "./SideBar";
 import { BsStars } from 'react-icons/bs'
 import CharityItem from "./CharityItem";
@@ -23,7 +24,6 @@ export default function Catalog() {
     const [size, setSize] = useState([])
     const [filter, setFilter] = useState([])
     const [loading, setLoading] = useState(true)
-    const [openPayment, setOpenPayment] = useState(false)
     const [allCategories, setAllCategories] = useState(['Human', 'Education', 'Environment', 'Animals', 'Healthcare', 'Research', 'Community'])
     const [allSizes, setAllSizes] = useState(['Small', 'Mid', 'Large'])
     const loadingRef = useRef(null)
@@ -166,7 +166,6 @@ export default function Catalog() {
                 }
             <div className={`catalog-main-content ${paymentActive!== null?'dim-container':''}`}>
             <Navbar/>
-     
                 <div className="catalog-header-container" ref={topRef}>
                     <div className="catalog-header-wrapper">
                         <p className="catalog-header-text">

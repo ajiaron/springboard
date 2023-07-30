@@ -51,7 +51,7 @@ export default function Register() {
                 <input className='register-email-input'
                   onChange={(e)=>setEmail(e.target.value)}
                   value={email}
-                  placeholder='Enter your email...'/>
+                  placeholder='Enter your email'/>
               </div>
             </div>
 
@@ -63,10 +63,38 @@ export default function Register() {
                 <input className='register-email-input'
                   onChange={(e)=>setUsername(e.target.value)}
                   value={username}
-                  placeholder='Enter a username...'/>
+                  placeholder='Enter a username'/>
               </div>
             </div>
 
+
+            <div className='register-fullname-wrapper'>
+              <div className='register-fullname-container'>
+                <p className='register-fullname-text'>
+                  First Name
+                </p>
+                <div className='register-email-input-wrapper'>
+                  <input className='register-email-input'
+                    onChange={(e)=>setUsername(e.target.value)}
+                    value={username}
+                    placeholder='Enter your first name'/>
+                </div>
+              </div>
+
+              <div className='register-fullname-container'>
+                <p className='register-fullname-text'>
+                  Last Name
+                </p>
+                <div className='register-email-input-wrapper'>
+                  <input className='register-email-input'
+                    onChange={(e)=>setUsername(e.target.value)}
+                    value={username}
+                    placeholder='Enter your last name'/>
+                </div>
+              </div>
+            </div>
+    
+            
             <div className='register-email-container'>
               <p className='register-email-text'>
                 Password
@@ -76,7 +104,7 @@ export default function Register() {
                   onChange={(e)=>setPassword(e.target.value)}
                   value={password}
                   type={password}
-                  placeholder='Enter a username...'/>
+                  placeholder='Enter a password'/>
               </div>
             </div>
             <div className='confirm-register-button'>

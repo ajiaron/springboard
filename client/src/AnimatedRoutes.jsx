@@ -12,7 +12,7 @@ import Settings from './components/Settings';
 import Donations from './components/Donations';
 import Friends from './components/Friends'
 import ScrollToTop from "./components/ScrollToTop";
-
+import Archive from './components/Archive';
 import Charity from './components/Charity';
 import CharityItem from './components/CharityItem';
 
@@ -31,6 +31,7 @@ function AnimatedRoutes() {
                 <Route path='/cart' element={<Cart/>}/>
                 <Route path='/feed' element={<Feed/>}/>
                 <Route path='/friends' element={<Friends/>}/>
+                <Route path='/archive' element={<Archive/>}/>
                 <Route path='/donations' element={<Donations/>}/>
                 <Route path='/donate/:charityid/:charityname/:amount' element={<Donate/>}/>
             </Routes>

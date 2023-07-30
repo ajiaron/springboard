@@ -42,7 +42,7 @@
     flex-direction: column;
     padding-left: 3.5%;
    // padding-right: 3.5%;
-    padding-top: 2.75%;
+    padding-top: 2.65%;
   }
   .dashboard-text-container {
     max-width: 36vw;
@@ -393,7 +393,7 @@
 }
 .feed-donation-dashboard-caption {
     width: 80%;
-    height:fit-content;
+   // height:fit-content;
    // padding-top: .025em;
     //background-color: red;
 
@@ -417,4 +417,12 @@
     transform: translateY(-.025em);
     height: 1em;
     color:#a0a0a0;
+}
+.feed-dashboard-item-text-alt {
+  font-size: clamp(10px, 3vw, 14px);
+  color:#eee;
+  font-family: 'Rubik';
+
+  line-height: 21px;
+  font-weight: 400;
 }

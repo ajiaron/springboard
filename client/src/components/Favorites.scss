@@ -22,7 +22,7 @@
     box-shadow: 3px 3px 2px 4px rgba(0,0,0,0.2);
   }
   .profile-favorite-item-container:hover {
-    transform: scale(1.025);
+ //   transform: scale(1.025);
   }
   .hr-item:hover {
     border: 1px solid rgba(93, 136, 216, 0.9);
@@ -36,6 +36,16 @@
   .environment-item:hover {
     border: 1px solid #2f8f79ee;
   }
+  .research-item:hover {
+    border: 1px solid rgba(80, 187, 191, 0.9);
+  }
+  .animals-item:hover {
+    border: 1px solid rgba(122, 188, 69, .9);
+  }
+  .community-item:hover {
+    border: 1px solid rgba(154, 129, 106, 0.9);
+  }
+
   .profile-favorite-icon {
     color:#555555;
     width:1.475em;

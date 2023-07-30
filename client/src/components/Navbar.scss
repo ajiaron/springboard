@@ -302,17 +302,20 @@
    // margin-top: vh;
   // border-radius: 15px;
   // background-color: #252525;
+  z-index: 99;
    text-decoration: none;
    transform: translateX(.115em);
   // padding-bottom: .25em;
   }
   .charity-side-item {
     opacity: 0;
+    z-index: 1;
 
   }
   .charity-side-item-alt {
     transform:scale(1.05) translateX(.0em);
    // visibility: hidden;
+   z-index: 1;
    opacity: 1;
   // background-color: red;
 
@@ -331,4 +334,37 @@
     //background-color: red;
     justify-content: center;
     align-items: center;
+  }
+  .navbar-charity-container-inactive {
+   // transition: all .15s linear;
+  // transform: translateX(.115em);
+    animation-name:animate-nav-inactive;
+    animation-timing-function:linear;
+    animation-duration: .25s;
+    pointer-events: none;
+    animation-fill-mode: forwards;
+  }
+  @keyframes animate-nav-inactive {
+    from {
+        filter: brightness(1) blur(0px);
+    }
+    to {   
+        filter: brightness(.6) blur(5px);
+    }
+  }
+  .navbar-charity-container-active {
+   // transition: all .15s linear;
+    animation-name:animate-nav-active;
+    animation-timing-function:linear;
+    animation-duration: .25s;
+   // pointer-events: none;
+    animation-fill-mode: forwards;
+  }
+  @keyframes animate-nav-active {
+    from {
+        filter: brightness(.6) blur(5px) 
+    }
+    to {   
+        filter: brightness(1) blur(0);
+    }
   }

@@ -5,6 +5,7 @@ import Payment from "./Payment";
 import Paypal from "./Paypal";
 import {BsSearch} from 'react-icons/bs'
 import SideBar from "./SideBar";
+import SideNavigation from "./SideNavigation";
 import {GoArrowRight} from 'react-icons/go'
 import Footer from "./Footer";
 import Axios from "axios";
@@ -22,13 +23,13 @@ export default function Donate() {
 
     return (
         <div className="donate-page">
-               <Navbar route={'donate'}/>
+            <SideNavigation route={'donate'}/>
             <div className="donate-page-container">
         
                 <div className={`checkout-container`}>
                     <div className={`checkout-content`}>
                         <div className="checkout-header-container">
-                            <p className="checkout-header-text">
+                            <p className="cart-header-text">
                                 Checkout
                             </p>
                         </div>
@@ -105,8 +106,8 @@ export default function Donate() {
                 <div className={`cart-container`}>
                     <div className={`cart-content`}>
                         <div className="cart-header-container">
-                            <p className="cart-header-text">
-                                Donation Items
+                            <p className="cart-header-text" >
+                                {'Basket'}
                             </p>
                         </div>
                         <div className={`cart-item-list`}>
@@ -131,6 +132,7 @@ export default function Donate() {
                                     </p>
                                 </div>
                             </div>
+                            {/* 
                             <div className="cart-item">
                                 
                             </div>
@@ -140,6 +142,7 @@ export default function Donate() {
                             <div className="cart-item">
                                 
                             </div>
+                            */}
                         </div>
                     </div>
                 </div>

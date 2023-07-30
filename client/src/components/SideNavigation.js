@@ -52,7 +52,7 @@ export default function SideNavigation({route}) {
                     Donations
                 </p>
             </Link>
-            <Link className="console-content-wrapper " to={'/profile'}>
+            <Link className="console-content-wrapper " to={'/archive'}>
                 <BiBookHeart className="home-icon"/>
                 <p className="console-item-subtext">
                     Archive

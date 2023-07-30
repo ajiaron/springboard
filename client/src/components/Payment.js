@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { useInView } from 'react-intersection-observer';
 import { FiMail } from "react-icons/fi";
 import {GoArrowRight} from 'react-icons/go'
+import { BsCheck2,BsCheckLg } from 'react-icons/bs'
 import {AiOutlineArrowRight} from 'react-icons/ai'
 import {LiaTimesSolid} from 'react-icons/lia'
 import { debounce } from "lodash";
@@ -15,11 +16,13 @@ import Paypal from "./Paypal";
 import styled from 'styled-components'
 
 
-export default function Payment({charityid, onClose}) {
-    const [value, setValue] = useState(1)
+export default function Payment({charityid, onClose, onBlur}) {
+    const [value, setValue] = useState(10)
     const [message, setMessage] = useState('')
     const modalRef = useRef(null);
-    const [selected, setSelected] = useState(false)
+    const [shareName, setShareName] = useState(true)
+    const [shareEmail, setShareEmail] = useState(true)
+    const [shouldClose, setShouldClose] = useState(false)
     const [customValue, setCustomValue] = useState(0)
     const [loading, setLoading] = useState(true)
     const [charityInfo, setCharityInfo] = useState([])
@@ -27,19 +30,16 @@ export default function Payment({charityid, onClose}) {
         console.log(charityid)
     }
     const PaymentOption = styled.span`
-        border: ${props => props.primary?'1px solid rgb(148, 86, 183)':'1px solid #ccc'};
-        background-color: ${props=>props.primary?'rgb(148, 86, 183)':'#1a1a1a'};
-        width: 4.5em;
-        border-radius: 18px;
-        height: 2.5em;
+        background-color: #151515;
+        width: 100%;
+        height: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: all 0.15s linear;
-        text-align: center;
+        border-radius: 10px;
+        filter:brightness(${props=> props.primary?'1.25':'1'})
         &:hover {
-            background-color: rgb(148, 86, 183);
-            border: 1px solid rgb(148, 86, 183);
+            filter:brightness(${props=> props.primary?'1':'1.25'})
         }
     `;
     const handleInputChange = (event) => {
@@ -72,9 +72,16 @@ export default function Payment({charityid, onClose}) {
             setValue(0)
         }
     }, [customValue])
+    function handleClose() {
+        setShouldClose(true)
+        onBlur()
+        setTimeout(()=> {
+            onClose()
+        }, 300)
+    }
     const handleOutsideClick = (event) => {
         if (modalRef.current && !modalRef.current.contains(event.target)) {
-            onClose();
+            handleClose();
         }
     };
     useEffect(() => {
@@ -85,110 +92,129 @@ export default function Payment({charityid, onClose}) {
     }, []);
     
     return (
-            <div className="payment-screen-wrapper" ref={modalRef}>
-                <div className="payment-header-container">
-                    <span className="exit-container" onClick={()=>onClose()}>
-                        <LiaTimesSolid className="exit-icon"/>
-                    </span>
-                    <p className="payment-header-text">
-                        Your Donation Details
-                    </p>
-                    <p className="payment-header-subtext">
-                    {loading ? 'Loading...' : (charityInfo.length > 0 ? charityInfo[0].charity_name : 'No charity info')}
-                    </p>
-                </div>
-                <div className="payment-options-container">
-                    <div className="payment-option-top-row">
-                        <PaymentOption primary={(value===1)&&!customValue} onClick={()=>setValue((value!==1)?1:0)}>
-                            <p className="payment-option-text">
-                                $1
-                            </p>
-                        </PaymentOption>
-                        <PaymentOption primary={(value===5)&&!customValue} onClick={()=>setValue((value!==5)?5:0)}>
-                            <p className="payment-option-text">
-                                $5
-                            </p>
-                        </PaymentOption>
-                        <PaymentOption primary={(value===10)&&!customValue} onClick={()=>setValue((value!==10)?10:0)}>
-                            <p className="payment-option-text">
-                                $10
-                            </p>
-                        </PaymentOption>
-                        <PaymentOption primary={(value===20)&&!customValue} onClick={()=>setValue((value !== 20)?20:0)}>
-                            <p className="payment-option-text">
-                                $20
-                            </p>
-                        </PaymentOption>
-                    </div>
-                    <div className="payment-option-bottom-row">
-                        <PaymentOption primary={(value===50)&&!customValue} onClick={()=>setValue((value!==50)?50:0)}>
-                            <p className="payment-option-text">
-                                $50
-                            </p>
-                        </PaymentOption>
-                        <PaymentOption primary={(value===100)&&!customValue} onClick={()=>setValue((value!==100)?100:0)}>
-                            <p className="payment-option-text">
-                                $100
-                            </p>
-                        </PaymentOption>
-                        <PaymentOption primary={(value===200)&&!customValue} onClick={()=>setValue((value!==200)?200:0)}>
-                            <p className="payment-option-text">
-                                $200
-                            </p>
-                        </PaymentOption>
-                        <PaymentOption primary={(value===500)&&!customValue} onClick={()=>setValue((value!==500)?500:0)}>
-                            <p className="payment-option-text">
-                                $500
-                            </p>
-                        </PaymentOption>
-                    </div>
-                    
-                </div>
-                <div className="payment-custom-container">
-                    <p className="custom-container-text">
-                        Choose a custom amount:
-                    </p>
-                    <span className="currency-input">
-                        $
-                        <input type="number" name="customdonate" id="customdonate"
-                            onChange={(e)=> handleInputChange(e)}
-                            value={(customValue===0)?'':customValue}
-                            placeholder={`Enter an amount to donate...`}
-                            className="custom-input-container" />
-                    </span>
-                </div>
-                <div className="message-custom-container">
-                    <p className="custom-container-text">
-                        Leave a message if you'd like:
-                    </p>
-             
-                        <textarea type="text" name="ownerName" id="ownerName"
-                            onChange={(e)=> setMessage(e.target.value)}
-                            value={message}
-                            placeholder={`Share a comment...`}
-                            className="message-input-container" />
-                </div>
-        
-                {/*
-                    <Paypal 
-                    charityid={charityid}
-                    name={charityInfo.length > 0 ? charityInfo[0].charity_name : 'No charity info'}
-                    amount={customValue>0?customValue:value}
-                  />*/
-                }
-                {
-                <div className="payment-confirm-container">
-                    <Link className="payment-confirm-button" 
-                    to={(loading)?'#':`/donate/${charityid}/${charityInfo[0].charity_name}/${customValue>0?customValue:value}`}>
-                        <p className="payment-confirm-text">
-                            {
-                            `${loading?'Loading...':'Confirm Your Donation'}`
-                            }
+        <div className={`payment-screen-wrapper ${shouldClose?'payment-screen-active':'payment-screen-inactive'}`} ref={modalRef}>
+            <span className="exit-container" onClick={()=>handleClose()}>
+                <LiaTimesSolid className="exit-icon"/>
+            </span>
+            <div className="payment-inner-container">
+                <div className='payment-inner-wrapper'>
+                    <div className='register-header-container'>
+                        <p className='payment-inner-text'>
+                        Make your impact.
                         </p>
-                        <GoArrowRight className="arrow-icon"/>
-                    </Link>
+                        <p className='payment-inner-subtext'>
+                        {`Donate to ${loading ? 'Loading...' : (charityInfo.length > 0 ? charityInfo[0].charity_name : 'No charity info')}`}
+                        </p>
+                    </div>
+                    <div className='payment-inner-content'>
+                        <div className='payment-inner-button-container'>
+                            <span className='payment-inner-option-button'>
+                                <PaymentOption primary={(value===10)} onClick={()=>setValue(10)}>
+                                    <p className={`${value==10?'payment-inner-option-text-alt':'payment-inner-option-text'}`}>
+                                        $10
+                                    </p>
+                                </PaymentOption>
+                            </span>
+                            <span className='payment-inner-option-button'>
+                                <PaymentOption primary={(value===25)} onClick={()=>setValue(25)}>
+                                    <p className={`${value==25?'payment-inner-option-text-alt':'payment-inner-option-text'}`}>
+                                        $25
+                                    </p>
+                                </PaymentOption>
+                            </span>
+                            <span className='payment-inner-option-button'>
+                                <PaymentOption primary={(value===50)} onClick={()=>setValue(50)}>
+                                    <p className={`${value==50?'payment-inner-option-text-alt':'payment-inner-option-text'}`} >
+                                        $50
+                                    </p>
+                                </PaymentOption>
+                            </span>
+                            <span className='payment-inner-option-button'>
+                                <PaymentOption primary={(value===100)} onClick={()=>setValue(100)}>
+                                    <p className={`${value==100?'payment-inner-option-text-alt':'payment-inner-option-text'}`}>
+                                        $100
+                                    </p>
+                                </PaymentOption>
+                            </span>
+                        </div>
+
+                        <div className="payment-inner-option-footer">
+                            <p className="payment-inner-option-footer-text">
+                                or
+                            </p>
+                        </div>
+
+                        <div className='payment-inner-fields-container '> 
+                            <div className='payment-inner-field-wrapper'>
+                                <p className='payment-inner-input-text'>
+                                    Choose an amount:
+                                </p>
+                                <div className='payment-inner-input-wrapper'>                
+                                    $
+                                    <input type="number" name="customdonate" id="customdonate"
+                                        onChange={(e)=> setValue(e.target.value)}
+                                        value={(value)}
+                                        className="payment-inner-input" />
+                                    <p style={{color:'#656565'}}>
+                                        USD
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className='payment-inner-input-container'>
+                                <p className='payment-inner-input-text'>
+                                    Share a message or dedication:
+                                </p>
+                                <div className='payment-inner-message-input-wrapper'>
+                                    <textarea className='payment-inner-message-input'
+                                    onChange={(e)=>setMessage(e.target.value)}
+                                    value={message}
+                                    placeholder='Write something for someone...'/>
+                                </div>
+                            </div>
+
+                            <div className='payment-inner-field-wrapper' style={{paddingTop:'1em'}}>
+                                <p className='payment-inner-input-text'>
+                                    {`For the organization:`}
+                                </p>
+                                <div className='payment-inner-button-container' style={{paddingTop:"0em",transform:"translateY(.575em)"}}>
+                                    <span className={`payment-inner-option-share-button`} onClick={()=>setShareName(!shareName)}
+                                  >
+                                        <div className={`payment-inner-option-content-alt ${shareName?'payment-inner-option-content-on':''}`}>
+                 
+                                                Share your name
+                                          
+                                            {(shareName)&&
+                                                <BsCheckLg className="payment-check-icon"/>
+                                            }
+                                        </div>
+                                    </span>
+                                    <span className={`payment-inner-option-share-button`} onClick={()=>setShareEmail(!shareEmail)}
+                                  >
+                                        <div className={`payment-inner-option-content-alt ${shareEmail?'payment-inner-option-content-on':''}`}>
+                       
+                                                Share your email
+
+                                            {(shareEmail)&&
+                                                <BsCheckLg className="payment-check-icon"/>
+                                            }
+                                        </div>
+                                    </span>
+                                </div>
+                               
+                            </div>
+                            <Link className='payment-inner-confirm-button' 
+                              to={(loading)?'#':`/donate/${charityid}/${charityInfo[0].charity_name}/${value}`}
+                            >
+                                <p className='confirm-register-text'>
+                                    {` ${(loading)?'Loading...':'Add to Donation Basket'}`}
+                                </p>
+                                <GoArrowRight className="register-icon"/>
+                            </Link>
+                        </div>
+                    </div>
                 </div>
-                }
             </div>
+        </div>
     )
 }

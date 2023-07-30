@@ -16,7 +16,7 @@ export default function Login() {
         Welcome to your very own donor platform.
       </p>
     </div>
-    <div className='register-content'>
+    <div className='login-content'>
       <div className='register-button-container'>
         <span className='register-google-button'>
           <div className='login-google-content'>
@@ -42,10 +42,10 @@ export default function Login() {
           </p>
       </div>
 
-      <div className='register-fields-container'> 
+      <div className='login-fields-container'> 
 
 
-          <div className='register-email-container'>
+          <div className='login-email-container'>
             <p className='login-email-text'>
               Username / Email 
             </p>
@@ -53,11 +53,11 @@ export default function Login() {
               <input className='register-email-input'
                 onChange={(e)=>setUsername(e.target.value)}
                 value={username}
-                placeholder='Enter a username...'/>
+                placeholder='Enter your email or username...'/>
             </div>
           </div>
 
-          <div className='register-email-container'>
+          <div className='login-email-container'>
             <p className='login-email-text'>
               Password
             </p>
@@ -66,7 +66,7 @@ export default function Login() {
                 onChange={(e)=>setPassword(e.target.value)}
                 value={password}
                 type={password}
-                placeholder='Enter a username...'/>
+                placeholder='Enter your password...'/>
             </div>
           </div>
 

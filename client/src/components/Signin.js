@@ -32,7 +32,7 @@ export default function Signin({type, onClose, onBlur}) {
   return (
     <div className={`signin-container ${shouldClose?'signin-active':'signin-inactive'}`} ref={signInRef}>
         <div className='signin-content'>
-            {
+            { 
                 (type==='register')?
                 <Register/>
                 :

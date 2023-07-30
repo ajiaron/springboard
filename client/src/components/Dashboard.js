@@ -37,13 +37,16 @@ const RecentDonation = ({name, charity, status, caption, date, index}) => {
                 <p className="feed-dashboard-item-text">
                     Follows you
                 </p>   
-                
-                <BsCheckLg className="dashboard-check-icon"/>
+                {
+                    
+                             <BsCheckLg className="dashboard-check-icon"/>
+                }
+       
     
             </div>
             {(caption.length > 0)&&
             <div className="feed-donation-dashboard-caption">
-                <p className="feed-donation-item-text-alt">
+                <p className="feed-dashboard-item-text-alt">
                    {caption}
                 </p>
             </div>
@@ -87,7 +90,7 @@ export default function Dashboard() {
                         <Doughchart/>
                         <div className="dashboard-grid-wrapper">
                             <div className="dashboard-grid-pair ">
-                                <Link className="dashboard-grid-content-item" to='/feed'>
+                                <Link className="dashboard-grid-content-item" to='/catalog'>
                                         <div className="dashboard-grid-button-wrapper">
                                             <p className="dashboard-grid-button-text">
                                                 View page

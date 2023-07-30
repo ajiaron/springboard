@@ -75,6 +75,30 @@ app.get('/donate/getcharity/:charityid', (req,res)=> {
         }
     })
 })
+app.get('/archive/getcharityid/:name', (req,res)=> {
+    const name = req.params.name
+    db.query('SELECT charityid FROM charities WHERE charity_name LIKE ?', [`%${name}%`],
+    (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+app.get('/archive/getarchive/:userid', (req,res)=> {
+    const userid = req.params.userid
+    const sql = `SELECT charityid, charity_name, overall_score, city, state, size, type1 FROM andale_db.charities `+
+                `WHERE charityid IN (SELECT charityid FROM andale_db.archive WHERE userid = ?);`
+    db.query(sql, [userid],
+    (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
 app.get('/catalog/getfiltered/:next/:current', (req,res)=> {
     const next = Number(req.params.next)
     const current = Number(req.params.current)
