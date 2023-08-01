@@ -20,7 +20,7 @@ export default function SideBar({}) {
             </p>
         </div>
         <div className="navigation-item-container">
-            <Link className="navigation-item" to={'/dashboard'}>
+            <Link className="navigation-item" to={'/settings'}>
                 <FiSettings className='settings-icon'/>
             </Link>
             <p className="navigation-item-text">

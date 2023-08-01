@@ -19,7 +19,7 @@ export default function SideNavigation({route}) {
   return (
     <div className="side-console-container">
         <div className="console-header-container">
-            <Link className="console-logo-text-container" to='/'>   
+            <Link className="console-logo-text-container" to='/dashboard'>   
                 <div className="console-app-logo"/>
                     <p className="console-logo-text">
                         Springboard

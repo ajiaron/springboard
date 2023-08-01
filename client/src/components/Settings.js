@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from "react"
+import React, {useState, useEffect, useRef, useContext} from "react"
 import './Profile.scss'
 import './Settings.scss'
 import Navbar from "./Navbar";
@@ -8,8 +8,12 @@ import DonationItem from "./DonationItem";
 import SideBar from "./SideBar";
 import Favorites from "./Favorites";
 import { BsStars } from 'react-icons/bs'
-import { Link } from "react-router-dom";
+import UserContext from "../contexts/UserContext";
+import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineLink, AiOutlineEdit,AiOutlineClockCircle } from 'react-icons/ai'
+import { Amplify, Auth } from "aws-amplify";
+import config from '../aws-exports';
+Amplify.configure(config);
 const ToggleSwitch = ({label}) => {
     const [isToggled, setIsToggled] = useState(false)
     const [isAll, setIsAll] = useState(label==='all-categories' || label==='all-sizes')
@@ -33,19 +37,30 @@ const ToggleSwitch = ({label}) => {
 }
 
 export default function Settings() {
+    const navigate = useNavigate()
+    const user = useContext(UserContext)
     const [nickname, setNickname] = useState('')
+    const handleSignOut = async() => {
+        try {
+            await Auth.signOut()
+            navigate("/")
+        } catch(e) {
+            console.log(e)
+        }
+    }
     return (
         <div className={`settings-container`}>
             <Navbar route={'settings'}/>
             <div className={`settings-content`}>
 
-                <div className="settings-header-container">
+                <div className="settings-header-container ">
                     <div className="settings-image-wrapper">
                         <p className="settings-image-text">
                             A
                         </p>
                     </div>
-                    <div className="settings-header-wrapper">
+                    
+                    <div className="settings-header-wrapper ">
                         <p className="settings-header-text">
                             {`Aaron Jiang`}
                         </p>
@@ -56,6 +71,10 @@ export default function Settings() {
                             </p>
                         </div>
                     </div>
+                    <span className="logout-container" onClick={()=>handleSignOut()}>
+                            Logout
+                    </span>
+
                 </div>
 
                 <div className="manage-settings-container">

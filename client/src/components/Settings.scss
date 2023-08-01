@@ -20,7 +20,7 @@
 .settings-header-container {
     display: flex;
     flex-direction: row;
-    width: 100%;
+    width: 92.25%;
     height: fit-content;
     align-items: center;
     justify-content: flex-start;
@@ -54,7 +54,7 @@
 .settings-header-wrapper {
     display: flex;
     flex-direction: column;
-    min-width: 100vw;
+    width: 80%;
     min-height: 100%;
     //padding-top: 0.25em;
  // align-self: center;
@@ -522,3 +522,36 @@
     padding-top: 2.5em;
     padding-right: .25em;
   }
+
+  .logout-container {
+    min-width: 9.5%;
+    height: fit-content;
+    padding-top: .25em;
+    padding-bottom: .25em;
+    border-radius: 8px;
+    outline: 1px solid #3a3a3a;
+    align-self: flex-start;
+    margin-left: auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    transform: translateX(-.5em) translateY(.5em);
+    transition: all .15s linear;
+    background-color: #2a2a2a;
+    z-index: 999;
+    font-size: clamp(10px, 3vw, 15.5px);
+    font-family: "Rubik";// padding-left: .025em;
+    line-height: 26px;
+    letter-spacing: -.25px;
+    font-weight: 400;
+    transition: all .15s linear;
+    color: #a0a0a0;
+  }
+  .logout-container:hover {
+    background-color: #1a1a1a;
+    outline: 1px solid rgba(220, 117, 117,.8);
+    color:rgb(220, 117, 117);
+  }
+

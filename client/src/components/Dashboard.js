@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from "react"
+import React, {useState, useEffect, useRef, useContext} from "react"
 import './Landing.scss'
 import './Dashboard.scss'
 import Navbar from "./Navbar";
@@ -6,6 +6,7 @@ import Footer from "./Footer";
 import SideBar from "./SideBar";
 import Signin from "./Signin";
 import { BsCheck2,BsCheckLg } from 'react-icons/bs'
+import UserContext from "../contexts/UserContext";
 import { Link } from "react-router-dom";
 import SideNavigation from "./SideNavigation";
 import Doughchart from "./Doughchart";
@@ -37,12 +38,9 @@ const RecentDonation = ({name, charity, status, caption, date, index}) => {
                 <p className="feed-dashboard-item-text">
                     Follows you
                 </p>   
-                {
-                    
-                             <BsCheckLg className="dashboard-check-icon"/>
+                {   
+                    <BsCheckLg className="dashboard-check-icon"/>
                 }
-       
-    
             </div>
             {(caption.length > 0)&&
             <div className="feed-donation-dashboard-caption">
@@ -65,6 +63,7 @@ export default function Dashboard() {
     const [screenWidth, setScreenWidth] = useState(window.innerWidth)
     const [screenHeight, setScreenHeight] = useState(window.innerHeight)
     const [signInActive, setSignInActive] = useState(null)
+    const user = useContext(UserContext)
 
     useEffect(()=>{
         if (signInActive !== null) {
@@ -82,7 +81,11 @@ export default function Dashboard() {
                     <div className="dashboard-text-container  ">
                         <div className="dashboard-header-container">
                             <p className="dashboard-header">
-                                Your Dashboard
+                                {
+                                    (user&&user.firstName)?
+                                    `Welcome back, ${user.firstName}.`:
+                                    `Your Dashboard`
+                                }
                             </p>
                         </div>
                     </div>

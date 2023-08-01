@@ -15,6 +15,7 @@ import { useInView } from 'react-intersection-observer';
 import _, { debounce } from 'lodash'; 
 import { FiMail } from "react-icons/fi";
 
+
 export default function Catalog() {
     const [query, setQuery] = useState('')
     const initialPos = useRef(null)

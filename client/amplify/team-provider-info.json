@@ -1,0 +1,38 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-springboard-dev-155055-authRole",
+      "UnauthRoleArn": "arn:aws:iam::535974679162:role/amplify-springboard-dev-155055-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::535974679162:role/amplify-springboard-dev-155055-authRole",
+      "Region": "us-west-1",
+      "DeploymentBucketName": "amplify-springboard-dev-155055-deployment",
+      "UnauthRoleName": "amplify-springboard-dev-155055-unauthRole",
+      "StackName": "amplify-springboard-dev-155055",
+      "StackId": "arn:aws:cloudformation:us-west-1:535974679162:stack/amplify-springboard-dev-155055/8baa7f50-2f2b-11ee-a5ff-06035b84a35f",
+      "AmplifyAppId": "d3tsvqds6f9bn2"
+    },
+    "categories": {
+      "auth": {
+        "springboardf01d249f": {}
+      }
+    }
+  },
+  "andale": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-springboard-andale-122503-authRole",
+      "UnauthRoleArn": "arn:aws:iam::535974679162:role/amplify-springboard-andale-122503-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::535974679162:role/amplify-springboard-andale-122503-authRole",
+      "Region": "us-west-1",
+      "DeploymentBucketName": "amplify-springboard-andale-122503-deployment",
+      "UnauthRoleName": "amplify-springboard-andale-122503-unauthRole",
+      "StackName": "amplify-springboard-andale-122503",
+      "StackId": "arn:aws:cloudformation:us-west-1:535974679162:stack/amplify-springboard-andale-122503/f34d5630-2fd7-11ee-9c88-061f67b3c699",
+      "AmplifyAppId": "d3tsvqds6f9bn2"
+    },
+    "categories": {
+      "auth": {
+        "springboardf01d249f": {}
+      }
+    }
+  }
+}

@@ -141,6 +141,71 @@ app.get('/catalog/searchfiltered/:next/:current/:query', (req,res)=> {
         }
     })
 })
+
+// auth
+
+// check if username or email is already taken
+app.get('/register/validate', (req,res)=> {
+    const email = String(req.query.email)
+    const username = String(req.query.username)
+    const sql = `SELECT SUM(CASE WHEN ? IN (email) THEN 1 ELSE 0 END) as emailTaken, `+
+                `SUM(CASE WHEN ? IN (username) THEN 1 ELSE 0 END) as usernameTaken `+
+                `FROM andale_db.users;`
+    db.query(sql, [email, username],
+    (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+// get login info of user
+app.get('/login/getuser', (req,res)=> {
+    const username = String(req.query.username)
+    db.query('SELECT * FROM users WHERE username = ?', [username],
+    (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+
+
+app.post('/register/createuser', (req, res) => {
+    const userid = req.body.userid
+    const username = req.body.username
+    const firstname = req.body.firstname
+    const lastname = req.body.lastname
+    const email = req.body.email
+    const password = req.body.password
+    const confirmed = req.body.confirmed
+    db.query('INSERT INTO users (userid, username, firstname, lastname, email, password, confirmed) VALUES (?,?,?,?,?,?,?)', 
+    [userid, username, firstname, lastname, email, password, confirmed], (err, result) => {
+        if(err) {
+            console.log(err)
+        } else {
+            res.send("user successfully registered")
+        }
+    })
+})
+
+app.put('/login/confirmuser', (req, res) => {     // for email confirmation on register
+    const username = String(req.body.username)
+    db.query('UPDATE users SET confirmed = true WHERE name = ?', [username],
+    (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    }
+    )
+})
+
+
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/build/index.html'));
   });
