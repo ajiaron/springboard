@@ -1,6 +1,7 @@
-import React, {useState, useEffect, useRef} from "react"
+import React, {useState, useEffect, useRef, useContext} from "react"
 import './Profile.scss'
 import './Donations.scss'
+import UserContext from "../contexts/UserContext";
 import DonationItem from "./DonationItem";
 import SideNavigation from "./SideNavigation";
 import Navbar from "./Navbar";
@@ -15,13 +16,15 @@ import { Link } from "react-router-dom";
 import { AiOutlineLink, AiOutlineEdit,AiOutlineClockCircle } from 'react-icons/ai'
 
 export default function Archive() {
+    const user = useContext(UserContext)
     const [loading, setLoading] = useState(true)
+    const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
     const [charityData, setCharityData] = useState()
     useEffect(()=> {
         const loadCharity = async() => {
           setLoading(true)
           try {
-            const url = `http://localhost:3000/archive/getarchive/${0}`;
+            const url = `${connection}/archive/getarchive/${0}`;
             const res = await axios.get(url, {
               params: {
                   userid:0
@@ -37,6 +40,7 @@ export default function Archive() {
         loadCharity()
         setLoading(false)
       },[])
+
   return (
         <div className={`donations-page-container`}>
             <SideNavigation route={'donations'}/>
@@ -86,7 +90,7 @@ export default function Archive() {
                                     <CharityTab id={charityData&&item.charityid} type={charityData&&item.type1} value={charityData&&item.overall_score} name={charityData&&item.charity_name} size={charityData&&item.size}/>
                                 )):
                                 <div className='loading-text-container'>
-                                    <p className="loading-text"> {`${(loading)?'Loading...':`Showing all matching results`}`} </p>
+                                    <p className="loading-text"> {`${(loading)?'Loading...':``}`} </p>
                                 </div>
                                 }
                             </div>

@@ -1,9 +1,10 @@
-import React, {useState, useEffect, useRef} from "react"
+import React, {useState, useEffect, useRef, useContext} from "react"
 import './Payment.scss'
 import Navbar from "./Navbar";
 import axios from "axios";
 import SideBar from "./SideBar";
 import { BsStars } from 'react-icons/bs'
+import UserContext from "../contexts/UserContext";
 import { Link } from "react-router-dom";
 import { useInView } from 'react-intersection-observer';
 import { FiMail } from "react-icons/fi";
@@ -17,9 +18,11 @@ import styled from 'styled-components'
 
 
 export default function Payment({charityid, onClose, onBlur}) {
+    const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
     const [value, setValue] = useState(10)
     const [message, setMessage] = useState('')
     const modalRef = useRef(null);
+    const user = useContext(UserContext)
     const [shareName, setShareName] = useState(true)
     const [shareEmail, setShareEmail] = useState(true)
     const [shouldClose, setShouldClose] = useState(false)
@@ -52,7 +55,7 @@ export default function Payment({charityid, onClose, onBlur}) {
         const loadCharity = async() => {
             setLoading(true)
             try {
-                const res = await axios.get(`http://localhost:3000/donate/getcharity/${charityid}`)
+                const res = await axios.get(`${connection}/donate/getcharity/${charityid}`)
                 setCharityInfo(res.data)
             }
             catch(error) {

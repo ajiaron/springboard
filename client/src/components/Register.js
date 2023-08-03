@@ -15,6 +15,7 @@ Amplify.configure(config);
 
 export default function Register() {
   const navigate = useNavigate()
+  const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
   const user = useContext(UserContext)
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState('')
@@ -49,7 +50,7 @@ export default function Register() {
 
   const validateRegister = async() => {
         try {
-          const url = `http://localhost:3000/register/validate`;
+          const url = `${connection}/register/validate`;
           const res = await axios.get(url, {
             params: {
                 email:email,
@@ -85,7 +86,7 @@ export default function Register() {
     try {
       const response = await Auth.signIn(username, password)
       if (response.attributes.email_verified) {
-        navigate('/dashboard', { state: {userid:userid, username:username, firstName:firstName, lastName:lastName}})
+        navigate('/dashboard')
       }
     }
     catch(e) {
@@ -136,7 +137,7 @@ export default function Register() {
             }
           })
           console.log(response.userConfirmed)
-          axios.post(`http://localhost:3000/register/createuser`, 
+          axios.post(`${connection}/register/createuser`, 
           {userid:userid, username:username, firstname:firstName, lastname:lastName, email:email, password:password, confirmed:response.userConfirmed
           })
           .then(()=>{

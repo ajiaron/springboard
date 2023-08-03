@@ -7,6 +7,7 @@ import CharityItem from './CharityItem'
 import DonationItem from "./DonationItem";
 import SideBar from "./SideBar";
 import Favorites from "./Favorites";
+import axios from "axios";
 import { BsStars } from 'react-icons/bs'
 import UserContext from "../contexts/UserContext";
 import { Link, useNavigate } from "react-router-dom";
@@ -48,6 +49,7 @@ export default function Settings() {
             console.log(e)
         }
     }
+
     return (
         <div className={`settings-container`}>
             <Navbar route={'settings'}/>

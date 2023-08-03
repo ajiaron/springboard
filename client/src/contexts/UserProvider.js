@@ -16,7 +16,7 @@ const UserProvider = ({children}) => {
     firstName:firstName, setFirstName:setFirstName,
     lastName:lastName, setLastName:setLastName,
     profilepic:profilepic, setProfilePic:setProfilePic,
-    isPublic:isPublic, setIsPublic:setIsPublic
+    isPublic:isPublic, setIsPublic:setIsPublic,
     }}>
       {children}
     </UserContext.Provider>

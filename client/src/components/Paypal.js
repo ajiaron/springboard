@@ -1,9 +1,11 @@
-import React, {useState, useEffect, useRef} from 'react'
+import React, {useState, useEffect, useRef, useContext} from 'react'
 import {GoArrowRight} from 'react-icons/go'
+import UserContext from '../contexts/UserContext'
 import './Payment.scss'
 import { debounce } from 'lodash'
 
 export default function Paypal({charityid, name, amount, type}) {
+  const user = useContext(UserContext)
   const [isConfigured, setIsConfigured] = useState(false)
   const [key, setKey] = useState(Math.random());
   const paypal = useRef()

@@ -5,16 +5,20 @@ import Footer from "./Footer";
 import SideBar from "./SideBar";
 import Signin from "./Signin";
 import { BsStars } from 'react-icons/bs'
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SideNavigation from "./SideNavigation";
 import { useInView } from 'react-intersection-observer';
 import { FiMail } from "react-icons/fi";
+import { Auth } from 'aws-amplify';
 
 export default function Landing() {
+    const navigate = useNavigate()
     const [screenWidth, setScreenWidth] = useState(window.innerWidth)
     const [screenHeight, setScreenHeight] = useState(window.innerHeight)
     const [signInActive, setSignInActive] = useState(null)
     const [firstRender, setFirstRender] = useState(true)
+    const [isLoading, setIsLoading] = useState(true);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isActive, setIsActive] = useState(true)  // background is active
     const handleSignIn = (type) => {
         setFirstRender(false)
@@ -38,6 +42,16 @@ export default function Landing() {
             document.body.style.overflow='auto'
         }
       }, [signInActive])
+    function handleLogin() {
+        navigate('/dashboard')
+    }
+
+    useEffect(() => {
+        Auth.currentAuthenticatedUser()
+          .then(() => setIsAuthenticated(true))
+          .catch(() => setIsAuthenticated(false))
+          .finally(() => setIsLoading(false));
+      }, []);
     return (
         <div className="landing-container">
         {
@@ -64,9 +78,9 @@ export default function Landing() {
                                     Create Account
                                 </p>
                             </span>
-                            <span className="login-button" onClick={()=>handleSignIn('login')}>
+                            <span className="login-button" onClick={()=>(isAuthenticated)?handleLogin():handleSignIn('login')}>
                                 <p className="hero-button-text">
-                                    Sign In
+                                    {`${(isAuthenticated)?'To Dashboard ':'Sign In'}`}
                                 </p>
                             </span>
                         </div>

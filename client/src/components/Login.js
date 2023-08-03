@@ -11,6 +11,7 @@ Amplify.configure(config);
 
 export default function Login() {
   const user = useContext(UserContext)
+  const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState('')
@@ -56,7 +57,7 @@ const signInAfter = async() => {
   try {
     const response = await Auth.signIn(username, password)
     if (response.attributes.email_verified) {
-      navigate('/dashboard', { state: {userid:user.userid, username:username, firstName:user.firstName, lastName:user.lastName}})
+      navigate('/dashboard')
     } 
     else {
       console.log("not verified")
@@ -72,7 +73,7 @@ const signInAfter = async() => {
     setLoading(true)
     if (username.length > 0 && password.length > 0) {
       try {
-        const url = `http://localhost:3000/login/getuser`;
+        const url = `${connection}/login/getuser`;
         const res = await axios.get(url, {
           params: {
             username:username

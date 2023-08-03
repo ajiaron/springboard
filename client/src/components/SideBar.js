@@ -1,11 +1,27 @@
+import React, {useState, useEffect, useContext} from 'react'
 import './SideBar.scss'
 import {FiSettings} from 'react-icons/fi'
 import {BsFillSuitHeartFill} from 'react-icons/bs'
 import {HiSpeakerphone} from 'react-icons/hi'
 import {FaShoppingBasket, FaShoppingCart} from 'react-icons/fa'
+import UserContext from '../contexts/UserContext'
 import { Link, useParams } from "react-router-dom";
+import { Auth } from 'aws-amplify';
+
 
 export default function SideBar({}) {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [userData, setUserData] = useState(null)
+    const user = useContext(UserContext)
+    useEffect(()=> {
+        Auth.currentAuthenticatedUser()
+        .then((res) => setUserData(res))
+        .then(()=>setIsLoggedIn(true))
+        .catch(() => setIsLoggedIn(false));
+    }, [])
+    function handleTest() {
+        console.log(user.connection)
+    }
     return (
         <div 
         className={`side-navigation`}>
@@ -28,16 +44,16 @@ export default function SideBar({}) {
             </p>
 
         </div>
-        <div className="navigation-item-container">
-            <Link className="navigation-item" to={'/charity'}>
-                <BsFillSuitHeartFill className='archive-icon'/>
+        <span className="navigation-item-container" onClick={()=>handleTest()}>
+            <Link className="navigation-item" to={'#'}>
+                <BsFillSuitHeartFill className='archive-icon' style={{color:(isLoggedIn?'lightcoral':'#eee')}}/>
             </Link>
             <p className="navigation-item-text">
                 Archive
             </p>
-        </div>
+        </span>
 
-
+        {/*
         <div className="navigation-item-container">
             <span className="navigation-item" 
              onClick={(e)=>{
@@ -51,6 +67,7 @@ export default function SideBar({}) {
             </p>
 
         </div>
+         */}
     </div>
     )
 }

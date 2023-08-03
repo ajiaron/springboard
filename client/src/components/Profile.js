@@ -216,7 +216,7 @@ const barOptions = {
                     <div className="profile-link-container">
                         <AiOutlineLink className="link-icon"/>
                         <p className="profile-header-subtext">
-                            link.springboard.app/aaronjiang
+                            springboard.app/aaronjiang
                         </p>
                     </div>
                 </div>

@@ -6,10 +6,10 @@ const mysql = require('mysql')
 const cors = require('cors')
 app.use(express.json())
 app.use(cors())
-app.use(express.static(path.join(__dirname, '../client/build')));
-app.use(express.static("public"))
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+//app.use(express.static(path.join(__dirname, '../client/build')));
+//app.use(express.static("public"))
+//app.set('views', path.join(__dirname, 'views'));
+//app.set('view engine', 'ejs');
 
 
 const db = mysql.createConnection({
@@ -20,6 +20,7 @@ const db = mysql.createConnection({
     database:'andale_db',
  }
 )
+
 /*
 app.get('/paypal/:description/:value', (req, res) => {
     const description = req.params.description;
@@ -30,7 +31,6 @@ app.get('/paypal/:description/:value', (req, res) => {
 });
 */
   
-
 app.get('/catalog/getitems', (req,res)=> {
     db.query('SELECT * FROM charities', (err, result)=> {
         if (err) {
@@ -206,8 +206,8 @@ app.put('/login/confirmuser', (req, res) => {     // for email confirmation on r
 })
 
 
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/build/index.html'));
-  });
+//app.get('*', (req, res) => {
+//    res.sendFile(path.join(__dirname, '../client/build/index.html'));
+//  });
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}`))

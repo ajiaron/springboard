@@ -1,9 +1,10 @@
-import React, {useState, useEffect, useRef, useCallback} from "react"
+import React, {useState, useEffect, useRef, useContext} from "react"
 import './Catalog.scss'
 import Navbar from "./Navbar";
 import Payment from "./Payment";
 import {BsSearch} from 'react-icons/bs'
 import SideNavigation from "./SideNavigation";
+import UserContext from "../contexts/UserContext";
 import SideBar from "./SideBar";
 import { BsStars } from 'react-icons/bs'
 import CharityItem from "./CharityItem";
@@ -15,10 +16,11 @@ import { useInView } from 'react-intersection-observer';
 import _, { debounce } from 'lodash'; 
 import { FiMail } from "react-icons/fi";
 
-
 export default function Catalog() {
+    const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
     const [query, setQuery] = useState('')
     const initialPos = useRef(null)
+    const user = useContext(UserContext)
     const [scrollY, setScrollY] = useState(0)
     const [initPos, setInitPos] = useState(0)
     const [category, setCategory] = useState([])
@@ -115,8 +117,8 @@ export default function Catalog() {
             setLoading(true)
             try {
                 const url = query
-                ? `http://localhost:3000/catalog/searchfiltered/${pageSize}/${(page-1)*pageSize}/${query}`
-                : `http://localhost:3000/catalog/getfiltered/${pageSize}/${(page-1)*pageSize}`;
+                ? `${connection}/catalog/searchfiltered/${pageSize}/${(page-1)*pageSize}/${query}`
+                : `${connection}/catalog/getfiltered/${pageSize}/${(page-1)*pageSize}`;
                 const res = await Axios.get(url, {
                     params: {
                         categories:(category.length > 0)?(category.indexOf("Environment")>-1)?[...category, 'Animals']:category:allCategories,

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react'
+import React, {useState, useEffect, useRef, useContext} from 'react'
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { Link, useParams, useLocation } from "react-router-dom";
@@ -6,6 +6,7 @@ import {AiOutlineHeart, AiFillHeart} from 'react-icons/ai'
 import './Charity.scss'
 import {GoArrowRight} from 'react-icons/go'
 import SideNavigation from './SideNavigation';
+import UserContext from '../contexts/UserContext';
 import Payment from './Payment';
 import Axios from "axios";
 import { PolarArea, Doughnut, Bar } from 'react-chartjs-2';
@@ -60,6 +61,8 @@ const InsightItem = ({name, value}) => {
 export default function Charity() {
   const { pathname } = useLocation();
   const params = useParams()
+  const user = useContext(UserContext)
+  const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
   const [firstRender, setFirstRender] = useState(true)
   const [isActive, setIsActive] = useState(true)  // background is active
   const [loading, setLoading] = useState(true)
@@ -228,7 +231,7 @@ export default function Charity() {
     const loadCharity = async() => {
       setLoading(true)
       try {
-        const url = `http://localhost:3000/charity/getcharity/${charityid}`;
+        const url = `${connection}/charity/getcharity/${charityid}`;
         const res = await Axios.get(url, {
           params: {
               charityid:charityid

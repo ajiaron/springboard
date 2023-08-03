@@ -1,15 +1,18 @@
-import React, {useState, useEffect, useRef} from "react"
+import React, {useState, useEffect, useRef, useContext} from "react"
 import {AiOutlineHeart, AiFillHeart} from 'react-icons/ai'
 import axios from "axios"
+import UserContext from "../contexts/UserContext";
 import { Link } from "react-router-dom";
 export default function DonationItem({type, value, name, size, date}) {
+    const user = useContext(UserContext)
+    const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
     const [loading, setLoading] = useState(true)
     const [charityid, setCharityid] = useState(null)
     useEffect(()=> {
         const loadCharity = async() => {
             setLoading(true)
             try {
-            const url = `http://localhost:3000/archive/getcharityid/${name}`;
+            const url = `${connection}/archive/getcharityid/${name}`;
             const res = await axios.get(url, {
                 params: {
                     name:name
