@@ -61,7 +61,7 @@ const InsightItem = ({name, value}) => {
 export default function Charity() {
   const { pathname } = useLocation();
   const params = useParams()
-  const user = useContext(UserContext)
+  const userid = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0
   const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
   const [firstRender, setFirstRender] = useState(true)
   const [isActive, setIsActive] = useState(true)  // background is active
@@ -81,7 +81,11 @@ export default function Charity() {
   const [theme, setTheme] = useState(themeColors[categoryColor] || 'rgba(90,90,90,0.75)');
   
   const barData = {
-    labels: ['Overall', 'Healthcare', 'Large', 'California', 'Personal'],
+    labels: ['Overall', 
+    `${charityInfo?charityInfo[0].type1==='Human'?'H. Services':charityInfo[0].type1:'Loading..'}`,
+     'Location',
+     `${charityInfo&&charityInfo[0].size}-sized`,
+      'Personal'],
     datasets: [
       {
           label: 'Dataset 2',
@@ -220,10 +224,8 @@ export default function Charity() {
     setIsActive(false)
 }
   const onClosePayment = () => {
-
     setPaymentActive(null)
   }
-
   function handleTest() {
     console.log(charityInfo)
   }
@@ -231,7 +233,7 @@ export default function Charity() {
     const loadCharity = async() => {
       setLoading(true)
       try {
-        const url = `${connection}/charity/getcharity/${charityid}`;
+        const url = `${connection}/api/getcharity/${charityid}`;
         const res = await Axios.get(url, {
           params: {
               charityid:charityid
@@ -256,15 +258,13 @@ export default function Charity() {
     }
   }, [paymentActive])
   return (
-    <div className={`charity-page `}>
+    <div className={`charity-page`}>
       {
-          (paymentActive!==null)&&<Payment charityid={paymentActive} onClose={onClosePayment} onBlur={handleBlur}/>
+          (paymentActive!==null)&&<Payment charityid={paymentActive} edit={null} onClose={onClosePayment} onBlur={handleBlur}/>
       }
       <div className={`header-blur blur-${categoryColor}`}/>
        
         <Navbar route={'charity-page'} blur={paymentActive!==null && !isActive}/>
-
-
         <div className={`charity-page-container ${!isActive?(!firstRender)?'inactive-landing-container':'dim-landing-container':(!firstRender)?'active-container':''}`}>
             <div className="charity-header-container">
                 <div style={{display:"flex", justifyContent:"center", height:"fit-content", alignItems:"center", gap:"2em", width:"fit-content"}}>

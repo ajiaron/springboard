@@ -18,13 +18,14 @@ import { AiOutlineLink, AiOutlineEdit,AiOutlineClockCircle } from 'react-icons/a
 export default function Archive() {
     const user = useContext(UserContext)
     const [loading, setLoading] = useState(true)
+    const userid = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0
     const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
     const [charityData, setCharityData] = useState()
     useEffect(()=> {
         const loadCharity = async() => {
           setLoading(true)
           try {
-            const url = `${connection}/archive/getarchive/${0}`;
+            const url = `${connection}/api/getarchive/${userid}`;
             const res = await axios.get(url, {
               params: {
                   userid:0

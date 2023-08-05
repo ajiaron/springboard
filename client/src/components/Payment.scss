@@ -16,6 +16,7 @@ textarea {
     padding-top:.5rem;
     padding-bottom: .5rem;
     align-self: center;
+    overflow-x: hidden;
     animation-name:animate-payment;
     animation-timing-function: ease-in-out;
     animation-duration: .25s;
@@ -71,19 +72,120 @@ textarea {
     //padding-right: 1em;
     padding-top: 2.35em;
     padding-bottom: 2.5em;
+    overflow: hidden;
     display: flex;
 }
 .payment-inner-wrapper {
     width: 68%;
-    height: 76.5%;
+    //height: 76.5%;
+    height: 75%;
     padding:2em;
-
+    left:0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
     display: flex;
    // background-color: rgba(26, 255, 0, 0.285);
     flex-direction: column;
     align-self: flex-start;
+    //position: relative;
+    position: absolute;
+}
+.confirmation-check-inner-container {
+    width: 100%;
+    display: flex;
+   // background-color: red;
+    padding-top: .6em;
+    justify-content: center;
+    align-items: center;
+}
+.confirmation-check-inner {
+
+    border-radius: 100%;
+    filter: contrast(1.05) brightness(1.05);
+    width:6.25vw;
+    height: 6.25vw;
+    color:rgba(28, 190, 166, 0.875);
+    background: -webkit-linear-gradient(135deg,rgba(240, 202, 105, 0.875),rgba(50, 198, 176, 0.875));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+   // color: linear-gradient(135deg,rgba(240, 202, 105, 0.875),rgba(50, 198, 176, 0.875));
+}
+.confirmation-inner-wrapper {
+    width: 68%;
+    //height: 76.5%;
+    height: 75%;
+    padding:2em;
+    left:0;
+    right: 0;
     margin-left: auto;
+    padding-top: 20%;
     margin-right: auto;
+    display: flex;
+ //   background-color: rgba(26, 255, 0, 0.285);
+    flex-direction: column;
+    align-self: flex-start;
+  //  justify-content: center;
+    //position: relative;
+  //  align-items: center;
+    position: absolute;
+}
+.payment-inner-wrapper-active {
+    animation-name: animate-open-payment-inner;
+    animation-timing-function:ease-in-out;
+    animation-duration: .25s;
+    animation-fill-mode: forwards;
+}
+.payment-inner-wrapper-inactive {
+    animation-name: animate-close-payment-inner;
+    animation-timing-function:ease-in-out;
+    animation-duration: .25s;
+    animation-fill-mode: forwards;
+}
+.confirmation-container-active {
+    animation-name: animate-open-confirm;
+    animation-timing-function:ease-in-out;
+    animation-duration: .25s;
+    animation-fill-mode: forwards;
+}
+.confirmation-container-inactive {
+    animation-name: animate-close-confirm;
+    animation-timing-function:ease-in-out;
+    animation-duration: .25s;
+    animation-fill-mode: forwards;
+}
+@keyframes animate-open-payment-inner {
+    from {
+        transform: translateX(-125%);
+    }
+    to {   
+        transform: translateX(0%);
+    }
+}
+@keyframes animate-close-payment-inner {
+    from {
+        transform: translateX(0%);
+    }
+    to {   
+        transform: translateX(-125%);
+    }
+}
+
+@keyframes animate-open-confirmation {
+    from {
+        transform: translateX(125%);
+    }
+    to {   
+        transform: translateX(0%);
+    }
+}
+@keyframes animate-close-confirmation {
+    from {
+        transform: translateX(0%);
+    }
+    to {   
+        transform: translateX(125%);
+    }
 }
 
 
@@ -783,12 +885,32 @@ input[type="number"] {
     display: flex;
     text-decoration: none;
     filter: contrast(1.05) brightness(1.05);
-    transition: all .2s ease-in-out;
+    transition: all .15s ease-in-out;
     justify-content: center;
     background: linear-gradient(90deg, rgba(28, 190, 166, 0.875), rgba(211, 184, 116, 0.875));
     align-items: center;
-    height: 13.5%;
+    height: 13.55%;
 }
-.payment-confirm-button:hover {
-    filter: contrast(1.05) brightness(1.15);
+.payment-inner-confirm-button:hover {
+    filter: contrast(1.05) brightness(1.2);
+}
+
+.navigate-inner-confirm-button {
+    width: 90%;
+    border-radius: 12px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top:10.5%;
+    background-color: #252525;
+    display: flex;
+    text-decoration: none;
+    filter: contrast(1.05) brightness(1.05);
+    transition: all .15s ease-in-out;
+    justify-content: center;
+    background: linear-gradient(90deg, rgba(28, 190, 166, 0.875), rgba(211, 184, 116, 0.875));
+    align-items: center;
+    height: 13.55%;
+}
+.navigate-inner-confirm-button:hover {
+    filter: contrast(1.05) brightness(1.2);
 }

@@ -12,7 +12,7 @@ export default function DonationItem({type, value, name, size, date}) {
         const loadCharity = async() => {
             setLoading(true)
             try {
-            const url = `${connection}/archive/getcharityid/${name}`;
+            const url = `${connection}/api/getcharityid/${name}`;
             const res = await axios.get(url, {
                 params: {
                     name:name

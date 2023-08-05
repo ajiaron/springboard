@@ -117,8 +117,8 @@ export default function Catalog() {
             setLoading(true)
             try {
                 const url = query
-                ? `${connection}/catalog/searchfiltered/${pageSize}/${(page-1)*pageSize}/${query}`
-                : `${connection}/catalog/getfiltered/${pageSize}/${(page-1)*pageSize}`;
+                ? `${connection}/api/searchfiltered/${pageSize}/${(page-1)*pageSize}/${query}`
+                : `${connection}/api/getfiltered/${pageSize}/${(page-1)*pageSize}`;
                 const res = await Axios.get(url, {
                     params: {
                         categories:(category.length > 0)?(category.indexOf("Environment")>-1)?[...category, 'Animals']:category:allCategories,

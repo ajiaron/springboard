@@ -63,7 +63,7 @@ export default function Doughchart() {
                     <div className='chart-container'>
                         <Doughnut data={data} options={doughOptions} className='charity-chart'/>
                         <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
-                            <p className="charity-insight-figure-score" style={{transform:"translateY(-.025em)"}}>
+                            <p className="charity-insight-figure-score" style={{transform:"translateY(-.05em)"}}>
                                 14
                             </p>
                             <p className={`charity-chart-details-text`} style={{color:'#ccc', padding:0, transform:'translateY(-.1em)'}}>

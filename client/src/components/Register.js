@@ -50,7 +50,7 @@ export default function Register() {
 
   const validateRegister = async() => {
         try {
-          const url = `${connection}/register/validate`;
+          const url = `${connection}/api/validate`;
           const res = await axios.get(url, {
             params: {
                 email:email,
@@ -137,7 +137,7 @@ export default function Register() {
             }
           })
           console.log(response.userConfirmed)
-          axios.post(`${connection}/register/createuser`, 
+          axios.post(`${connection}/api/createuser`, 
           {userid:userid, username:username, firstname:firstName, lastname:lastName, email:email, password:password, confirmed:response.userConfirmed
           })
           .then(()=>{

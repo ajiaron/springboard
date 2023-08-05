@@ -9,29 +9,31 @@ import { Link } from "react-router-dom";
 import { useInView } from 'react-intersection-observer';
 import { FiMail } from "react-icons/fi";
 import {GoArrowRight} from 'react-icons/go'
-import { BsCheck2,BsCheckLg } from 'react-icons/bs'
+import { BsCheck2,BsCheckLg,BsFillPatchCheckFill} from 'react-icons/bs'
 import {AiOutlineArrowRight} from 'react-icons/ai'
 import {LiaTimesSolid} from 'react-icons/lia'
 import { debounce } from "lodash";
 import Paypal from "./Paypal";
+import { v4 as uuidv4 } from 'uuid';
 import styled from 'styled-components'
 
 
-export default function Payment({charityid, onClose, onBlur}) {
+export default function Payment({charityid, edit, onClose, onBlur}) {
+    const userid = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0
     const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
     const [value, setValue] = useState(10)
     const [message, setMessage] = useState('')
     const modalRef = useRef(null);
-    const user = useContext(UserContext)
     const [shareName, setShareName] = useState(true)
     const [shareEmail, setShareEmail] = useState(true)
     const [shouldClose, setShouldClose] = useState(false)
     const [customValue, setCustomValue] = useState(0)
     const [loading, setLoading] = useState(true)
     const [charityInfo, setCharityInfo] = useState([])
-    function handleTest() {
-        console.log(charityid)
-    }
+    const [basketid, setBasketId] = useState(edit!==null?edit:uuidv4())
+    const [firstRender, setFirstRender] = useState(true)
+    const [finished, setFinished] = useState(false)
+    const [shouldScroll, setShouldScroll] = useState(false)
     const PaymentOption = styled.span`
         background-color: #151515;
         width: 100%;
@@ -45,26 +47,88 @@ export default function Payment({charityid, onClose, onBlur}) {
             filter:brightness(${props=> props.primary?'1':'1.25'})
         }
     `;
-    const handleInputChange = (event) => {
-        const value = event.target.value;
-        if (value === '' || /^[0-9]*\.?[0-9]{0,2}$/.test(value)) {
-          setCustomValue(value);
-        }
-    };
+    function handleTest() {
+        console.log(basketid)
+        console.log(userid)
+        console.log(charityid)
+        console.log(edit!==null?charityInfo[0].charityname:charityInfo[0].charity_name)
+        console.log(edit!==null?charityInfo[0].type:charityInfo[0].type1)
+        console.log(value)
+        console.log(message)
+        console.log('share email:', shareEmail)
+        console.log('share name:', shareName)
+    }
+    function onConfirm() {
+        setFinished(!finished)
+        setFirstRender(false)
+        setTimeout(()=> {
+          setShouldScroll(!shouldScroll)
+        }, 250)
+      }
+    const handleConfirm = () => {
+        handleTest()
+        axios.post(`${connection}/api/pushbasket`, 
+        {basketid:uuidv4(), userid:localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0, charityid:charityid, charityname:charityInfo[0].charity_name,
+        type:charityInfo[0].type1, amount:value, message:message, shareEmail:shareEmail, shareName:shareName})
+        .then((res)=> {
+            if (res) {
+                console.log("added to basket")
+                onConfirm()
+            }
+        })
+        .catch((e)=> {
+            console.log(e)
+        })
+    }
+    const handleChanges = () => {
+        axios.put(`${connection}/api/editbasketitem`, 
+        {basketid:edit, amount:value, message:message, shareEmail:shareEmail, shareName:shareName})
+        .then((res)=> {
+            if (res) {
+                console.log("item successfully changed")
+                handleClose()
+            }
+        })
+        .catch((e)=> {
+            console.log(e)
+        })
+    } 
     useEffect(()=> {
         const loadCharity = async() => {
             setLoading(true)
             try {
-                const res = await axios.get(`${connection}/donate/getcharity/${charityid}`)
+                const res = await axios.get(`${connection}/api/getcharity/${charityid}`)
                 setCharityInfo(res.data)
             }
-            catch(error) {
-                console.log(error)
+            catch(e) {
+                console.log(e)
             } 
             setLoading(false)
         }
-        loadCharity()  
-    }, [charityid])
+        const loadBasketItem = async() => {
+            setLoading(true)
+            try {
+                const res = await axios.get(`${connection}/api/getbasketitem`,{
+                    params: {
+                        basketid:edit
+                    }
+                })
+                setCharityInfo(res.data)
+                setValue(res.data[0].amount)
+                setMessage(res.data[0].message)
+                setShareName(res.data[0].shareName)
+                setShareEmail(res.data[0].shareEmail)
+            } catch(e) {
+                console.log(e)
+            }
+            setLoading(false)
+        }
+        if (edit!==null) {
+            loadBasketItem()
+        } else {
+            loadCharity()  
+        }
+    }, [charityid, edit])
     useEffect(()=> {
         if (value) {
             setCustomValue(0)
@@ -95,20 +159,24 @@ export default function Payment({charityid, onClose, onBlur}) {
     }, []);
     
     return (
+        
         <div className={`payment-screen-wrapper ${shouldClose?'payment-screen-active':'payment-screen-inactive'}`} ref={modalRef}>
             <span className="exit-container" onClick={()=>handleClose()}>
                 <LiaTimesSolid className="exit-icon"/>
             </span>
             <div className="payment-inner-container">
-                <div className='payment-inner-wrapper'>
+                <>
+                {(!shouldScroll)&&
+                <div className={`payment-inner-wrapper ${firstRender?'':finished?'payment-inner-wrapper-inactive':'payment-inner-wrapper-active'}`}>
                     <div className='register-header-container'>
                         <p className='payment-inner-text'>
                         Make your impact.
                         </p>
                         <p className='payment-inner-subtext'>
-                        {`Donate to ${loading ? 'Loading...' : (charityInfo.length > 0 ? charityInfo[0].charity_name : 'No charity info')}`}
+                        {`Donate to ${loading ? 'Loading...' : (charityInfo.length > 0 ? edit!==null?charityInfo[0].charityname:charityInfo[0].charity_name : 'No charity info')}`}
                         </p>
                     </div>
+                    
                     <div className='payment-inner-content'>
                         <div className='payment-inner-button-container'>
                             <span className='payment-inner-option-button'>
@@ -156,7 +224,7 @@ export default function Payment({charityid, onClose, onBlur}) {
                                     $
                                     <input type="number" name="customdonate" id="customdonate"
                                         onChange={(e)=> setValue(e.target.value)}
-                                        value={(value)}
+                                        value={(edit&&loading?'processing...':value)}
                                         className="payment-inner-input" />
                                     <p style={{color:'#656565'}}>
                                         USD
@@ -171,7 +239,7 @@ export default function Payment({charityid, onClose, onBlur}) {
                                 <div className='payment-inner-message-input-wrapper'>
                                     <textarea className='payment-inner-message-input'
                                     onChange={(e)=>setMessage(e.target.value)}
-                                    value={message}
+                                    value={(edit&&loading)?"Retrieving your message../":message}
                                     placeholder='Write something for someone...'/>
                                 </div>
                             </div>
@@ -184,28 +252,26 @@ export default function Payment({charityid, onClose, onBlur}) {
                                     <span className={`payment-inner-option-share-button`} onClick={()=>setShareName(!shareName)}
                                   >
                                         <div className={`payment-inner-option-content-alt ${shareName?'payment-inner-option-content-on':''}`}>
-                 
                                                 Share your name
-                                          
-                                            {(shareName)&&
+                                            {(shareName)?
                                                 <BsCheckLg className="payment-check-icon"/>
+                                                :null
                                             }
                                         </div>
                                     </span>
                                     <span className={`payment-inner-option-share-button`} onClick={()=>setShareEmail(!shareEmail)}
                                   >
                                         <div className={`payment-inner-option-content-alt ${shareEmail?'payment-inner-option-content-on':''}`}>
-                       
-                                                Share your email
-
-                                            {(shareEmail)&&
+                                            Share your email
+                                            {(shareEmail)?
                                                 <BsCheckLg className="payment-check-icon"/>
+                                                :null
                                             }
                                         </div>
                                     </span>
                                 </div>
-                               
                             </div>
+                            {/*
                             <Link className='payment-inner-confirm-button' 
                               to={(loading)?'#':`/donate/${charityid}/${charityInfo[0].charity_name}/${value}`}
                             >
@@ -214,10 +280,60 @@ export default function Payment({charityid, onClose, onBlur}) {
                                 </p>
                                 <GoArrowRight className="register-icon"/>
                             </Link>
+                            */}
+                            <span className='payment-inner-confirm-button' onClick={()=>edit!==null?handleChanges():handleConfirm()}>
+                                <p className='confirm-register-text'>
+                                    {` ${(loading)?'Loading...':(edit!==null)?'Edit Donation Basket':'Add to Donation Basket'}`}
+                                </p>
+                                <GoArrowRight className="register-icon"/>
+                            </span>
                         </div>
                     </div>
                 </div>
+                }
+                {(shouldScroll)&&
+                    <div className={`confirmation-inner-wrapper ${firstRender?'':finished?'confirmation-container-active':'confirmation-container-inactive'}`}>
+                      <div className='register-header-container'>
+                          <p className='payment-inner-text'>
+                            Your donation is confirmed!
+                          </p>
+                          <p className='payment-inner-subtext'>
+                          {`Continue browsing, or review your basket for checkout.`}
+                          </p>
+                      </div>
+                      
+                      <div className='payment-inner-content'>
+                         <div className="confirmation-check-inner-container">
+                            <BsFillPatchCheckFill className="confirmation-check-inner"/>
+                         </div>
+                          <div className='payment-inner-fields-container '> 
+                    
+  
+                            
+                              {/*
+                              <Link className='payment-inner-confirm-button' 
+                                to={(loading)?'#':`/donate/${charityid}/${charityInfo[0].charity_name}/${value}`}
+                              >
+                                  <p className='confirm-register-text'>
+                                      {` ${(loading)?'Loading...':'Add to Donation Basket'}`}
+                                  </p>
+                                  <GoArrowRight className="register-icon"/>
+                              </Link>
+                              */}
+                              <Link className='navigate-inner-confirm-button'
+                              to={`/cart`}>
+                                  <p className='confirm-register-text'>
+                                      {` Review your basket`}
+                                  </p>
+                                  <GoArrowRight className="register-icon"/>
+                              </Link>
+                          </div>
+                      </div>
+                  </div>
+                }
+                </>
             </div>
         </div>
+    
     )
 }

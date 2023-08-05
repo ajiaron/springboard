@@ -31,7 +31,7 @@ app.get('/paypal/:description/:value', (req, res) => {
 });
 */
   
-app.get('/catalog/getitems', (req,res)=> {
+app.get('/api/getitems', (req,res)=> {
     db.query('SELECT * FROM charities', (err, result)=> {
         if (err) {
             console.log(err)
@@ -41,7 +41,7 @@ app.get('/catalog/getitems', (req,res)=> {
     })
 })
 
-app.get('/catalog/getbatch/:next/:current', (req,res)=> {
+app.get('/api/getbatch/:next/:current', (req,res)=> {
     const next = Number(req.params.next)
     const current = Number(req.params.current)
     db.query('SELECT * FROM charities LIMIT ? OFFSET ?', [next, current],
@@ -53,7 +53,7 @@ app.get('/catalog/getbatch/:next/:current', (req,res)=> {
         }
     })
 })
-app.get('/charity/getcharity/:charityid', (req,res)=> {
+app.get('/api/getcharity/:charityid', (req,res)=> {
     const charityid = Number(req.params.charityid)
     db.query('SELECT * FROM charities WHERE charityid = ?', [charityid],
     (err, result)=> {
@@ -64,9 +64,10 @@ app.get('/charity/getcharity/:charityid', (req,res)=> {
         }
     })
 })
-app.get('/donate/getcharity/:charityid', (req,res)=> {
-    const charityid = Number(req.params.charityid)
-    db.query('SELECT * FROM charities WHERE charityid = ?', [charityid],
+
+app.get('/api/getcharityid/:name', (req,res)=> {
+    const name = String(req.params.name)
+    db.query('SELECT charityid FROM charities WHERE charity_name = ?', [name],
     (err, result)=> {
         if (err) {
             console.log(err)
@@ -75,18 +76,7 @@ app.get('/donate/getcharity/:charityid', (req,res)=> {
         }
     })
 })
-app.get('/archive/getcharityid/:name', (req,res)=> {
-    const name = req.params.name
-    db.query('SELECT charityid FROM charities WHERE charity_name LIKE ?', [`%${name}%`],
-    (err, result)=> {
-        if (err) {
-            console.log(err)
-        } else {
-            res.send(result)
-        }
-    })
-})
-app.get('/archive/getarchive/:userid', (req,res)=> {
+app.get('/api/getarchive/:userid', (req,res)=> {
     const userid = req.params.userid
     const sql = `SELECT charityid, charity_name, overall_score, city, state, size, type1 FROM andale_db.charities `+
                 `WHERE charityid IN (SELECT charityid FROM andale_db.archive WHERE userid = ?);`
@@ -99,7 +89,7 @@ app.get('/archive/getarchive/:userid', (req,res)=> {
         }
     })
 })
-app.get('/catalog/getfiltered/:next/:current', (req,res)=> {
+app.get('/api/getfiltered/:next/:current', (req,res)=> {
     const next = Number(req.params.next)
     const current = Number(req.params.current)
     const categories = req.query.categories
@@ -113,7 +103,7 @@ app.get('/catalog/getfiltered/:next/:current', (req,res)=> {
         }
     })
 })
-app.get('/catalog/searchbatch/:next/:current/:query', (req,res)=> {
+app.get('/api/searchbatch/:next/:current/:query', (req,res)=> {
     const next = Number(req.params.next)
     const current = Number(req.params.current)
     const query = String(req.params.query)
@@ -126,7 +116,7 @@ app.get('/catalog/searchbatch/:next/:current/:query', (req,res)=> {
         }
     })
 })
-app.get('/catalog/searchfiltered/:next/:current/:query', (req,res)=> {
+app.get('/api/searchfiltered/:next/:current/:query', (req,res)=> {
     const next = Number(req.params.next)
     const current = Number(req.params.current)
     const query = String(req.params.query)
@@ -145,7 +135,7 @@ app.get('/catalog/searchfiltered/:next/:current/:query', (req,res)=> {
 // auth
 
 // check if username or email is already taken
-app.get('/register/validate', (req,res)=> {
+app.get('/api/validate', (req,res)=> {
     const email = String(req.query.email)
     const username = String(req.query.username)
     const sql = `SELECT SUM(CASE WHEN ? IN (email) THEN 1 ELSE 0 END) as emailTaken, `+
@@ -161,7 +151,7 @@ app.get('/register/validate', (req,res)=> {
     })
 })
 // get login info of user
-app.get('/login/getuser', (req,res)=> {
+app.get('/api/getuser', (req,res)=> {
     const username = String(req.query.username)
     db.query('SELECT * FROM users WHERE username = ?', [username],
     (err, result)=> {
@@ -173,8 +163,34 @@ app.get('/login/getuser', (req,res)=> {
     })
 })
 
+app.get('/api/getbasket', (req,res)=> {
+    const ownerid = req.query.userid
+    const sql = `SELECT *, CONCAT_WS('-',LPAD(charityid, 3,'0'), SUBSTRING(UPPER(basketid), 1,7)) as subkey `+
+                `FROM andale_db.basket where ownerid = ?;`
+    db.query(sql, [ownerid],
+    (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+app.get('/api/getbasketitem', (req,res)=> {
+    const basketid = req.query.basketid
+    const sql = `SELECT * FROM andale_db.basket WHERE basketid = ?;`
+    db.query(sql, [basketid],
+    (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
 
-app.post('/register/createuser', (req, res) => {
+
+app.post('/api/createuser', (req, res) => {
     const userid = req.body.userid
     const username = req.body.username
     const firstname = req.body.firstname
@@ -192,7 +208,28 @@ app.post('/register/createuser', (req, res) => {
     })
 })
 
-app.put('/login/confirmuser', (req, res) => {     // for email confirmation on register
+app.post('/api/pushbasket', (req, res) => {
+    const basketid = req.body.basketid
+    const ownerid = req.body.userid
+    const charityid = req.body.charityid
+    const charityname = req.body.charityname
+    const type = req.body.type
+    const amount = req.body.amount
+    const message = req.body.message
+    const shareEmail = req.body.shareEmail
+    const shareName = req.body.shareName
+    db.query('INSERT INTO basket (basketid, ownerid, charityid, charityname, type, amount, message, shareEmail, shareName) VALUES (?,?,?,?,?,?,?,?,?)', 
+    [basketid, ownerid, charityid, charityname, type, amount, message, shareEmail, shareName], (err, result) => {
+        if(err) {
+            console.log(err)
+        } else {
+            res.send("user successfully registered")
+        }
+    })
+})
+
+
+app.put('/api/confirmuser', (req, res) => {     // for email confirmation on register; not needed
     const username = String(req.body.username)
     db.query('UPDATE users SET confirmed = true WHERE name = ?', [username],
     (err, result) => {
@@ -201,10 +238,46 @@ app.put('/login/confirmuser', (req, res) => {     // for email confirmation on r
         } else {
             res.send(result)
         }
-    }
-    )
+    })
 })
 
+app.put('/api/editbasketitem', (req, res) => {     
+    const basketid = req.body.basketid
+    const amount = Number(req.body.amount)
+    const message = String(req.body.message)
+    const shareEmail = req.body.shareEmail
+    const shareName = req.body.shareName
+    db.query('UPDATE basket SET amount = ?, message = ?, shareEmail = ?, shareName = ? WHERE basketid = ?',
+    [amount, message, shareEmail, shareName, basketid],
+    (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+
+app.delete('/api/deletebasketitem', (req, res) => {
+    const basketid = req.body.basketid
+    db.query("DELETE FROM basket WHERE basketid = ?", [basketid], (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send('members cleared')
+        }
+    })
+})
+app.delete('/api/clearbasket', (req, res) => {
+    const ownerid = req.body.ownerid
+    db.query("DELETE FROM basket WHERE ownerid = ?", [ownerid], (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send('members cleared')
+        }
+    })
+})
 
 //app.get('*', (req, res) => {
 //    res.sendFile(path.join(__dirname, '../client/build/index.html'));

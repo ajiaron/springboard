@@ -13,6 +13,8 @@ import Doughchart from "./Doughchart";
 import { AiFillHeart } from "react-icons/ai";
 import { useInView } from 'react-intersection-observer';
 import { FiMail } from "react-icons/fi";
+import { Auth } from 'aws-amplify'
+import axios from "axios";
 
 const RecentDonation = ({name, charity, status, caption, date, index}) => {
     return (
@@ -60,35 +62,66 @@ const RecentDonation = ({name, charity, status, caption, date, index}) => {
     )
 }
 export default function Dashboard() {
+    const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
     const [screenWidth, setScreenWidth] = useState(window.innerWidth)
     const [screenHeight, setScreenHeight] = useState(window.innerHeight)
-    const [signInActive, setSignInActive] = useState(null)
+    const [isAuthenticated, setIsAuthenticated] = useState(false)
+    const [userData, setUserData] = useState({})
+    const [loading, setLoading] = useState(true)
     const user = useContext(UserContext)
+    function handleTest() {
+        console.log(localStorage.getItem("userid"))
+        console.log(localStorage.getItem("username"))
+        console.log(localStorage.getItem("email"))
+        console.log(localStorage.getItem("firstname"))
+        console.log(localStorage.getItem("lastname"))
+    }
+    const handleSession = async(data) => {
+        try {
+            setLoading(true)
+            const res = await axios.get(`${connection}/api/getuser`, {
+                params: {
+                    username:data&&data.username
+                }
+            })
+            if (res.data &&(!localStorage.getItem("userid") || localStorage.getItem("userid") !== `"${res.data[0].userid.toString()}"`)) {
+              localStorage.setItem("userid", JSON.stringify(res.data[0].userid))
+              localStorage.setItem("username", JSON.stringify(res.data[0].username))
+              localStorage.setItem("email", JSON.stringify(res.data[0].email))
+              localStorage.setItem("firstname", JSON.stringify(res.data[0].firstname))
+              localStorage.setItem("lastname", JSON.stringify(res.data[0].lastname))
+              console.log("user data set in local")
+            } else {
+                console.log('local already set')
+            }
+        } catch(e) {
+            console.log(e)
+        }
+    }
+    useEffect(()=> {
+        Auth.currentAuthenticatedUser()
+        .then((res)=>handleSession(res))
+        .then(() => setIsAuthenticated(true))
+        .catch(() => setIsAuthenticated(false))
+        .finally(() => setLoading(false));
+    }, [])
 
-    useEffect(()=>{
-        if (signInActive !== null) {
-            document.body.style.overflow='hidden'
-        }
-        else {
-            document.body.style.overflow='auto'
-        }
-      }, [signInActive])
     return (
         <div className="dashboard-container">
             <SideNavigation route={'dashboard'}/>
             <div className={`dashboard-main-content`}>
                 <div className="dashboard-content-container ">
-                    <div className="dashboard-text-container  ">
+                    <span className="dashboard-text-container  " onClick={()=>handleTest()}>
                         <div className="dashboard-header-container">
                             <p className="dashboard-header">
                                 {
-                                    (user&&user.firstName)?
-                                    `Welcome back, ${user.firstName}.`:
+                                    (localStorage.getItem("username"))?
+                                    `Welcome back, ${JSON.parse(localStorage.getItem("firstname"))}.`:
                                     `Your Dashboard`
                                 }
                             </p>
                         </div>
-                    </div>
+                    </span>
                     <div className="dashboard-chart-container ">
                         <Doughchart/>
                         <div className="dashboard-grid-wrapper">

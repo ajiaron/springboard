@@ -73,7 +73,7 @@ const signInAfter = async() => {
     setLoading(true)
     if (username.length > 0 && password.length > 0) {
       try {
-        const url = `${connection}/login/getuser`;
+        const url = `${connection}/api/getuser`;
         const res = await axios.get(url, {
           params: {
             username:username
