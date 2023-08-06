@@ -95,7 +95,7 @@ p {
   border-bottom: 1px dashed #5a5a5a;
 }
 .charity-page-donate-button {
-    width: 12%;
+    width: 75%;
     height: 4%;
    // margin-top: .25em;
     border-radius: 20px;
@@ -107,7 +107,56 @@ p {
     margin-right:.75em;
   //  transform: translateY(-.5em);
     align-self: flex-end;
-    margin-bottom: .25em;
+   // margin-bottom: .25em;
+}
+.charity-page-donate-subcontainer {
+  width:19%;
+  align-self: center;
+ //background-color: rgba(255, 0, 0, 0.096);
+  display: flex;
+  margin-left: auto;
+  justify-content: center;
+  gap:1.25em;
+  height: fit-content;
+}
+.charity-page-like-icon {
+  color:#eee;
+  width:1.5em;
+  height: 1.5em;
+  transform: translateY(.05em);
+}
+
+.charity-page-like-icon-wrapper {
+  min-width:20%;
+  min-height: 25%;
+  background-color: #5a5a5a;
+  display: flex;
+  transition: all .2s linear;
+  transform: translateX(-.125em);
+  justify-content: center;
+  align-items: center;
+  border-radius: 2em;
+}
+.charity-page-like-icon-wrapper:hover {
+  filter: brightness(1.2);
+}
+.charity-page-like-icon-wrapper-alt {
+  min-width:20%;
+  transition: all .2s linear;
+  min-height: 25%;
+  transform: translateX(-.125em);
+  background:linear-gradient(45deg, rgba(55, 88, 252, 0.6),#39ead599,#c9ff35ad);
+
+ // background-color: rgb(190, 64, 106);
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+  border-radius: 2em;
+}
+.charity-page-like-icon-wrapper-alt:hover {
+
+  filter: hue-rotate(30deg);
 }
 .charity-header-container {
     display: flex;

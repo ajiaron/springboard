@@ -4,7 +4,7 @@ import UserContext from '../contexts/UserContext'
 import './Payment.scss'
 import { debounce } from 'lodash'
 
-export default function Paypal({charityid, name, amount, type}) {
+export default function Paypal({groupid, names, amount, type}) {
   const user = useContext(UserContext)
   const [isConfigured, setIsConfigured] = useState(false)
   const [key, setKey] = useState(Math.random());
@@ -12,13 +12,13 @@ export default function Paypal({charityid, name, amount, type}) {
   const payButton = useRef()
   const prevAmount = useRef(amount);
   function handleTest() {
-    console.log(charityid!==undefined?charityid:'id not found')
-    console.log(name!==undefined?name:'name not found')
+    console.log(groupid!==undefined?groupid:'id not found')
+    console.log(names!==undefined&&names.length > 0?names:'name not found')
     console.log(amount!==undefined?amount:'amount not found')
   }
   
   const debouncedUpdate = debounce(amount => {
-    if (charityid && name && amount && amount > 0) {
+    if (groupid && names && names.length > 0 && amount && amount > 0) {
       if (payButton.current && prevAmount.current !== amount && !isConfigured) {
         payButton.current.close();
         setIsConfigured(true);
@@ -31,7 +31,7 @@ export default function Paypal({charityid, name, amount, type}) {
             intent: "CAPTURE",
             purchase_units: [
               {
-                description: `Donation to ${name}`,
+                description: `Donation to ${names[0]} ${names.length>1?` + ${names.length} others`:''}`,
                 amount: {
                   currency_code: "USD",
                   value: amount
@@ -43,6 +43,7 @@ export default function Paypal({charityid, name, amount, type}) {
         onApprove: async (data, actions) => {
           const order = await actions.order.capture();
           console.log(order);
+          console.log(data.orderId)
         },
         onError: (err) => {
           console.log(err);
@@ -57,7 +58,7 @@ export default function Paypal({charityid, name, amount, type}) {
     return () => {
         debouncedUpdate.cancel()
     }
-  }, [amount, name, charityid])
+  }, [amount, names, groupid])
 
   useEffect(() => {
     if (isConfigured) {
@@ -67,20 +68,20 @@ export default function Paypal({charityid, name, amount, type}) {
 
   return (
     <div>
-        {(charityid && name && amount && amount > 0)?
+        {(groupid && names && names.length > 0 && amount && amount > 0)?
        <div ref={paypal} key={key} className={`${type}-button`}/>:
        <div className="payment-confirm-container">
-        <span className="payment-confirm-button" onClick={()=>handleTest()}>
-            <p className={`${(amount && amount > 0)?'payment-confirm-text':'inactive-confirm-text '}`}>
-                Debug
-            </p>
-            {
-                (amount && amount > 0)?
-                <GoArrowRight className="arrow-icon"/>:
-                null
-            }     
-        </span>
-        </div>
+          <span className="payment-confirm-button" onClick={()=>handleTest()}>
+              <p className={`${(amount && amount > 0)?'payment-confirm-text':'inactive-confirm-text '}`}>
+                  Debug
+              </p>
+              {
+                  (amount && amount > 0)?
+                  <GoArrowRight className="arrow-icon"/>:
+                  null
+              }     
+          </span>
+       </div>
     }
     </div>
   )

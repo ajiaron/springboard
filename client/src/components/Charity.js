@@ -12,6 +12,7 @@ import Axios from "axios";
 import { PolarArea, Doughnut, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, RadialLinearScale, BarElement, ArcElement, Tooltip, Legend, CategoryScale, LinearScale } from "chart.js";
 import { AiOutlineLink, AiOutlineEdit, AiOutlineClockCircle } from 'react-icons/ai'
+import axios from 'axios';
 ChartJS.register(RadialLinearScale, CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend);
 
 const CharityDonation = ({name, location, category, index}) => {
@@ -59,8 +60,6 @@ const InsightItem = ({name, value}) => {
 }
 
 export default function Charity() {
-  const { pathname } = useLocation();
-  const params = useParams()
   const userid = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0
   const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
   const [firstRender, setFirstRender] = useState(true)
@@ -68,6 +67,7 @@ export default function Charity() {
   const [loading, setLoading] = useState(true)
   const [paymentActive, setPaymentActive] = useState(null)
   const [charityInfo, setCharityInfo] = useState(null)
+  const [shouldArchive, setShouldArchive] = useState()
   const { charityid, charityname, category: categoryColor } = useParams();
   const themeColors = {
     healthcare: 'rgba(214, 72, 86, ',
@@ -181,7 +181,7 @@ export default function Charity() {
           100-parseFloat(charityInfo[0].overall_score).toFixed(1):0.0],
           backgroundColor: [
             `${theme}${categoryColor==='healthcare'||categoryColor==='education'||categoryColor==='animals'?'0.75)':'.8)'}`,
-            'rgba(94, 94, 94, 0.8)',
+            'rgba(92, 92, 92, 0.8)',
         //   'rgba(255, 99, 132, 0.15)',
           ],
           borderColor: ['#252525bb','#252525bb'],
@@ -229,17 +229,41 @@ export default function Charity() {
   function handleTest() {
     console.log(charityInfo)
   }
+  const handleArchive = () => {
+    if (!shouldArchive) {
+      axios.post(`${connection}/api/addarchive`, {userid:userid, charityid:charityid})
+      .then(()=>{
+        setShouldArchive(true)
+      })
+      .catch((e)=>console.log(e))
+    }
+    else {
+      axios.delete(`${connection}/api/removearchiveitem`, {
+        data:{
+          userid:userid,
+          charityid:charityid
+        }
+      })
+      .then(()=>{
+        setShouldArchive(false)
+      })
+      .catch((e)=>console.log(e))
+    }
+   
+  }
   useEffect(()=> {
     const loadCharity = async() => {
       setLoading(true)
       try {
-        const url = `${connection}/api/getcharity/${charityid}`;
+        const url = `${connection}/api/getcharitypage`;
         const res = await Axios.get(url, {
           params: {
-              charityid:charityid
+              charityid:charityid,
+              userid:userid
           }
         })
         setCharityInfo(res.data)
+        setShouldArchive(res.data[0].archived)
       }
       catch(e) {
         console.log(e)
@@ -248,7 +272,6 @@ export default function Charity() {
     loadCharity()
     setLoading(false)
   },[])
-
   useEffect(()=>{
     if (paymentActive !== null) {
         document.body.style.overflow='hidden'
@@ -263,7 +286,6 @@ export default function Charity() {
           (paymentActive!==null)&&<Payment charityid={paymentActive} edit={null} onClose={onClosePayment} onBlur={handleBlur}/>
       }
       <div className={`header-blur blur-${categoryColor}`}/>
-       
         <Navbar route={'charity-page'} blur={paymentActive!==null && !isActive}/>
         <div className={`charity-page-container ${!isActive?(!firstRender)?'inactive-landing-container':'dim-landing-container':(!firstRender)?'active-container':''}`}>
             <div className="charity-header-container">
@@ -285,7 +307,6 @@ export default function Charity() {
                       </div>
                   </div>
                 </div>
-               
             </div>
             <div className="manage-charity-container">
                 <div className="manage-charity-header-container">
@@ -297,18 +318,22 @@ export default function Charity() {
                             Learn about the impact of this organization.
                         </p>
                     </div>
-              
-                    <span className='charity-page-donate-button' onClick={()=>handlePayment(charityid)}>
-                      <div className="donate-page-link-button">
-                          <p className="charity-confirm-checkout-text">
-                              {
-                                "Donate"
-                              }
-                          </p>
-                      </div>
-                  </span>
+                    <div className='charity-page-donate-subcontainer'>
+                      <span className={`${(shouldArchive)?'charity-page-like-icon-wrapper-alt':'charity-page-like-icon-wrapper'}`}
+                      onClick={()=>handleArchive()}>
+                        <AiFillHeart className="charity-page-like-icon"/>
+                      </span>
+                      <span className='charity-page-donate-button' onClick={()=>handlePayment(charityid)}>
+                        <div className="donate-page-link-button">
+                            <p className="charity-confirm-checkout-text">
+                                {
+                                  "Donate"
+                                }
+                            </p>
+                        </div>
+                      </span>
+                    </div>
                 </div>
-
             </div>
             {(loading)?    
             <div className='loading-text-container' onClick={()=>handleTest()}>

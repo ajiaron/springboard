@@ -87,7 +87,7 @@ function AnimatedRoutes() {
                             <Donations/>
                         </ProtectedRoute>
                     }/>
-                    <Route path='/donate/:charityid/:charityname/:amount' element={
+                    <Route path='/donate/:groupid' element={
                         <ProtectedRoute>
                             <Donate/>
                         </ProtectedRoute>

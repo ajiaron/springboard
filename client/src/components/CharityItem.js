@@ -207,25 +207,18 @@ export default function CharityItem({
                             </div>
                    
                             <div className="donation-button-container">
-      
-                      
                                 <div className="like-icon-wrapper">
                                     <AiFillHeart className="charity-like-icon"/>
                                 </div>
-                    
                                 <div className="like-icon-wrapper">
                                     <FaShoppingBasket className="charity-basket-icon"/>
                                 </div>
                                 <div className="like-icon-wrapper">
                                     <AiOutlineLink className="charity-linkto-icon"/>
                                 </div>
-
-                      
-                  
                                 <Link className="like-icon-wrapper" to={`/charity/${charityid}/${title}/${category.toLowerCase()}`}>
                                     <FaArrowRight className="charity-arrow-icon"/>
                                 </Link>
-                   
                                 {/*
                                 <Link className={`link-donation-button`} to={url}>
                                     <p className="link-donation-text">
@@ -234,7 +227,6 @@ export default function CharityItem({
                                 </Link>
                         */}
                             </div>
-                   
                         </div>
     }
                         <div className={`charity-categories-wrapper ${(selected&&expanded)?'selected-categories':(!selected && expanded)?'unselected-categories':''}`}>

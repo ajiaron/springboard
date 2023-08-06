@@ -64,6 +64,28 @@ app.get('/api/getcharity/:charityid', (req,res)=> {
         }
     })
 })
+app.get('/api/getcharitypage', (req,res)=> {
+    const charityid = Number(req.query.charityid)
+    const userid = req.query.userid
+    const sql = `SELECT charities.*, `+
+                `CASE `+
+                `WHEN ? IN (SELECT charityid FROM andale_db.archive WHERE userid = ?) THEN true `+
+                `ELSE false `+
+                `END as archived `+
+                `FROM andale_db.charities `+
+                `LEFT JOIN andale_db.archive ON archive.charityid = charities.charityid `+
+                `WHERE charities.charityid = ?;`
+    db.query(sql, [charityid, userid, charityid],
+    (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+
+
 
 app.get('/api/getcharityid/:name', (req,res)=> {
     const name = String(req.params.name)
@@ -78,7 +100,7 @@ app.get('/api/getcharityid/:name', (req,res)=> {
 })
 app.get('/api/getarchive/:userid', (req,res)=> {
     const userid = req.params.userid
-    const sql = `SELECT charityid, charity_name, overall_score, city, state, size, type1 FROM andale_db.charities `+
+    const sql = `SELECT charityid, charity_name, overall_score, financial_score, accountability_score, city, state, size, type1 FROM andale_db.charities `+
                 `WHERE charityid IN (SELECT charityid FROM andale_db.archive WHERE userid = ?);`
     db.query(sql, [userid],
     (err, result)=> {
@@ -208,6 +230,8 @@ app.post('/api/createuser', (req, res) => {
     })
 })
 
+
+
 app.post('/api/pushbasket', (req, res) => {
     const basketid = req.body.basketid
     const ownerid = req.body.userid
@@ -228,6 +252,19 @@ app.post('/api/pushbasket', (req, res) => {
     })
 })
 
+
+app.post('/api/addarchive', (req, res) => {
+    const userid = req.body.userid
+    const charityid = req.body.charityid
+    db.query('INSERT INTO archive (userid, charityid) VALUES (?,?)', 
+    [userid, charityid], (err, result) => {
+        if(err) {
+            console.log(err)
+        } else {
+            res.send("succ")
+        }
+    })
+})
 
 app.put('/api/confirmuser', (req, res) => {     // for email confirmation on register; not needed
     const username = String(req.body.username)
@@ -258,6 +295,31 @@ app.put('/api/editbasketitem', (req, res) => {
     })
 })
 
+app.put('/api/confirmbasket', (req, res)=> {
+    const ownerid = req.body.ownerid
+    const groupid = req.body.groupid
+    db.query('UPDATE andale_db.basket SET groupid = ? WHERE ownerid = ?;', [groupid, ownerid],
+    (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+
+app.delete('/api/removearchiveitem', (req, res) => {
+    const userid = req.body.userid
+    const charityid = req.body.charityid
+    db.query("DELETE FROM archive WHERE (charityid = ? AND userid = ?);",
+    [charityid, userid], (err, result)=> {
+        if (err) {
+            console.log(e)
+        } else {
+            res.send(`item removed from archive`)
+        }
+    })
+})
 app.delete('/api/deletebasketitem', (req, res) => {
     const basketid = req.body.basketid
     db.query("DELETE FROM basket WHERE basketid = ?", [basketid], (err, result) => {

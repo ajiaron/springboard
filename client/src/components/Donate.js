@@ -8,39 +8,97 @@ import SideBar from "./SideBar";
 import SideNavigation from "./SideNavigation";
 import {GoArrowRight} from 'react-icons/go'
 import Footer from "./Footer";
-import Axios from "axios";
+import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import { useInView } from 'react-intersection-observer';
 import _, { debounce } from 'lodash'; 
 import { FiMail } from "react-icons/fi";
 
+const CartItem = ({basketid, charityid, charityname, type, subkey, amount, index}) => {
+    const [shouldDelete, setShouldDelete] = useState(false)
+
+    return (
+        <div className={`cart-item`}>
+            <div className="donate-page-item-info">
+                <p className="cart-page-item-title">
+                    {charityname}
+                </p>
+                <p className="cart-page-item-text">
+                    {`SKU: ${subkey}`}
+                </p>   
+                <div className={`cart-page-item-type-wrapper cart-${type.toLowerCase()}`}>
+                    <p className="cart-donation-item-type-text">
+                        {`${type==='Human'?'Rights & Services':type}`}
+                    </p>
+                </div>
+            </div>
+            <div className={`donate-page-item-price`}>
+
+                <p className="item-price-text" style={{marginLeft:'auto', marginRight:'auto'}}>
+                    {`$${parseFloat(amount).toLocaleString(undefined,
+                    {minimumFractionDigits:2, maximumFractionDigits:2})}`}
+                </p>
+                
+            </div>
+        </div>
+    )
+}
 export default function Donate() {
     const params = useParams()
+    const [donationList, setDonationList] = useState([])
+    const [total, setTotal] = useState(0)
     const [loading, setLoading] = useState(true)
+    const userid = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0
+    const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
     function handleTest() {
         console.log(params)
     }
+    useEffect(()=> {
+        const loadDonation = async() => {
+            setLoading(true)
+            try {
+                const res = await axios.get(`${connection}/api/getbasket`, {
+                    params: {
+                        ownerid:userid
+                    }
+                })
+                if (res.data) {
+                    setDonationList(res.data)
+                    setTotal(parseFloat(res.data.map((item)=>item.amount).reduce((a, b) => a + b, 0))
+                    .toLocaleString(undefined,{minimumFractionDigits:2, maximumFractionDigits:2}))
+                }
+            } catch(e) {
+                console.log(e)
+            }
+        }
+        loadDonation()
+        setLoading(false)
+    }, [])
+
 
     return (
         <div className="donate-page">
             <SideNavigation route={'donate'}/>
             <div className="donate-page-container">
-        
                 <div className={`checkout-container`}>
                     <div className={`checkout-content`}>
                         <div className="checkout-header-container">
                             <p className="cart-header-text">
-                                Checkout
+                                Order Checkout
                             </p>
                         </div>
+                        
                         <div className="checkout-details-container">
                             <p className="checkout-details-header">
-                                Dedications
+                                Donation Details
                             </p>
-                            <div className="dedication-container">
+                            <div className="dedication-container ">
                                 <p className="dedication-text">
-                                   {`${params.charityname}`}<br/>
-                                   {`$${params.amount} USD`}
+                                    {`(${donationList.length}) Donation Items`}
+                                </p>
+                    
+                                <p className="dedication-text">
+                                    {`Total Contribution: $${total}`}
                                 </p>
                             </div>
                             <p className="checkout-details-header mentions-container">
@@ -48,7 +106,7 @@ export default function Donate() {
                             </p>
                             <div className="dedication-container">
                                 <p className="dedication-text">
-                                    call me abusive the way i beat the odds
+                                    {`(3) messages included`}
                                 </p>
                             </div>
                         </div>
@@ -58,9 +116,9 @@ export default function Donate() {
                             </p>
                             <div className="paypal-method-container">
                             <Paypal 
-                                charityid={params.charityid}
-                                name={params.charityname}
-                                amount={params.amount}
+                                groupid={params?params.groupid:null}
+                                names={donationList&&donationList.map((item)=>item.charityname)}
+                                amount={total!==0&&total}
                                 type={'paypal'}
                             />
                             </div>
@@ -72,9 +130,9 @@ export default function Donate() {
                             
                             <div className="card-method-container">
                                 <Paypal 
-                                    charityid={params.charityid}
-                                    name={params.charityname}
-                                    amount={params.amount}
+                                    groupid={params?params.groupid:null}
+                                    names={donationList&&donationList.map((item)=>item.charityname)}
+                                    amount={total!==0&&total}
                                     type={'card'}
                                 />
                             </div>
@@ -101,48 +159,37 @@ export default function Donate() {
                         </div>
                      
                     </div>
+                                
                 
                 </div>
+                                
                 <div className={`cart-container`}>
                     <div className={`cart-content`}>
                         <div className="cart-header-container">
-                            <p className="cart-header-text" >
-                                {'Basket'}
+                            <p className="cart-header-text" style={{color:"#151515"}}>
+                                {'Items'}
                             </p>
                         </div>
                         <div className={`cart-item-list`}>
-                            <div className="cart-item first-item">
-                                <div className="cart-item-info">
-                                 
-                                        <p className="cart-item-title">
-                                            {params.charityname}
-                                        </p>
-                                        <p className="cart-item-text">
-                                            SKU: XYZ-1364570
-                                        </p>   
-                                  <div className="cart-item-type-wrapper">
-                                     <p className="cart-item-type-text">
-                                        Education
-                                    </p>
-                                  </div>
-                                </div>
-                                <div className="cart-item-price">
-                                    <p className="item-price-text">
-                                        {`$${parseFloat(params.amount).toFixed(2)}`}
-                                    </p>
-                                </div>
-                            </div>
-                            {/* 
-                            <div className="cart-item">
-                                
-                            </div>
-                            <div className="cart-item">
-                                
-                            </div>
-                            <div className="cart-item">
-                                
-                            </div>
-                            */}
+                        {  
+                            (loading)?    
+                            <div className='loading-text-container' style={{paddingTop:".5em"}}>
+                                <p className="loading-text"> {`${(loading)?'Loading...':`Showing all items in your basket`}`} </p>
+                            </div>:
+                             <>
+                             {
+                                donationList.map((item, index)=> (
+                                    <CartItem 
+                                    basketid={item.basketid} charityid={item.charityid} 
+                                    charityname={item.charityname} type={item.type} 
+                                    subkey={item.subkey} amount={item.amount} 
+                                    index={index}
+                                    />
+                                ))
+                             }
+
+                            </>
+                        }
                         </div>
                     </div>
                 </div>

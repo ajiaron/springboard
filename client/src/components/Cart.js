@@ -9,8 +9,9 @@ import SideBar from "./SideBar";
 import {GoArrowRight} from 'react-icons/go'
 import SideNavigation from "./SideNavigation";
 import Footer from "./Footer";
+import { v4 as uuidv4 } from 'uuid';
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useInView } from 'react-intersection-observer';
 import _, { debounce } from 'lodash'; 
 import {LiaTimesSolid} from 'react-icons/lia'
@@ -22,6 +23,10 @@ import { FiMail } from "react-icons/fi";
 const CartItem = ({basketid, charityid, charityname, type, subkey, amount, message, shareName, shareEmail, index, onEdit, onDelete}) => {
     const [shouldDelete, setShouldDelete] = useState(false)
     function preDelete() {
+        setShouldDelete(!shouldDelete)
+    }
+    function handleRemove() {
+        onDelete(basketid)
         setShouldDelete(!shouldDelete)
     }
     return (
@@ -83,7 +88,7 @@ const CartItem = ({basketid, charityid, charityname, type, subkey, amount, messa
             <div className={`cart-page-item-price`}>
                 {
                     (shouldDelete)?
-                    <span className="delete-cart-item-container" onClick={()=>onDelete(basketid)}>
+                    <span className="delete-cart-item-container" onClick={()=>handleRemove()}>
                         Remove
                     </span>:
                 <p className="item-price-text">
@@ -101,16 +106,18 @@ export default function Cart() {
   const [total, setTotal] = useState(0)
   const [emptyList, setEmptyList] = useState([0,1,2,3,4])
   const [loading, setLoading] = useState(true)
+  const [confirmLoading, setConfirmLoading] = useState(false)
   const [firstRender, setFirstRender] = useState(true)
   const [isActive, setIsActive] = useState(true)
   const [editActive, setEditActive] = useState(null)
   const [shouldEdit, setShouldEdit] = useState(null)
+  const [groupid, setGroupId] = useState(uuidv4())
   const [reload, setReload] = useState(false)
+  const navigate = useNavigate()
   const userid = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0
   const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
   const handleBlur = () => {
     setIsActive(true)
-
   }
   const handleEdit = (charityid, basketid) => {
     setFirstRender(false)
@@ -118,15 +125,28 @@ export default function Cart() {
     setShouldEdit(basketid)
     setIsActive(false)
 }
+  const handleConfirm = async() => {
+    setConfirmLoading(true)
+    try {
+        const res = await axios.put(`${connection}/api/confirmbasket`, 
+        {ownerid:userid, groupid:groupid})
+        if (res.data) {
+            console.log("basket has been confirmed")
+            navigate(`/donate/${groupid}`)
+        } 
+    } catch(e) {
+        console.log(e)
+    }
+    setConfirmLoading(false)
+  }
+
   const onClosePayment = () => {
     setEditActive(null)
     setReload(!reload)
   }
   const handleDelete= (basketid) => {
-    console.log("ayp")
     axios.delete(`${connection}/api/deletebasketitem`, {data:{basketid:basketid}})
     .then((res)=> {
-        console.log(res)
         setReload(!reload)
     })
     .catch((e)=> {
@@ -143,8 +163,7 @@ export default function Cart() {
                 }
             })
             if (res.data) {
-                console.log(res.data)
-                console.log(userid)
+                console.log()
                 setBasketList(res.data)
                 setTotal(parseFloat(res.data.map((item)=>item.amount).reduce((a, b) => a + b, 0))
                 .toLocaleString(undefined,{minimumFractionDigits:2, maximumFractionDigits:2}))
@@ -262,9 +281,9 @@ export default function Cart() {
                         </div>
                         <div className="cart-checkout-confirm-container ">             
                             <div className="checkout-cart-page-confirm-container">
-                                <span className="cart-confirm-checkout-button " onClick={()=>handleTest()}>
+                                <span className="cart-confirm-checkout-button " onClick={()=>handleConfirm()}>
                                     <p className="cart-confirm-checkout-text">
-                                        {(loading)?'Loading...':
+                                        {(confirmLoading||loading)?'Loading...':
                                         'Checkout'
                                         }
                                     </p>
