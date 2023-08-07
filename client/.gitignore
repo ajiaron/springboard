@@ -22,6 +22,7 @@ amplifytools.xcconfig
 **.sample
 #amplify-do-not-edit-end
 /log
+log/
 
 .env
 .env.production
