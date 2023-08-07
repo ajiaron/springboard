@@ -9,6 +9,7 @@ amplify/backend/.temp
 build/
 dist/
 node_modules/
+client/log
 client/node_modules/.cache/
 aws-exports.js
 awsconfiguration.json
@@ -20,6 +21,7 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
+/log
 
 .env
 .env.production
