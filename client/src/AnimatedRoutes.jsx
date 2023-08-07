@@ -51,7 +51,7 @@ function AnimatedRoutes() {
                         </ProtectedRoute>
                     }/>
                     <Route path='/catalog' element={<Catalog/>}/>
-                    <Route path='/profile' element={
+                    <Route path='/profile/:username' element={
                         <ProtectedRoute>
                             <Profile/>
                         </ProtectedRoute>
@@ -90,6 +90,11 @@ function AnimatedRoutes() {
                     <Route path='/donate/:groupid' element={
                         <ProtectedRoute>
                             <Donate/>
+                        </ProtectedRoute>
+                    }/>
+                     <Route path='/:username' element={
+                        <ProtectedRoute>
+                            <Profile/>
                         </ProtectedRoute>
                     }/>
                 </Routes>

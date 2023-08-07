@@ -79,12 +79,13 @@ export default function Dashboard() {
     const handleSession = async(data) => {
         try {
             setLoading(true)
+            console.log(data)
             const res = await axios.get(`${connection}/api/getuser`, {
                 params: {
                     username:data&&data.username
                 }
             })
-            if (res.data &&(!localStorage.getItem("userid") || localStorage.getItem("userid") !== `"${res.data[0].userid.toString()}"`)) {
+            if (res.data) {
               localStorage.setItem("userid", JSON.stringify(res.data[0].userid))
               localStorage.setItem("username", JSON.stringify(res.data[0].username))
               localStorage.setItem("email", JSON.stringify(res.data[0].email))
@@ -93,6 +94,7 @@ export default function Dashboard() {
               console.log("user data set in local")
             } else {
                 console.log('local already set')
+
             }
         } catch(e) {
             console.log(e)

@@ -10,6 +10,8 @@ import {RiSettings5Fill} from 'react-icons/ri'
 import './Navbar.scss'
 export default function Navbar({route, blur}) {
     const location = useLocation()
+    const userid = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0
+    const username = localStorage.getItem("username")?JSON.parse(localStorage.getItem("username")):''
     const [shouldBlur, setShouldBlur] = useState(false)
     const [screenWidth, setScreenWidth] = useState(window.innerWidth)
     const [screenHeight, setScreenHeight] = useState(window.innerHeight)
@@ -38,34 +40,31 @@ export default function Navbar({route, blur}) {
                  </Link>
                  :
                  <div className="main-navbar-container">
-                     <Link className="logo-text-container" to='/dashboard'>   
+                    <Link className="logo-text-container" to='/dashboard'>   
                         <div className="app-logo"/>
-                         <p className="logo-text">
-                             Springboard
-                         </p> 
-                     </Link>
-                    
-            
-
-                        <Link className={`${route==='cart'?'profile-cart-nav':'profile-nav-item'}`} to='/profile'>
-                            <div className={`navigation-item-alt ${route==='cart'?'cart-nav':''}`}>
-                                <p className={`${route==='cart'?'cart-nav-text':'navigation-item-text-alt'}`}>
-                                    A
-                                </p>
-                            </div>
-                        </Link>
-           
-
+                        <p className="logo-text">
+                            Springboard
+                        </p> 
+                    </Link>
+                    <Link className={`${route==='cart'?'profile-cart-nav':'profile-nav-item'}`} to={`/${username}`}>
+                        <div className={`navigation-item-alt ${route==='cart'?'cart-nav':''}`}>
+                            <p className={`${route==='cart'?'cart-nav-text':'navigation-item-text-alt'}`}>
+                                {username!==null?username.charAt(0).toUpperCase():''}
+                            </p>
+                        </div>
+                    </Link>
                 </div>
              }
              </div>
              :
             <>
                 {(route==='settings' || route ==='charity-page') &&
-                <Link className={`profile-nav-item-settings ${shouldBlur?'navbar-charity-container-inactive':'navbar-charity-container-active'}`} to='/profile'>
+                <Link className={`profile-nav-item-settings ${shouldBlur?'navbar-charity-container-inactive':
+                route==='settings'?'':'navbar-charity-container-active'}`} 
+                to={`/${username}`}>
                    <div className="settings-profile-item-alt">
                        <p className="navigation-item-text-alt settings-item-text">
-                           A
+                       {username!==null?username.charAt(0).toUpperCase():''}
                        </p>
                    </div>
                </Link>

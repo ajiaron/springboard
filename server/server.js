@@ -184,6 +184,18 @@ app.get('/api/getuser', (req,res)=> {
         }
     })
 })
+app.get('/api/getuserinfo', (req,res)=> {
+    const userid = req.query.userid
+    db.query('SELECT * FROM users WHERE userid = ?', [userid],
+    (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+
 
 app.get('/api/getbasket', (req,res)=> {
     const ownerid = req.query.userid
@@ -286,6 +298,31 @@ app.put('/api/editbasketitem', (req, res) => {
     const shareName = req.body.shareName
     db.query('UPDATE basket SET amount = ?, message = ?, shareEmail = ?, shareName = ? WHERE basketid = ?',
     [amount, message, shareEmail, shareName, basketid],
+    (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+
+app.put('/api/updateuser', (req, res) => {     
+    const userid = req.body.userid
+    const username = req.body.username
+    const firstname = req.body.firstname
+    const lastname = req.body.lastname
+    const email = req.body.email
+    const bio = req.body.bio
+    const location = req.body.location
+    const social = req.body.social
+    const profilepic = req.body.profilepic
+    const public = req.body.public
+    const sql = `UPDATE users SET username = ?, firstname = ?, lastname = ?, email = ?, ` +
+                `bio = ?, location = ?, social = ?, profilepic = ?, public = ? `+
+                `WHERE userid = ?`;
+    db.query(sql,
+    [username, firstname, lastname, email, bio, location, social, profilepic, public, userid],
     (err, result) => {
         if (err) {
             console.log(err)

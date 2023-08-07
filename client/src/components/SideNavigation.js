@@ -16,6 +16,8 @@ import './Navbar.scss'
 import './SideNavigation.scss'
 
 export default function SideNavigation({route}) {
+  const userid = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0
+  const username = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("username")):0
   return (
     <div className="side-console-container">
         <div className="console-header-container">
@@ -72,7 +74,7 @@ export default function SideNavigation({route}) {
                     ACCOUNT
                 </p>
             </div>
-            <Link className="console-content-wrapper " to={'/profile'}>
+            <Link className="console-content-wrapper " to={`/${username}`}>
                 <BsPerson className="home-icon" />
                 <p className="console-item-subtext">
                     Your profile

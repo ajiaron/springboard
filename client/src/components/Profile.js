@@ -6,12 +6,12 @@ import CharityItem from './CharityItem'
 import SideBar from "./SideBar";
 import Favorites from "./Favorites";
 import { BsStars } from 'react-icons/bs'
-import { Link } from "react-router-dom";
-
-import { AiOutlineLink, AiOutlineEdit,AiOutlineClockCircle } from 'react-icons/ai'
-
+import { Link, useParams, useNavigate } from "react-router-dom";
+import {BiEdit, BiEditAlt,BiPencil} from 'react-icons/bi'
+import { AiOutlineLink, AiOutlineEdit, AiOutlineClockCircle } from 'react-icons/ai'
 import { PolarArea, Doughnut, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, RadialLinearScale, BarElement, ArcElement, Tooltip, Legend, CategoryScale, LinearScale } from "chart.js";
+import axios from "axios";
 ChartJS.register(RadialLinearScale, CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend);
 
 const DonationItem = ({name, type, index}) => {
@@ -62,164 +62,73 @@ const FriendsItem = ({name, status}) => {
     )
 }
 
-const data = {
-    labels: ['Red', 'Blue'],
-    datasets: [
-      {
-        label: '# of Votes',
-        data: [90,30,40],
-        backgroundColor: [
-          'rgba(218, 194, 85, 0.75)',
-          'rgba(63, 118, 163, 0.75)',
-          'rgba(76, 173, 115,.75)',
-        ],
-        borderColor: ['#252525bb','#252525bb'],
-        borderWidth:0,
-        spacing:5,
-        hoverBackgroundColor: [
-          'rgba(214, 72, 86, .95)',
-          'rgba(53, 108, 153,.95)',
-          'rgba(90, 187, 111,.95)',
-        ],
-        borderRadius: {
-          outerEnd:20,
-          innerEnd:20,
-          outerStart:20,
-          innerStart:20,
-        },
-      },
-    ],
-}
-const barData = {
-    labels: ['Overall', 'Healthcare', 'Large', 'California', 'Personal'],
-    datasets: [
-      {
-          label: 'Dataset 2',
-          data: [30, 55, 20, 38, 35],
-          backgroundColor: 'rgba(60, 60, 60, .8)',
-          // backgroundColor: 'rgba(255, 99, 132, 0.1)',
-          borderColor: 'rgba(255, 99, 132, .8)',
-          borderWidth: 0,
-          borderRadius: {
-              topLeft:20,
-              topRight:20,
-          },
-          barPercentage:.4,
-          categoryPercentage:1,
-      },
-      {
-          label: 'Dataset 1',
-          data: [50, 20, 30, 45, 25],
-          backgroundColor: 'rgba(214, 72, 86, 0.8)',
-          borderColor: 'rgba(214, 72, 86, 0.8)',
-          borderWidth: 0,
-          hoverBackgroundColor: [
-            'rgba(234, 72, 86, .95)',
-          ],
-          borderRadius: {
-              topLeft:20,
-              topRight:20,
-          },
-          barPercentage:.4,
-          categoryPercentage:1,
-      },
-    ],
-};
-
 export default function Profile() {
-  const [nickname, setNickname] = useState('')
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth)
-  const [screenHeight, setScreenHeight] = useState(window.innerHeight)
-  const doughOptions = {
-    cutout:'80%',
-    responsive:true,
-    plugins: {
-        legend: {
-          display:false,
-          labels: {
-            color: '#bbb'  // changes color of legend labels
-          }
-        },
-        tooltip: {
-          enabled:false
+  const {username} = useParams()
+  const navigate = useNavigate()
+  const id = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0
+  const name = localStorage.getItem("username")?JSON.parse(localStorage.getItem("username")):0
+  const firstname = localStorage.getItem("firstname")?JSON.parse(localStorage.getItem("firstname")):0
+  const lastname = localStorage.getItem("lastname")?JSON.parse(localStorage.getItem("lastname")):0
+  const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
+  const [loading, setLoading] = useState(true)
+  const [userData, setUserData] = useState(null)
+  const [hasBio, setHasBio] = useState(false)
+  useEffect(()=> {
+    const loadUser = async() => {
+        setLoading(true)
+        try {
+            const res = await axios.get(`${connection}/api/getuser`,{
+                params: {
+                    username:username?username:'default'
+                }
+            })
+            if (res.data && res.data.length > 0) {
+                setUserData(res.data[0])
+                setHasBio(res.data[0].bio!==null && res.data[0].bio.length > 0)
+            } 
+            else {
+                navigate('/dashboard')
+            }
+        } catch(e) {
+            console.log(e)
         }
-      }
-}
-const barOptions = {
-    scales: {
-      y: {
-        beginAtZero: true,
-        offset:false,
-        stacked: false,
-        grid: {
-            display:false,
-            color: function(context) {
-                return context.tick.value === 0 ? 'rgba(255, 99, 132, 0.6)' : 'rgba(0, 0, 0, 0)';
-            },
-       
-            borderColor: 'rgba(255, 99, 132, 0.6)', // sets color of axis line
-        },
-        ticks: {
-            color:'#151515',
-            padding:0,
-            stepSize:5,
-            display:false,
-            position:'right',
-            backdropPadding:0
-          },
-      },
-      x: {
-        offset:true,
-        beginAtZero:true,
-        stacked: true,
-        grid: {
-            display:true,
-            color:'transparent',
-            borderColor:'transparent'
-   
-          },
-        ticks: {
-            padding:2,
-            color:"#aaa",
-            backgroundColor:'#151515',
-            backdropColor: 'transparent',
-          },
-      },
-    },
-    responsive:true,
-    plugins: {
-        legend: {
-          display:false,
-          labels: {
-            color: '#151515'  // changes color of legend labels
-          }
-        }
-      }
-  };
-  function handleTest() {
-      console.log('W:', screenWidth, 'H:',screenHeight)
-  }
+    }
+    loadUser()
+    setLoading(false)
+  }, [])
   return (
     <div className="profile-page-container">
         <Navbar route={'profile'}/>
         <div className="profile-page-content">
-            <div className="profile-header-container">
+            <div className="profile-header-container ">
                 <div className="profile-image-wrapper">
                     <p className="profile-image-text">
-                        A
+                        {`${username&&username.charAt(0).toUpperCase()}`}
                     </p>
                 </div>
-                <div className="profile-header-wrapper">
-                    <p className="profile-header-text">
-                        {`Aaron Jiang`}
+                {(!loading && userData)&&
+                <div className={`${(hasBio)?'profile-header-wrapper-alt':'profile-header-wrapper'}`}>
+                    <p className={`${(hasBio)?'profile-header-text-alt':'profile-header-text'}`}>
+                        {username&&username===name?`${firstname} ${lastname}`:
+                        loading?'':userData&&`${userData.firstname} ${userData.lastname}`}
                     </p>
-                    <div className="profile-link-container">
+                    <div className={`${(hasBio)?'profile-link-container-alt':'profile-link-container'}`}>
                         <AiOutlineLink className="link-icon"/>
-                        <p className="profile-header-subtext">
-                            springboard.app/aaronjiang
+                        <p className={`${(hasBio)?'profile-header-subtext-alt':'profile-header-subtext'}`}>
+                            {`link.springboard.gift/${username?username:''}`}
                         </p>
                     </div>
+                    {(hasBio)&&
+                    <div className="profile-bio-container">
+                        <BiPencil className="pen-icon"/>
+                        <p className="profile-header-bio">
+                            {userData&&userData.bio}
+                        </p>
+                    </div>
+                    }
+          
                 </div>
+                }
             </div>
 
             <div className="manage-profile-container">

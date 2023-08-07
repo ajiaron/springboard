@@ -21,7 +21,7 @@ export default function CharityTab({ id, type, overall, financial, accountabilit
     const [width, setWidth] = useState(0)
     const [shouldRemove, setShouldRemove] = useState(false)
     const [isHovered, setIsHovered] = useState(false);
-    const [value, setValue] = useState(Math.max(overall, financial, accountability))
+    const [value, setValue] = useState(Math.min(financial, accountability))
     function handleNavigate() {
         navigate(`/charity/${id}/${name}/${type.toLowerCase()}`)
     }
@@ -70,10 +70,10 @@ export default function CharityTab({ id, type, overall, financial, accountabilit
             <div className="archive-favorite-item-figure">
                 <div className="archive-favorite-item-figure-wrapper">
                     <p className="archive-favorite-figure-text">
-                        {parseFloat(overall).toFixed(1)}
+                        {parseFloat(value).toFixed(1)}
                     </p>
                     <p className="archive-favorite-figure-subtext">
-                        OVERALL <br/>SCORE
+                        {`${financial===value?'FINANCIAL':'ACCOUNTABILITY'}`} <br/>SCORE
                     </p>
                     
                 </div>

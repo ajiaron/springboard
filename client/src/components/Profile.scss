@@ -19,7 +19,7 @@
 .profile-header-container {
     display: flex;
     flex-direction: row;
-    width: 100%;
+    width: 92.25%;
     height: fit-content;
     align-items: center;
     justify-content: flex-start; 
@@ -53,12 +53,27 @@
     display: flex;
     flex-direction: column;
     min-width: fit-content;
+   // min-height: 7.65em;
     min-height: 100%;
     padding-top: 0.35em;
  // align-self: center;
  // justify-content: center;
  // background-color: rgba(255, 0, 0, 0.223);
 }
+.profile-header-wrapper-alt {
+    display: flex;
+    flex-direction: column;
+    min-width: fit-content;
+    min-height:8em;
+   // min-height: 100%;
+  // padding-bottom: .125em;
+  
+   // padding-top: 0.35em;
+ // align-self: center;
+ // justify-content: center;
+  //background-color: rgba(255, 0, 0, 0.223);
+}
+
 .profile-header-text {
     font-size: clamp(18px, 3vw, 38px);
     font-family: "Inter";
@@ -66,6 +81,15 @@
     font-weight: 800;
     color:#eee;
     line-height:48px;
+}
+.profile-header-text-alt {
+    font-size: clamp(18px, 3vw, 38px);
+    font-family: "Inter";
+    letter-spacing: -.5px;
+    font-weight: 800;
+    color:#eee;
+    line-height:62px;
+  //  margin-top: auto;
 }
 .profile-link-container {
     width: 100%;
@@ -77,6 +101,18 @@
     gap:.375em;
     transform: translateX(-0.15em);
 }
+.profile-link-container-alt {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+//    background-color: rgba(255, 0, 0, 0.142);
+    margin-top: auto;
+    gap:.5em;
+    transform: translateX(-0.15em);
+}
 .profile-header-subtext {
     font-size: clamp(10px, 3vw, 16px);
     font-family: "Rubik";// padding-left: .025em;
@@ -85,9 +121,44 @@
     font-weight: 400;
     color: #aaa;
 }
+.profile-header-subtext-alt {
+    font-size: clamp(10px, 3vw, 16px);
+    font-family: "Rubik";// padding-left: .025em;
+    line-height: 28px;
+    letter-spacing: -.25px;
+    font-weight: 400;
+
+    color: #aaa;
+}
+.profile-bio-container {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+   // background-color: rgba(0, 255, 195, 0.142);
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap:.5em;
+    //margin-top: auto;
+    transform: translateX(-0.15em);
+}
+.profile-header-bio {
+    font-size: clamp(10px, 3vw, 16px);
+    font-family: "Rubik";// padding-left: .025em;
+    line-height: 30px;
+    letter-spacing: -.25px;
+    font-weight: 400;
+    color: #aaa;
+}
 .link-icon {
     color:#ababab;
     transform: translateY(.0125em);
+    width: 1.0em;
+    height: 1.0em;
+}
+.pen-icon {
+    color:#ababab;
+   // transform: translateY(.0125em);
     width: 1.0em;
     height: 1.0em;
 }
