@@ -5,7 +5,10 @@ client/node_modules
 /node_modules
 /.pnp
 .pnp.js
-
+client/node_modules/.cache
+/.cache
+/.log
+/.pack
 # testing
 /coverage
 
@@ -27,6 +30,5 @@ yarn-error.log*
 
 /log
 .pack
-/.apck
 
-client/node_modules/.cache
+
