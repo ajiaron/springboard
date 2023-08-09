@@ -6,13 +6,13 @@
     align-self: flex-start;
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: flex-start;
     //transform: translateX(-.1em);
     gap:1.3em;
     align-items: center;
   }
   .profile-favorite-item-container {
-    width: 25%;
+    min-width: 23.54%;
     background-color: #202020;
     overflow: hidden;
     border-radius: 16px;

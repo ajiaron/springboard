@@ -5,15 +5,50 @@ import Footer from "./Footer";
 import CharityItem from './CharityItem'
 import SideBar from "./SideBar";
 import Favorites from "./Favorites";
-import { BsStars } from 'react-icons/bs'
+import { BsStars, BsPlusLg } from 'react-icons/bs'
 import { Link, useParams, useNavigate } from "react-router-dom";
 import {BiEdit, BiEditAlt,BiPencil} from 'react-icons/bi'
-import { AiOutlineLink, AiOutlineEdit, AiOutlineClockCircle } from 'react-icons/ai'
+import {AiOutlineHeart, AiFillHeart, AiOutlineLink, AiOutlineEdit, AiOutlineClockCircle, AiOutlinePlus } from 'react-icons/ai'
 import { PolarArea, Doughnut, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, RadialLinearScale, BarElement, ArcElement, Tooltip, Legend, CategoryScale, LinearScale } from "chart.js";
 import axios from "axios";
 ChartJS.register(RadialLinearScale, CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend);
+const FavoriteItem = ({charityid, charityname, value, size, type, index, onNavigate}) => {
 
+    return (
+        <span onClick={()=>onNavigate(charityid, charityname, type)}
+            className={`profile-favorite-item-container ${type==='Human'?'hr':type==='Healthcare'?'health':
+            type.toLowerCase()}-item`}>
+            <div className="profile-favorite-item-category">
+                <p className={`category-favorite-text ${type==='Healthcare'?'health':type.toLowerCase()}-text`}>
+                {`${type==='Human'?'Human Rights & Services':type==='Healthcare'?'Health':
+                    type==='Research'?'Research & Public Policy':
+                    type==='Community'?'Community Development':type}`}
+                </p>
+                <AiFillHeart className="profile-favorite-icon"/>
+            </div>
+            <div className="profile-favorite-item-figure">
+                <p className="profile-favorite-figure-text">
+                    {parseFloat(value).toFixed(1)}
+                </p>
+            </div>
+
+            <div className="profile-favorite-item-name">
+                <p className="profile-favorite-name-text">
+                    {charityname}
+                </p>
+            </div>
+            <div className="profile-favorite-type-container">
+                <div className={`profile-favorite-item-type-wrapper mid-favorite-wrapper`}>
+                    <p className="profile-favorite-item-type-text">
+                        {`${size}-Sized`}
+                    </p>
+                </div>
+            </div>
+
+        </span>
+    )
+}
 const DonationItem = ({name, type, index}) => {
     return (
     <div className={`profile-donation-item ${index===2?'donation-item-last':''}`}>
@@ -73,7 +108,21 @@ export default function Profile() {
   const [loading, setLoading] = useState(true)
   const [userData, setUserData] = useState(null)
   const [hasBio, setHasBio] = useState(false)
+  const [favorites, setFavorites] = useState([])
+
+  function handleNavigate(id, name, type) {
+    navigate(`/charity/${id}/${name}/${type.toLowerCase()}`)
+}
+
   useEffect(()=> {
+    const loadFavorites = (id) => {
+        axios.get(`${connection}/api/getfavorites/${id}`)
+        .then((res)=> {
+            setLoading(false)
+            setFavorites(res.data)
+        })
+        .catch((e)=>console.log(e))
+    }
     const loadUser = async() => {
         setLoading(true)
         try {
@@ -85,6 +134,7 @@ export default function Profile() {
             if (res.data && res.data.length > 0) {
                 setUserData(res.data[0])
                 setHasBio(res.data[0].bio!==null && res.data[0].bio.length > 0)
+                loadFavorites(id)
             } 
             else {
                 navigate('/dashboard')
@@ -94,13 +144,13 @@ export default function Profile() {
         }
     }
     loadUser()
-    setLoading(false)
   }, [])
+
   return (
     <div className="profile-page-container">
         <Navbar route={'profile'}/>
         <div className="profile-page-content">
-            <div className="profile-header-container ">
+            <div className="profile-header-container  ">
                 <div className="profile-image-wrapper">
                     <p className="profile-image-text">
                         {`${username&&username.charAt(0).toUpperCase()}`}
@@ -129,6 +179,16 @@ export default function Profile() {
           
                 </div>
                 }
+                  <span className='profile-follow-button'>
+                        <div className="profile-follow-link-button">
+                            <p className="profile-follow-text">
+                                {
+                                  "Follow"
+                                }
+                            </p>
+                            <AiOutlinePlus className="profile-follow-icon"/>
+                        </div>
+                      </span>
             </div>
 
             <div className="manage-profile-container">
@@ -142,6 +202,12 @@ export default function Profile() {
                 </div>
             </div>
           
+            {(loading || !favorites)?    
+                <div className='settings-loading-text-container'>
+                    <p className="settings-loading-text"> {`${(loading || !userData)?'Please wait...':`Viewing all matching results`}`} </p>
+                </div>
+                :
+            <>
             <div className="profile-favorites-wrapper">
                  <div className="donation-details-container">
                         <p className="donation-details-text">
@@ -152,7 +218,17 @@ export default function Profile() {
                         </p>
                 </div>
                 <div className="profile-favorites-container">
-                    <Favorites/>
+     
+                    
+                    <div className="subcontent-profile-container">
+                        {(favorites)&&
+                            favorites.map((item, index) => (
+                                <FavoriteItem charityid={item.charityid} charityname={item.charity_name} value={item.overall_score} size={item.size} type={item.type1} index={index} 
+                                onNavigate={(id,name,type)=>handleNavigate(id,name,type)}/>
+                            ))
+                        }
+                    </div>
+                   
                 </div>
             </div>
        
@@ -178,10 +254,10 @@ export default function Profile() {
                 <div className="account-friends-container">
                     <div className="donation-details-container">
                         <p className="donation-details-text">
-                            Friends List
+                            Followers List
                         </p>
                         <p className="donation-details-subtext">
-                            View your active friends and pending requests here.
+                            View your active followers and pending requests here.
                         </p>
                     </div>
                     <div className="account-friends-list">
@@ -194,8 +270,10 @@ export default function Profile() {
                     </div>
                 </div>
             </div>
+            </>
+            }
             
-            <Footer route={'profile'}/>
+          {/* <Footer route={'profile'}/>*/}
         </div>
     </div>
   )

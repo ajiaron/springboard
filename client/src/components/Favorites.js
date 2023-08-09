@@ -11,112 +11,48 @@ import { Link } from "react-router-dom";
 import { useInView } from 'react-intersection-observer';
 import { FiMail } from "react-icons/fi";
 
-export default function Favorites() {
+const FavoriteItem = ({charityid, charityname, value, size, type, index}) => {
+    return (
+        <div className={`profile-favorite-item-container ${type==='Human'?'hr':type==='Healthcare'?'health':
+        type.toLowerCase()}-item`}>
+            <div className="profile-favorite-item-category">
+                <p className={`category-favorite-text ${type==='Healthcare'?'health':type.toLowerCase()}-text`}>
+                {`${type==='Human'?'Human Rights & Services':type==='Healthcare'?'Health':
+                    type==='Research'?'Research & Public Policy':
+                    type==='Community'?'Community Development':type}`}
+                </p>
+                <AiFillHeart className="profile-favorite-icon"/>
+            </div>
+            <div className="profile-favorite-item-figure">
+                <p className="profile-favorite-figure-text">
+                    {parseFloat(value).toFixed(1)}
+                </p>
+            </div>
+
+            <div className="profile-favorite-item-name">
+                <p className="profile-favorite-name-text">
+                    {charityname}
+                </p>
+            </div>
+            <div className="profile-favorite-type-container">
+                <div className={`profile-favorite-item-type-wrapper mid-favorite-wrapper`}>
+                    <p className="profile-favorite-item-type-text">
+                        {`${size}-Sized`}
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    )
+}
+export default function Favorites(charityData) {
   return (
     <div className="subcontent-profile-container">
-        <div className="profile-favorite-item-container hr-item">
-            <div className="profile-favorite-item-category">
-                <p className="category-favorite-text category-hr">
-                    Human Rights {'&'} Services
-                </p>
-                <AiFillHeart className="profile-favorite-icon"/>
-            </div>
-            <div className="profile-favorite-item-figure">
-                <p className="profile-favorite-figure-text">
-                    99.0
-                </p>
-            </div>
-
-            <div className="profile-favorite-item-name">
-                <p className="profile-favorite-name-text">
-                    Equal Justice Initiative
-                </p>
-            </div>
-            <div className="profile-favorite-type-container">
-                <div className={`profile-favorite-item-type-wrapper mid-favorite-wrapper`}>
-                    <p className="profile-favorite-item-type-text">
-                        Mid-Sized
-                    </p>
-                </div>
-            </div>
-
-        </div>
-        <div className="profile-favorite-item-container education-item">
-            <div className="profile-favorite-item-category">
-                <p className="category-favorite-text category-ed">
-                    Education
-                </p>
-                <AiFillHeart className="profile-favorite-icon"/>
-            </div>
-            <div className="profile-favorite-item-figure">
-                <p className="profile-favorite-figure-text">
-                    98.2
-                </p>
-            </div>
-            <div className="profile-favorite-item-name">
-                <p className="profile-favorite-name-text">
-                   Kids In Need Foundation 
-                </p>
-            </div>
-            <div className="profile-favorite-type-container">
-                <div className={`profile-favorite-item-type-wrapper large-favorite-wrapper`}>
-                    <p className="profile-favorite-item-type-text">
-                        Large-Sized
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div className="profile-favorite-item-container health-item">
-            <div className="profile-favorite-item-category">
-                <p className="category-favorite-text category-h">
-                    Health
-                </p>
-                <AiFillHeart className="profile-favorite-icon"/>
-            </div>
-            <div className="profile-favorite-item-figure">
-                <p className="profile-favorite-figure-text">
-                    97.4
-                </p>
-
-            </div>
-            <div className="profile-favorite-item-name">
-                <p className="profile-favorite-name-text">
-                    American Heart Association
-                </p>
-            </div>
-            <div className="profile-favorite-type-container">
-                <div className={`profile-favorite-item-type-wrapper mid-favorite-wrapper`}>
-                    <p className="profile-favorite-item-type-text">
-                        Mid-Sized
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div className="profile-favorite-item-container environment-item">
-            <div className="profile-favorite-item-category">
-                <p className="category-favorite-text category-ev">
-                    Environment
-                </p>
-                <AiFillHeart className="profile-favorite-icon"/>
-            </div>
-            <div className="profile-favorite-item-figure">
-                <p className="profile-favorite-figure-text">
-                    100.0
-                </p>
-            </div>
-            <div className="profile-favorite-item-name">
-                <p className="profile-favorite-name-text">
-                    Conservation International 
-                </p>
-            </div>
-            <div className="profile-favorite-type-container">
-                <div className={`profile-favorite-item-type-wrapper small-favorite-wrapper`}>
-                    <p className="profile-favorite-item-type-text">
-                        Small-Sized
-                    </p>
-                </div>
-            </div>
-        </div>
+        {(charityData)&&
+            charityData.map((item, index) => (
+                <FavoriteItem charityid={item.charityid} charityname={item.charity_name} value={item.overall_score} size={item.size} type={item.type1} index={index}/>
+            ))
+        }
     </div>
   )
 }

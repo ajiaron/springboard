@@ -53,6 +53,7 @@ app.get('/api/getbatch/:next/:current', (req,res)=> {
         }
     })
 })
+
 app.get('/api/getcharity/:charityid', (req,res)=> {
     const charityid = Number(req.params.charityid)
     db.query('SELECT * FROM charities WHERE charityid = ?', [charityid],
@@ -64,6 +65,7 @@ app.get('/api/getcharity/:charityid', (req,res)=> {
         }
     })
 })
+
 app.get('/api/getcharitypage', (req,res)=> {
     const charityid = Number(req.query.charityid)
     const userid = req.query.userid
@@ -85,8 +87,6 @@ app.get('/api/getcharitypage', (req,res)=> {
     })
 })
 
-
-
 app.get('/api/getcharityid/:name', (req,res)=> {
     const name = String(req.params.name)
     db.query('SELECT charityid FROM charities WHERE charity_name = ?', [name],
@@ -98,10 +98,13 @@ app.get('/api/getcharityid/:name', (req,res)=> {
         }
     })
 })
+
 app.get('/api/getarchive/:userid', (req,res)=> {
     const userid = req.params.userid
-    const sql = `SELECT charityid, charity_name, overall_score, financial_score, accountability_score, city, state, size, type1 FROM andale_db.charities `+
-                `WHERE charityid IN (SELECT charityid FROM andale_db.archive WHERE userid = ?);`
+    const sql = `SELECT charities.charityid, charity_name, overall_score, financial_score, accountability_score, city, state, size, type1, archive.figure, archive.isfavorite `+
+                `FROM andale_db.charities `+
+                `INNER JOIN andale_db.archive ON charities.charityid = archive.charityid `+
+                `WHERE charities.charityid IN (SELECT archive.charityid FROM andale_db.archive WHERE userid = ?);`
     db.query(sql, [userid],
     (err, result)=> {
         if (err) {
@@ -111,6 +114,55 @@ app.get('/api/getarchive/:userid', (req,res)=> {
         }
     })
 })
+app.get('/api/profilefavorites/:userid', (req,res) => {
+    const userid = req.params.userid
+    const sql = `SELECT charities.charityid, charities.charity_name, charities.overall_score, charities.size, charities.type1 FROM andale_db.charities `+
+    `INNER JOIN andale_db.archive ON charities.charityid = archive.charityid `+
+    `WHERE archive.userid = ? AND archive.isfavorite = true;`
+    db.query(sql, [userid], (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+app.get('/api/getfavorites/:userid', (req,res)=> {
+    const userid = req.params.userid
+    const sql = `SELECT charities.charityid, charity_name, overall_score, financial_score, accountability_score, city, state, size, type1, archive.figure, archive.isfavorite `+
+                `FROM andale_db.charities `+
+                `INNER JOIN andale_db.archive ON charities.charityid = archive.charityid `+
+                `WHERE charities.charityid IN (SELECT archive.charityid FROM andale_db.archive WHERE userid = ? AND isfavorite = true);`
+    db.query(sql, [userid],
+    (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+
+app.get('/api/getlatestarchived/:userid', (req,res)=> {
+    const userid = req.params.userid
+    const limit = req.params.limit
+    const offset = req.params.offset
+    const sql = `SELECT charities.charityid, charity_name, overall_score, financial_score, accountability_score, city, state, size, type1, archive.figure, archive.isfavorite, archive.date `+
+                `FROM andale_db.charities `+
+                `INNER JOIN andale_db.archive ON charities.charityid = archive.charityid `+
+                `WHERE charities.charityid IN (SELECT archive.charityid FROM andale_db.archive WHERE userid = ? `+
+                `ORDER BY date DESC `+
+                `LIMIT ? OFFSET ?;`
+    db.query(sql, [userid, limit, offset],
+    (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+
 app.get('/api/getfiltered/:next/:current', (req,res)=> {
     const next = Number(req.params.next)
     const current = Number(req.params.current)
@@ -125,6 +177,7 @@ app.get('/api/getfiltered/:next/:current', (req,res)=> {
         }
     })
 })
+
 app.get('/api/searchbatch/:next/:current/:query', (req,res)=> {
     const next = Number(req.params.next)
     const current = Number(req.params.current)
@@ -138,6 +191,7 @@ app.get('/api/searchbatch/:next/:current/:query', (req,res)=> {
         }
     })
 })
+
 app.get('/api/searchfiltered/:next/:current/:query', (req,res)=> {
     const next = Number(req.params.next)
     const current = Number(req.params.current)
@@ -155,7 +209,6 @@ app.get('/api/searchfiltered/:next/:current/:query', (req,res)=> {
 })
 
 // auth
-
 // check if username or email is already taken
 app.get('/api/validate', (req,res)=> {
     const email = String(req.query.email)
@@ -184,6 +237,7 @@ app.get('/api/getuser', (req,res)=> {
         }
     })
 })
+
 app.get('/api/getuserinfo', (req,res)=> {
     const userid = req.query.userid
     db.query('SELECT * FROM users WHERE userid = ?', [userid],
@@ -195,7 +249,6 @@ app.get('/api/getuserinfo', (req,res)=> {
         }
     })
 })
-
 
 app.get('/api/getbasket', (req,res)=> {
     const ownerid = req.query.userid
@@ -210,6 +263,7 @@ app.get('/api/getbasket', (req,res)=> {
         }
     })
 })
+
 app.get('/api/getbasketitem', (req,res)=> {
     const basketid = req.query.basketid
     const sql = `SELECT * FROM andale_db.basket WHERE basketid = ?;`
@@ -222,7 +276,6 @@ app.get('/api/getbasketitem', (req,res)=> {
         }
     })
 })
-
 
 app.post('/api/createuser', (req, res) => {
     const userid = req.body.userid
@@ -241,8 +294,6 @@ app.post('/api/createuser', (req, res) => {
         }
     })
 })
-
-
 
 app.post('/api/pushbasket', (req, res) => {
     const basketid = req.body.basketid
@@ -324,6 +375,53 @@ app.put('/api/updateuser', (req, res) => {
     db.query(sql,
     [username, firstname, lastname, email, bio, location, social, profilepic, public, userid],
     (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+
+app.put('/api/changearchivefigure', (req, res)=> {
+    const userid = req.body.userid
+    const charityid = req.body.charityid
+    const figure = req.body.figure
+    db.query('UPDATE andale_db.archive SET figure = ? WHERE (userid = ? AND charityid = ?);', 
+    [figure, userid, charityid],
+    (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+app.put('/api/editfavorites', (req, res) => {
+    const userid = req.body.userid
+    const favorites = req.body.favorites
+    const sql = `UPDATE andale_db.archive SET isfavorite = `+
+                `CASE `+
+                `WHEN charityid IN (?) THEN true `+
+                `ELSE false `+
+                `END `+
+                `WHERE userid = ?;`
+    db.query(sql, [favorites, userid], 
+    (err,result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+app.put('/api/archivefavorite', (req,res) => {
+    const userid = req.body.userid
+    const charityid = req.body.charityid
+    const isfavorite = req.body.isfavorite
+    db.query('UPDATE andale_db.archive SET isfavorite = ? WHERE userid = ? AND charityid = ?);', 
+    [isfavorite, userid, charityid],
+    (err, result)=> {
         if (err) {
             console.log(err)
         } else {
