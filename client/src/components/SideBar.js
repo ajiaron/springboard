@@ -46,7 +46,7 @@ export default function SideBar({}) {
         </div>
         <span className="navigation-item-container" onClick={()=>handleTest()}>
             <Link className="navigation-item" to={'#'}>
-                <BsFillSuitHeartFill className='archive-icon' style={{color:(isLoggedIn?'lightcoral':'#eee')}}/>
+                <BsFillSuitHeartFill className='archive-icon'/>
             </Link>
             <p className="navigation-item-text">
                 Archive

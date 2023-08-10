@@ -58,7 +58,7 @@ export default function Landing() {
             (signInActive!==null)&&<Signin type={signInActive} onClose={closeSignIn} onBlur={handleBlur}/>
         }
             <div className={`main-content ${!isActive?(!firstRender)?'inactive-landing-container':'dim-landing-container':(!firstRender)?'active-container':''}`}>
-                <Navbar/>
+                <Navbar route={'landing'}/>
                 <div className="content-container">
                     <div className="hero-text-container">
                         <div className="hero-header-container">

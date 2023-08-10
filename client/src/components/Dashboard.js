@@ -5,6 +5,7 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import SideBar from "./SideBar";
 import Signin from "./Signin";
+import FeedItem from "./FeedItem";
 import { BsCheck2,BsCheckLg } from 'react-icons/bs'
 import UserContext from "../contexts/UserContext";
 import { Link } from "react-router-dom";
@@ -16,51 +17,6 @@ import { FiMail } from "react-icons/fi";
 import { Auth } from 'aws-amplify'
 import axios from "axios";
 
-const RecentDonation = ({name, charity, status, caption, date, index}) => {
-    return (
-        <div className={`${index===3?'last-dashboard-item':index===0?'first-dashboard-item':'dashboard-feed-friends-item'}`}>
-        <div className="feed-friends-image-container">
-            <div className="feed-friends-image-wrapper">
-
-            </div>
-        </div>
-        <div className="feed-friends-item-info">
-            <div className="feed-item-header">    
-                <p className="feed-friends-item-title">
-                    {name} {' '}
-                </p>
-                <p className="feed-friends-item-title-alt">
-                    made a donation to 
-                </p>
-                <p className="feed-friends-item-title">
-                    {' '}{charity}
-                </p>
-            </div>
-            <div className="feed-dashboard-text-wrapper">
-                <p className="feed-dashboard-item-text">
-                    Follows you
-                </p>   
-                {   
-                    <BsCheckLg className="dashboard-check-icon"/>
-                }
-            </div>
-            {(caption.length > 0)&&
-            <div className="feed-donation-dashboard-caption">
-                <p className="feed-dashboard-item-text-alt">
-                   {caption}
-                </p>
-            </div>
-            }
-        </div>
-        <div className="feed-item-date-container">
-            <AiFillHeart className="feed-like-icon"/>
-            <p className="feed-donation-item-text-alt"> 
-                {date}
-            </p>
-        </div>
-    </div>    
-    )
-}
 export default function Dashboard() {
     const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
     const [screenWidth, setScreenWidth] = useState(window.innerWidth)
@@ -72,14 +28,10 @@ export default function Dashboard() {
     function handleTest() {
         console.log(localStorage.getItem("userid"))
         console.log(localStorage.getItem("username"))
-        console.log(localStorage.getItem("email"))
-        console.log(localStorage.getItem("firstname"))
-        console.log(localStorage.getItem("lastname"))
     }
     const handleSession = async(data) => {
         try {
             setLoading(true)
-            console.log(data)
             const res = await axios.get(`${connection}/api/getuser`, {
                 params: {
                     username:data&&data.username
@@ -164,10 +116,10 @@ export default function Dashboard() {
                     </p>
                 </div>
                  <div className="dashboard-feed-list-container">
-                    <RecentDonation name={'Henry Zheng'} charity={'American Heart Association'} status={'approved'} caption={"ballin like a pacer"} date={'34m'} index={0}/>  
-                    <RecentDonation name={'An Truong'} charity={'The Conservation Fund'} status={'approved'} caption={"🗿"} date={'2d'} index={1}/>
-                    <RecentDonation name={'Thompson Nguyen'} charity={'#TeamTrees'} status={'approved'} caption={"mr beast give me an m"} date={'1w'} index={2}/>
-                    <RecentDonation name={'Jason Damasco'} charity={'Kids In Need Foundation'} status={'approved'} caption={"smile to much they call me giddey"} date={'2w'} index={3}/>
+                    <FeedItem id = {0} name={'Henry Zheng'} username={'hzenry'} charity={'American Heart Association'} charityid={171} type={"healthcare"} status={'approved'} caption={"ballin like a pacer"} date={'34m'} index={0} route={'dashboard'}/>
+                    <FeedItem id = {0} name={'An Truong'} username={'antruong_'} charity={'The Conservation Fund'} charityid={135} type={"environment"} status={'approved'} caption={"🗿"} date={'2d'} index={1} route={'dashboard'}/>
+                    <FeedItem id = {0} name={'Thompson Nguyen'} username={'tnompson'} charity={'World Forestry Center'} charityid={96} type={"environment"} status={'approved'} caption={"mr beast give me an m"} date={'1w'} index={2} route={'dashboard'}/>
+                    <FeedItem id = {0} name={'Jason Damasco'} username={'jdason'} charity={'Kids In Need Foundation'} charityid={107} type={"education"} status={'approved'} caption={"i get bucks like milwaukee"} date={'2w'} index={3} route={'dashboard'}/>
                 </div>
             </div>
         </div>

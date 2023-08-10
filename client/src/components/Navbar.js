@@ -11,6 +11,7 @@ import './Navbar.scss'
 export default function Navbar({route, blur}) {
     const location = useLocation()
     const userid = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0
+    const firstname = localStorage.getItem("firstname")?JSON.parse(localStorage.getItem("firstname")):''
     const username = localStorage.getItem("username")?JSON.parse(localStorage.getItem("username")):''
     const [shouldBlur, setShouldBlur] = useState(false)
     const [screenWidth, setScreenWidth] = useState(window.innerWidth)
@@ -46,13 +47,15 @@ export default function Navbar({route, blur}) {
                             Springboard
                         </p> 
                     </Link>
+                    {(route !== 'landing')&&
                     <Link className={`${route==='cart'?'profile-cart-nav':'profile-nav-item'}`} to={`/${username}`}>
                         <div className={`navigation-item-alt ${route==='cart'?'cart-nav':''}`}>
                             <p className={`${route==='cart'?'cart-nav-text':'navigation-item-text-alt'}`}>
-                                {username!==null?username.charAt(0).toUpperCase():''}
+                                {firstname!==null?firstname.charAt(0).toUpperCase():''}
                             </p>
                         </div>
                     </Link>
+                    }
                 </div>
              }
              </div>
@@ -64,7 +67,7 @@ export default function Navbar({route, blur}) {
                 to={`/${username}`}>
                    <div className="settings-profile-item-alt">
                        <p className="navigation-item-text-alt settings-item-text">
-                       {username!==null?username.charAt(0).toUpperCase():''}
+                       {firstname!==null?firstname.charAt(0).toUpperCase():''}
                        </p>
                    </div>
                </Link>

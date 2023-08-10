@@ -5,16 +5,15 @@ import Footer from "./Footer";
 import CharityItem from './CharityItem'
 import SideBar from "./SideBar";
 import Favorites from "./Favorites";
-import { BsStars, BsPlusLg } from 'react-icons/bs'
+import { BsStars, BsPlusLg, BsCheckLg, BsArrowRight,BsCheck2Circle, BsCheckCircle } from 'react-icons/bs'
 import { Link, useParams, useNavigate } from "react-router-dom";
-import {BiEdit, BiEditAlt,BiPencil} from 'react-icons/bi'
-import {AiOutlineHeart, AiFillHeart, AiOutlineLink, AiOutlineEdit, AiOutlineClockCircle, AiOutlinePlus } from 'react-icons/ai'
+import {BiEdit, BiEditAlt,BiPencil,BiCheckDouble} from 'react-icons/bi'
+import {AiOutlineHeart, AiFillHeart, AiOutlineLink, AiOutlineEdit,AiFillCheckCircle, AiOutlineClockCircle, AiOutlinePlus } from 'react-icons/ai'
 import { PolarArea, Doughnut, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, RadialLinearScale, BarElement, ArcElement, Tooltip, Legend, CategoryScale, LinearScale } from "chart.js";
 import axios from "axios";
 ChartJS.register(RadialLinearScale, CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend);
 const FavoriteItem = ({charityid, charityname, value, size, type, index, onNavigate}) => {
-
     return (
         <span onClick={()=>onNavigate(charityid, charityname, type)}
             className={`profile-favorite-item-container ${type==='Human'?'hr':type==='Healthcare'?'health':
@@ -101,18 +100,20 @@ export default function Profile() {
   const {username} = useParams()
   const navigate = useNavigate()
   const id = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0
-  const name = localStorage.getItem("username")?JSON.parse(localStorage.getItem("username")):0
-  const firstname = localStorage.getItem("firstname")?JSON.parse(localStorage.getItem("firstname")):0
-  const lastname = localStorage.getItem("lastname")?JSON.parse(localStorage.getItem("lastname")):0
+  const name = localStorage.getItem("username")?JSON.parse(localStorage.getItem("username")):''
+  const firstname = localStorage.getItem("firstname")?JSON.parse(localStorage.getItem("firstname")):''
+  const lastname = localStorage.getItem("lastname")?JSON.parse(localStorage.getItem("lastname")):''
   const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
   const [loading, setLoading] = useState(true)
   const [userData, setUserData] = useState(null)
   const [hasBio, setHasBio] = useState(false)
   const [favorites, setFavorites] = useState([])
+  const [isOwner, setIsOwner] = useState(username === name)
+  const [isFollowing, setIsFollowing] = useState(false)
 
   function handleNavigate(id, name, type) {
     navigate(`/charity/${id}/${name}/${type.toLowerCase()}`)
-}
+  }
 
   useEffect(()=> {
     const loadFavorites = (id) => {
@@ -133,8 +134,9 @@ export default function Profile() {
             })
             if (res.data && res.data.length > 0) {
                 setUserData(res.data[0])
+                setIsOwner(res.data[0].userid === id)
                 setHasBio(res.data[0].bio!==null && res.data[0].bio.length > 0)
-                loadFavorites(id)
+                loadFavorites(res.data[0].userid)
             } 
             else {
                 navigate('/dashboard')
@@ -153,20 +155,39 @@ export default function Profile() {
             <div className="profile-header-container  ">
                 <div className="profile-image-wrapper">
                     <p className="profile-image-text">
-                        {`${username&&username.charAt(0).toUpperCase()}`}
+                        {`${(isOwner)?firstname.charAt(0).toUpperCase():
+                            (!loading&&userData)?userData.firstname.charAt(0).toUpperCase():''}`}
                     </p>
                 </div>
                 {(!loading && userData)&&
-                <div className={`${(hasBio)?'profile-header-wrapper-alt':'profile-header-wrapper'}`}>
-                    <p className={`${(hasBio)?'profile-header-text-alt':'profile-header-text'}`}>
+                <div className={`${(hasBio || (!isOwner && isFollowing))?'profile-header-wrapper-alt':'profile-header-wrapper'}`}>
+                    <p className={`${(hasBio || (!isOwner && isFollowing))?'profile-header-text-alt':'profile-header-text'}`}>
                         {username&&username===name?`${firstname} ${lastname}`:
                         loading?'':userData&&`${userData.firstname} ${userData.lastname}`}
                     </p>
-                    <div className={`${(hasBio)?'profile-link-container-alt':'profile-link-container'}`}>
-                        <AiOutlineLink className="link-icon"/>
-                        <p className={`${(hasBio)?'profile-header-subtext-alt':'profile-header-subtext'}`}>
-                            {`link.springboard.gift/${username?username:''}`}
-                        </p>
+                    {(isFollowing && !hasBio && !isOwner)&&
+                        <div className="profile-status-container-alt">
+                            <BsCheck2Circle className="check-icon"/>
+                            <p className={`${(hasBio || (!isOwner && isFollowing))?'profile-header-subtext-alt':'profile-header-subtext'}`}>
+                                {`Follows you`}
+                            </p>
+                        </div>
+                    }
+                    <div className="profile-header-subcontent">
+                        <div className={`${(hasBio || (!isOwner && isFollowing))?'profile-link-container-alt':'profile-link-container'}`}>
+                            <AiOutlineLink className="link-icon"/>
+                            <p className={`${(hasBio || (!isOwner && isFollowing))?'profile-header-subtext-alt':'profile-header-subtext'}`}>
+                                {`link.springboard.gift/${username?username:''}`}
+                            </p>
+                        </div>
+                        {(isFollowing && hasBio && !isOwner)&&
+                        <div className="profile-status-container-alt">
+                            <BsCheck2Circle className="check-icon"/>
+                            <p className={`${(hasBio || (!isOwner && isFollowing))?'profile-header-subtext-alt':'profile-header-subtext'}`}>
+                                {`Follows you`}
+                            </p>
+                        </div>
+                        }
                     </div>
                     {(hasBio)&&
                     <div className="profile-bio-container">
@@ -176,28 +197,32 @@ export default function Profile() {
                         </p>
                     </div>
                     }
-          
                 </div>
                 }
-                  <span className='profile-follow-button'>
-                        <div className="profile-follow-link-button">
-                            <p className="profile-follow-text">
+                {(!isOwner && !loading)&&
+                  <span className={`profile-follow-button follow-inactive`}>
+                        <div className={`profile-following-link-button`}>
+                            <p className="profile-follow-text-alt">
                                 {
-                                  "Follow"
+                                  "Following"
                                 }
                             </p>
-                            <AiOutlinePlus className="profile-follow-icon"/>
+                            {/*
+                            <AiOutlinePlus className={`profile-following-icon`}/>
+                            */ }
+                            <BsCheckLg className={`profile-following-icon`}/>
                         </div>
-                      </span>
+                    </span>
+                }
             </div>
 
             <div className="manage-profile-container">
                 <div className="manage-header-container">
                     <p className="manage-header-text">
-                        Manage profile
+                        {`${(!isOwner)?'Profile Details':'Manage profile'}`}
                     </p>
                     <p className="manage-header-subtext">
-                        Update your account preferences here.
+                        {(!isOwner)?`View ${userData&&userData.firstname}'s recent activity and favorites.` :`Update your account preferences here.`}
                     </p>
                 </div>
             </div>
@@ -210,16 +235,26 @@ export default function Profile() {
             <>
             <div className="profile-favorites-wrapper">
                  <div className="donation-details-container">
-                        <p className="donation-details-text">
-                            Favorite Charities
-                        </p>
+                    <p className="donation-details-text">
+                        Favorite Charities
+                    </p>
+                    <div style={{display:"flex", alignItems:"center", justifyContent:"flex-start", gap:'.5em'}}>
                         <p className="donation-details-subtext">
                             Your collection of charities to be displayed on your profile.
                         </p>
+                        {(isOwner)&&
+                        <Link to={`/archive`}
+                        style={{textDecoration:"none", display:"flex",justifyContent:"flex-start", gap:".35em"}}>
+                            <p className="donation-details-subtext" style={{fontWeight:"600"}}>
+                                Add Favorites
+                            </p>
+                            <BsArrowRight style={{color:"#ababab", alignSelf:"flex-end", transform:"translateY(-.04em) "}}/>
+                        </Link>
+                        }
+                    </div>
                 </div>
-                <div className="profile-favorites-container">
-     
-                    
+                {(favorites && favorites.length > 0)&&
+                <div className="profile-favorites-container"> 
                     <div className="subcontent-profile-container">
                         {(favorites)&&
                             favorites.map((item, index) => (
@@ -228,18 +263,20 @@ export default function Profile() {
                             ))
                         }
                     </div>
-                   
                 </div>
+                }
             </div>
        
-            <div className="account-container">
-                <div className="account-donations-container">
+            <div className="account-container" style={{marginTop:(favorites&&favorites.length>0)?'0':'1.125em'}}>
+                <div className="account-donations-container"
+                style={{paddingLeft:(favorites&&favorites.length>0)?'0.2em':'0'}}>
                     <div className="donation-details-container">
                         <p className="donation-details-text">
                             Recent Donations
                         </p>
                         <p className="donation-details-subtext">
                             View your latest donations and pledges here.
+                   
                         </p>
                     </div>
 
@@ -252,7 +289,7 @@ export default function Profile() {
                     </div>
                 </div>
                 <div className="account-friends-container">
-                    <div className="donation-details-container">
+                    <div className="donation-details-container" >
                         <p className="donation-details-text">
                             Followers List
                         </p>

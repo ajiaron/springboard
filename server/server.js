@@ -30,7 +30,45 @@ app.get('/paypal/:description/:value', (req, res) => {
     res.render('paypal', { description, value }); // pass them into the view
 });
 */
-  
+app.get('/api/getusers', (req, res) => {
+    db.query('SELECT * FROM users', (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+app.get('/api/getuserlist/:next/:current', (req, res) => {
+    const next = Number(req.params.next)
+    const current = Number(req.params.current)
+    db.query('SELECT * FROM users LIMIT ? OFFSET ?', [next, current], (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+
+app.get('/api/searchuserlist/:next/:current/:query', (req, res) => {
+    const next = Number(req.params.next)
+    const current = Number(req.params.current)
+    const query = String(req.params.query)
+    const sql = `SELECT * FROM users WHERE (username LIKE ? OR `+
+    `firstname LIKE ? OR lastname LIKE ? OR CONCAT(firstname, ' ', lastname) LIKE ?) `+
+    `LIMIT ? OFFSET ?;`
+    db.query(sql, 
+    [`%${query}%`,`%${query}%`,`%${query}%`,`%${query}%`, next, current], (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+
+
 app.get('/api/getitems', (req,res)=> {
     db.query('SELECT * FROM charities', (err, result)=> {
         if (err) {

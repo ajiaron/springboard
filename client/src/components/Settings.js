@@ -27,7 +27,7 @@ const ToggleSwitch = ({label, value, onToggle}) => {
           <div className="settings-switch-container">
             <div className="settings-toggle-switch">
               <input type="checkbox" className="checkbox" onChange={()=>handleClick()} 
-                name={label} id={label} checked={isToggled}
+                name={label} id={label} checked={value}
              />
               <label className="settings-label" htmlFor={label}>
                 <span className="settings-inner" />
@@ -58,7 +58,7 @@ export default function Settings() {
     const [social, setSocial] = useState('')
     const [email, setEmail] = useState(localStorage.getItem("email")?JSON.parse(localStorage.getItem("email")):'')
     const [bio, setBio] = useState('')
-    const [isPublic, setIsPublic] = useState(true)
+    const [isPublic, setIsPublic] = useState(false)
     const [notifications, setNotifications] = useState(false)
     const [isUpdating, setIsUpdating] = useState(false)
     function handleTest() {
@@ -117,6 +117,7 @@ export default function Settings() {
                         setSocial(res.data[0].social!==null?res.data[0].social:'')
                         setLocation(res.data[0].location!==null?res.data[0].location:'')
                         setEmail(res.data[0].email!==null?res.data[0].email:'')
+                        setIsPublic(res.data[0].public===1?true:false)
                     }
                     else {
                         console.log("couldnt do it")
@@ -129,11 +130,13 @@ export default function Settings() {
         loadSettings()
         setLoading(false)
     }, [])
-    useEffect(()=> {
+    useEffect(()=> {  // refactor 
         if (userData&&((nickname.length>0 && nickname !== userData.username) || userData.email !== email ||
             userData.firstname !== firstName || userData.lastname !== lastName ||
-            (userData.bio !== bio) || (userData.location !== location)||
-            (userData.social !== social)|| userData.profilepic !== profilepic ||
+            ((userData.bio !== bio && bio.length > 0) || (userData.bio !==null && userData.bio.length > 0 && bio === '')) ||
+            ((userData.location !== location && location.length > 0) || (userData.location !== null && userData.location.length > 0 && location === ''))||
+            ((userData.social !== social && social.length > 0)||(userData.social !== null && userData.location.length > 0 && social === ''))||
+             userData.profilepic !== profilepic ||
             userData.public != isPublic)) {
                 setShouldUpdate(true)
         }
@@ -149,7 +152,7 @@ export default function Settings() {
                 <div className="settings-header-container ">
                     <div className="settings-image-wrapper">
                         <p className="settings-image-text">
-                            {name?name.charAt(0).toUpperCase():''}
+                            {firstName?firstName.charAt(0).toUpperCase():''}
                         </p>
                     </div>
                     
@@ -170,7 +173,7 @@ export default function Settings() {
                         {`${(isUpdating)?'Please wait...':'Save Changes'}`}
                     </span>
                     }
-                    <span className="logout-container" onClick={()=>handleTest()}>
+                    <span className="logout-container" onClick={()=>handleSignOut()}>
                         Logout
                     </span>
                 </div>
@@ -240,7 +243,7 @@ export default function Settings() {
                                 <p className='catalog-category-text'>
                                     Public Account
                                 </p>
-                                <ToggleSwitch label={'Public'} value={true} onToggle={()=>setIsPublic(!isPublic)}/>
+                                <ToggleSwitch label={'Public'} value={isPublic} onToggle={()=>setIsPublic(!isPublic)}/>
                             </div>
                             <div className='settings-public-wrapper'>
                                 <p className='catalog-category-text'>

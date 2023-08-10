@@ -23,7 +23,22 @@
  //   background-color: rgba(70, 131, 180, 0.208) ;
 }
 
-
+.feed-item-link {
+    text-decoration: none;
+    transition: all .2s linear;
+}
+.feed-image-link {
+    text-decoration: none;
+    border-radius: 3.25em;
+    transition: all .2s linear;
+}
+.feed-image-link:hover {
+   // transform: scale(1.05);
+    box-shadow: 0px 0px 0px 3.5px rgba(80,80,80,0.3);
+}
+.feed-item-link:hover {
+    filter: brightness(1.2);
+}
 .feed-header-container {
     display: flex;
     flex-direction: row;
@@ -127,7 +142,23 @@
     border-radius: 3.25em;
     align-self: center;
     background-color: #2e2e2e;
+    display: flex;
+    align-items: center;
+    vertical-align: middle;
+    text-align: center;
+    justify-content: center;
+
 }
+.feed-item-text-alt {
+    font-size:clamp(10px,3.25em,26px);
+    color:#eee;
+    font-weight: 400;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: normal;
+    align-self: center;
+    font-family: 'Rubik';
+  }
 .feed-friends-item-info {
     height: 100%;
     width: 100%;
@@ -155,6 +186,7 @@
     -webkit-line-clamp: 1;
     line-clamp: 1; 
     -webkit-box-orient: vertical;
+    transition: all .15s linear;
 }
 .feed-friends-item-title-alt {
     font-size: clamp(8px, 3vw, 16px);
@@ -162,6 +194,7 @@
     font-family: 'Inter';
     line-height: 22px;
     font-weight: 500;
+    transition: all .15s linear;
     display: -webkit-box;
     padding-right: .125em;
     padding-left:.125em;

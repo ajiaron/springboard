@@ -99,6 +99,8 @@ export default function Archive() {
     const [updateFavorite, setUpdateFavorite] = useState(false)
     const [favorites, setFavorites] = useState([])
     const userid = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0
+    const name = localStorage.getItem("firstname")?JSON.parse(localStorage.getItem("firstname")):'none'
+    const username = localStorage.getItem("username")?JSON.parse(localStorage.getItem("username")):'none'
     const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
     const [charityData, setCharityData] = useState()
     const [removeFavorite, setRemoveFavorite] = useState(0)
@@ -181,7 +183,7 @@ export default function Archive() {
                     <div className="settings-header-container">
                         <div className="settings-image-wrapper">
                             <p className="settings-image-text">
-                                A
+                                {name.charAt(0).toUpperCase()}
                             </p>
                         </div>
                         <div className="settings-header-wrapper">
@@ -191,7 +193,7 @@ export default function Archive() {
                             <div className="settings-link-container">
                                 <AiOutlineLink className="link-icon"/>
                                 <p className="settings-header-subtext">
-                                    link.springboard.app/aaronjiang/archive
+                                    {`link.springboard.app/${username}`}
                                 </p>
                             </div>
                         </div>
