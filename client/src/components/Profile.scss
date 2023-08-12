@@ -815,7 +815,7 @@
     min-height: 2.75em;
     width: 100%;
     border-radius: 24px;
-    gap:.875em;
+    gap:1em;
  //   padding-left: 1em;
     padding-right: 1em;
     display: flex;
@@ -828,7 +828,7 @@
     min-height: 2.75em;
     width: 100%;
     border-radius: 24px;
-    gap:.875em;
+    gap:1em;
  //   padding-left: 1em;
     padding-right: 1.125em;
     display: flex;
@@ -839,7 +839,7 @@
 .profile-follow-text {
     margin-left: auto;
    // margin-right:auto;
-    font-size: clamp(10px, 3vw, 17.5px);
+    font-size: clamp(10px, 3vw, 17px);
     font-family: "Rubik";
     transform: translateY(.025em);
     font-weight: 00;
@@ -853,7 +853,7 @@
 .profile-follow-text-alt {
     margin-left: auto;
     // margin-right:auto;
-     font-size: clamp(10px, 3vw, 17.5px);
+     font-size: clamp(10px, 3vw, 17px);
      font-family: "Rubik";
     // transform: translateY(.025em);
      font-weight: 00;

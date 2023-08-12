@@ -240,7 +240,7 @@ export default function Profile() {
                     </p>
                     <div style={{display:"flex", alignItems:"center", justifyContent:"flex-start", gap:'.5em'}}>
                         <p className="donation-details-subtext">
-                            Your collection of charities to be displayed on your profile.
+                            {(isOwner)? 'Your ':`${userData&&userData.firstname}'s `}collection of charities to be displayed on your profile.
                         </p>
                         {(isOwner)&&
                         <Link to={`/archive`}

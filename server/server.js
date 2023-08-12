@@ -50,6 +50,29 @@ app.get('/api/getuserlist/:next/:current', (req, res) => {
         }
     })
 })
+app.get('/api/getuserslist/:next/:current', (req, res) => {
+    const next = Number(req.params.next)
+    const current = Number(req.params.current)
+    const userid = req.query.userid
+    const sql = `SELECT users.*, CASE `+
+    `WHEN ? IN (SELECT requesterid FROM andale_db.followers WHERE recipientid = users.userid AND approved = true) THEN 'following' `+
+    `WHEN ? IN (SELECT requesterid FROM andale_db.followers WHERE recipientid = users.userid AND approved = false) THEN 'pending' `+
+    `ELSE "not following" `+
+    `END as isfollowing, `+
+    `CASE `+
+    `WHEN ? IN (SELECT recipientid FROM andale_db.followers WHERE requesterid = users.userid AND approved = true) THEN 'following' `+
+    `WHEN ? IN (SELECT recipientid FROM andale_db.followers WHERE requesterid = users.userid AND approved = false) THEN 'pending' `+
+    `ELSE "not following" `+
+    `END as isfollower `+
+    `FROM andale_db.users LIMIT ? OFFSET ?`
+    db.query(sql, [userid, userid, userid, userid, next, current], (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
 
 app.get('/api/searchuserlist/:next/:current/:query', (req, res) => {
     const next = Number(req.params.next)
@@ -67,7 +90,32 @@ app.get('/api/searchuserlist/:next/:current/:query', (req, res) => {
         }
     })
 })
-
+app.get('/api/searchuserslist/:next/:current', (req, res) => {
+    const next = Number(req.params.next)
+    const current = Number(req.params.current)
+    const query = String(req.params.query)
+    const userid = req.query.userid
+    const sql = `SELECT users.*, CASE `+
+    `WHEN ? IN (SELECT requesterid FROM andale_db.followers WHERE recipientid = users.userid AND approved = true) THEN 'following' `+
+    `WHEN ? IN (SELECT requesterid FROM andale_db.followers WHERE recipientid = users.userid AND approved = false) THEN 'pending' `+
+    `ELSE "not following" `+
+    `END as isfollowing, `+
+    `CASE `+
+    `WHEN ? IN (SELECT recipientid FROM andale_db.followers WHERE requesterid = users.userid AND approved = true) THEN 'following' `+
+    `WHEN ? IN (SELECT recipientid FROM andale_db.followers WHERE requesterid = users.userid AND approved = false) THEN 'pending' `+
+    `ELSE "not following" `+
+    `END as isfollower `+
+    `FROM andale_db.users `+
+    `WHERE (username LIKE ? OR firstname LIKE ? OR lastname LIKE ? OR CONCAT(firstname, ' ', lastname) LIKE ?) `+
+    `LIMIT ? OFFSET ?`
+    db.query(sql, [userid, userid, userid, userid,`%${query}%`,`%${query}%`,`%${query}%`,`%${query}%`,next, current], (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
 
 app.get('/api/getitems', (req,res)=> {
     db.query('SELECT * FROM charities', (err, result)=> {
@@ -275,7 +323,30 @@ app.get('/api/getuser', (req,res)=> {
         }
     })
 })
-
+app.get('/api/getfollowstatus', (req, res)=> {
+    const requesterid = req.query.requesterid
+    const recipientid = req.query.recipientid
+    const sql = `SELECT CASE `+
+    `WHEN ? IN (SELECT requesterid FROM andale_db.followers WHERE recipientid = ? AND approved = true) THEN 'following' `+
+    `WHEN ? IN (SELECT requesterid FROM andale_db.followers WHERE recipientid = ? AND approved = false) THEN 'pending' `+
+    `ELSE "not following" `+
+    `END as isfollowing, `+
+    `CASE `+
+    `WHEN ? IN (SELECT recipientid FROM andale_db.followers WHERE requesterid = ? AND approved = true) THEN 'following' `+
+    `WHEN ? IN (SELECT recipientid FROM andale_db.followers WHERE requesterid = ? AND approved = false) THEN 'pending' `+
+    `ELSE "not following" `+
+    `END as isfollower `+
+    `FROM andale_db.users WHERE userid = ?`
+    db.query(sql, 
+    [requesterid, recipientid, requesterid, recipientid, requesterid, recipientid, requesterid, recipientid, recipientid],
+    (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
 app.get('/api/getuserinfo', (req,res)=> {
     const userid = req.query.userid
     db.query('SELECT * FROM users WHERE userid = ?', [userid],
@@ -312,6 +383,209 @@ app.get('/api/getbasketitem', (req,res)=> {
         } else {
             res.send(result)
         }
+    })
+})
+
+app.get('/api/getfollowers/:next/:current', (req, res)=> {
+    const userid = req.query.userid
+    const next = Number(req.params.next)
+    const current = Number(req.params.current)
+    const sql = `SELECT users.userid, users.username, users.firstname, users.lastname, users.profilepic, users.public, users.email, users.bio, `+
+                `followers.idrequest, followers.approved, followers.date, CASE`+
+                `WHEN ? IN (SELECT requesterid FROM andale_db.followers WHERE recipientid = users.userid AND approved = true) THEN 'following' `+
+                `WHEN ? IN (SELECT requesterid FROM andale_db.followers WHERE recipientid = users.userid AND approved = false) THEN 'pending' `+
+                `ELSE "not following" `+
+                `END as isfollowing, `+
+                `CASE `+
+                `WHEN ? IN (SELECT recipientid FROM andale_db.followers WHERE requesterid = users.userid AND approved = true) THEN 'following' `+
+                `WHEN ? IN (SELECT recipientid FROM andale_db.followers WHERE requesterid = users.userid AND approved = false) THEN 'pending' `+
+                `ELSE "not following" `+
+                `END as isfollower `+
+                `FROM andale_db.users `+
+                `INNER JOIN andale_db.followers ON followers.requesterid = users.userid `+
+                `WHERE (followers.recipientid = ? AND approved = true) `+
+                `ORDER BY followers.date DESC `+
+                `LIMIT ? OFFSET ?`
+    db.query(sql, [userid, userid, userid, userid, userid,next, current], 
+    (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+app.get('/api/searchfollowers/:next/:current/:query', (req, res)=> {
+    const userid = req.query.userid
+    const next = Number(req.params.next)
+    const current = Number(req.params.current)
+    const query = String(req.params.query)
+    const sql = `SELECT users.userid, users.username, users.firstname, users.lastname, users.profilepic, users.public, users.email, users.bio, `+
+                `followers.idrequest, followers.approved, followers.date, CASE `+
+                `WHEN ? IN (SELECT requesterid FROM andale_db.followers WHERE recipientid = users.userid AND approved = true) THEN 'following' `+
+                `WHEN ? IN (SELECT requesterid FROM andale_db.followers WHERE recipientid = users.userid AND approved = false) THEN 'pending' `+
+                `ELSE "not following" `+
+                `END as isfollowing, `+
+                `CASE `+
+                `WHEN ? IN (SELECT recipientid FROM andale_db.followers WHERE requesterid = users.userid AND approved = true) THEN 'following' `+
+                `WHEN ? IN (SELECT recipientid FROM andale_db.followers WHERE requesterid = users.userid AND approved = false) THEN 'pending' `+
+                `ELSE "not following" `+
+                `END as isfollower `+
+                `FROM andale_db.users  `+
+                `INNER JOIN andale_db.followers ON followers.requesterid = users.userid `+
+                `WHERE (followers.recipientid = ? AND approved = true AND `+
+                `(username LIKE ? OR firstname LIKE ? OR lastname LIKE ? OR CONCAT(firstname, ' ', lastname) LIKE ?)) `+
+                `ORDER BY followers.date DESC `+
+                `LIMIT ? OFFSET ?`
+    db.query(sql, [userid, userid, userid, userid, userid, `%${query}%`, `%${query}%`, `%${query}%`, `%${query}%`, next, current], 
+    (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+
+
+app.get('/api/getfollowing/:next/:current', (req, res)=> {
+    const userid = req.query.userid
+    const next = Number(req.params.next)
+    const current = Number(req.params.current)
+    const sql = `SELECT users.userid, users.username, users.firstname, users.lastname, users.profilepic, users.public, users.email, users.bio, `+
+                `followers.idrequest, followers.approved, followers.date, CASE `+
+                `WHEN ? IN (SELECT requesterid FROM andale_db.followers WHERE recipientid = users.userid AND approved = true) THEN 'following' `+
+                `WHEN ? IN (SELECT requesterid FROM andale_db.followers WHERE recipientid = users.userid AND approved = false) THEN 'pending' `+
+                `ELSE "not following" `+
+                `END as isfollowing, `+
+                `CASE `+
+                `WHEN ? IN (SELECT recipientid FROM andale_db.followers WHERE requesterid = users.userid AND approved = true) THEN 'following' `+
+                `WHEN ? IN (SELECT recipientid FROM andale_db.followers WHERE requesterid = users.userid AND approved = false) THEN 'pending' `+
+                `ELSE "not following" `+
+                `END as isfollower `+
+                `FROM andale_db.users `+
+                `INNER JOIN andale_db.followers ON followers.recipientid = users.userid `+
+                `WHERE (followers.requesterid = ? AND approved = true) `+
+                `ORDER BY followers.date DESC `+
+                `LIMIT ? OFFSET ?`
+    db.query(sql, [userid, userid, userid, userid, userid, next, current], 
+    (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+app.get('/api/searchfollowing/:next/:current/:query', (req, res)=> {
+    const userid = req.query.userid
+    const next = Number(req.params.next)
+    const current = Number(req.params.current)
+    const query = String(req.params.query)
+    const sql = `SELECT users.userid, users.username, users.firstname, users.lastname, users.profilepic, users.public, users.email, users.bio, `+
+                `followers.idrequest, followers.approved, followers.date, CASE `+
+                `WHEN ? IN (SELECT requesterid FROM andale_db.followers WHERE recipientid = users.userid AND approved = true) THEN 'following' `+
+                `WHEN ? IN (SELECT requesterid FROM andale_db.followers WHERE recipientid = users.userid AND approved = false) THEN 'pending' `+
+                `ELSE "not following" `+
+                `END as isfollowing, `+
+                `CASE `+
+                `WHEN ? IN (SELECT recipientid FROM andale_db.followers WHERE requesterid = users.userid AND approved = true) THEN 'following' `+
+                `WHEN ? IN (SELECT recipientid FROM andale_db.followers WHERE requesterid = users.userid AND approved = false) THEN 'pending' `+
+                `ELSE "not following" `+
+                `END as isfollower `+
+                `FROM andale_db.users  `+
+                `INNER JOIN andale_db.followers ON followers.recipientid = users.userid `+
+                `WHERE (followers.requesterid = ? AND approved = true AND `+
+                `(username LIKE ? OR firstname LIKE ? OR lastname LIKE ? OR CONCAT(firstname, ' ', lastname) LIKE ?)) `+
+                `ORDER BY followers.date DESC `+
+                `LIMIT ? OFFSET ?`
+    db.query(sql, [userid, userid, userid, userid, userid `%${query}%`,`%${query}%`,`%${query}%`,`%${query}%`, next, current], 
+    (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+
+app.get('/api/getfollowrequests/:next/:current', (req, res)=> {
+    const userid = req.query.userid
+    const next = Number(req.params.next)
+    const current = Number(req.params.current)
+    const sql = `SELECT users.userid, users.username, users.firstname, users.lastname, users.profilepic, users.public, users.email, users.bio, `+
+                `followers.idrequest, followers.approved, followers.date, CASE `+
+                `WHEN ? IN (SELECT requesterid FROM andale_db.followers WHERE recipientid = users.userid AND approved = true) THEN 'following' `+
+                `WHEN ? IN (SELECT requesterid FROM andale_db.followers WHERE recipientid = users.userid AND approved = false) THEN 'pending' `+
+                `ELSE "not following" `+
+                `END as isfollowing, `+
+                `CASE `+
+                `WHEN ? IN (SELECT recipientid FROM andale_db.followers WHERE requesterid = users.userid AND approved = true) THEN 'following' `+
+                `WHEN ? IN (SELECT recipientid FROM andale_db.followers WHERE requesterid = users.userid AND approved = false) THEN 'pending' `+
+                `ELSE "not following" `+
+                `END as isfollower `+
+                `FROM andale_db.users  `+
+                `INNER JOIN andale_db.followers ON followers.requesterid = users.userid `+
+                `WHERE (followers.recipientid = ? AND approved = false) `+
+                `ORDER BY followers.date DESC `+
+                `LIMIT ? OFFSET ?`
+    db.query(sql, [userid, userid, userid, userid, userid, next, current], 
+    (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+app.get('/api/searchfollowrequests/:next/:current/:query', (req, res)=> {
+    const userid = req.query.userid
+    const next = Number(req.params.next)
+    const current = Number(req.params.current)
+    const query = String(req.params.query)
+    const sql = `SELECT users.userid, users.username, users.firstname, users.lastname, users.profilepic, users.public, users.email, users.bio, `+
+                `followers.idrequest, followers.approved, followers.date, CASE `+
+                `WHEN ? IN (SELECT requesterid FROM andale_db.followers WHERE recipientid = users.userid AND approved = true) THEN 'following' `+
+                `WHEN ? IN (SELECT requesterid FROM andale_db.followers WHERE recipientid = users.userid AND approved = false) THEN 'pending' `+
+                `ELSE "not following" `+
+                `END as isfollowing, `+
+                `CASE `+
+                `WHEN ? IN (SELECT recipientid FROM andale_db.followers WHERE requesterid = users.userid AND approved = true) THEN 'following' `+
+                `WHEN ? IN (SELECT recipientid FROM andale_db.followers WHERE requesterid = users.userid AND approved = false) THEN 'pending' `+
+                `ELSE "not following" `+
+                `END as isfollower `+
+                `FROM andale_db.users `+
+                `INNER JOIN andale_db.followers ON followers.requesterid = users.userid `+
+                `WHERE (followers.recipientid = ? AND approved = false AND `+
+                `(username LIKE ? OR firstname LIKE ? OR lastname LIKE ? OR CONCAT(firstname, ' ', lastname) LIKE ?)) `+
+                `ORDER BY followers.date DESC `+
+                `LIMIT ? OFFSET ?`
+    db.query(sql, [userid, userid, userid, userid, userid, `%${query}%`,`%${query}%`,`%${query}%`,`%${query}%`, next, current], 
+    (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+
+
+app.post('/api/followrequest', (req, res) => {
+    const idrequest = req.body.idrequest
+    const requesterid = req.body.requesterid
+    const recipientid = req.body.recipientid
+    const sql = `INSERT INTO andale_db.followers (idrequest, requesterid, recipientid, approved)  `+
+                `VALUES (?,?,?, `+
+                `(CASE `+
+                `WHEN (SELECT public FROM andale_db.users WHERE userid = ?) = true THEN true ELSE false `+
+                `END));`
+    db.query(sql, [idrequest, requesterid, recipientid, recipientid], (err, result) => {
+        if(err) {
+            console.log(err)
+        } else {
+            res.send("user successfully registered")
+        }   
     })
 })
 
@@ -363,6 +637,19 @@ app.post('/api/addarchive', (req, res) => {
             console.log(err)
         } else {
             res.send("succ")
+        }
+    })
+})
+
+app.put('/api/acceptrequest', (req, res) => {     
+    const recipientid = req.body.recipientid
+    const requesterid = req.body.requesterid
+    db.query('UPDATE andale_db.followers SET approved = true WHERE recipientid = ? AND requesterid = ?', [recipientid, requesterid],
+    (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
         }
     })
 })
@@ -514,6 +801,29 @@ app.delete('/api/clearbasket', (req, res) => {
     })
 })
 
+app.delete('/api/removerequest', (req, res) => {
+    const recipientid = req.body.recipientid
+    const requesterid = req.body.requesterid
+    db.query("DELETE FROM andale_db.followers WHERE recipientid = ? AND requesterid = ?;", 
+    [recipientid, requesterid], (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send('members cleared')
+        }
+    })
+})
+app.delete('/api/removeaccountrequests', (req, res) => {
+    const userid = req.body.userid
+    db.query("DELETE FROM andale_db.followers WHERE recipientid = ? OR requesterid = ?;", 
+    [userid], (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send('members cleared')
+        }
+    })
+})
 //app.get('*', (req, res) => {
 //    res.sendFile(path.join(__dirname, '../client/build/index.html'));
 //  });
