@@ -5,6 +5,8 @@ import Footer from "./Footer";
 import CharityItem from './CharityItem'
 import SideBar from "./SideBar";
 import Favorites from "./Favorites";
+import { v4 as uuidv4 } from 'uuid';
+import {LiaTimesSolid} from 'react-icons/lia'
 import { BsStars, BsPlusLg, BsCheckLg, BsArrowRight,BsCheck2Circle, BsCheckCircle } from 'react-icons/bs'
 import { Link, useParams, useNavigate } from "react-router-dom";
 import {BiEdit, BiEditAlt,BiPencil,BiCheckDouble} from 'react-icons/bi'
@@ -74,22 +76,30 @@ const DonationItem = ({name, type, index}) => {
     </div>
     )
 }
-const FriendsItem = ({name, status}) => {
+const FriendsItem = ({name, username, status, onNavigate}) => {
     return (
     <div className="profile-friends-item">
         <div className="profile-friends-image-container">
-            <div className="profile-friends-image-wrapper">
-
-            </div>
+            <span className="profile-friends-image-wrapper" onClick={()=>onNavigate(username)}>
+                <p className="profile-page-item-text-alt">
+                    {name&&name.charAt(0).toUpperCase()}
+                </p>
+            </span>
         </div>
         <div className="profile-friends-item-info">
-            <p className="profile-friends-item-title">
-                {name}
-            </p>
+            <span onClick={()=>onNavigate(username)}>
+                <p className="profile-friends-item-title">
+                    {name}
+                </p>
+            </span>
+   
             <div className="profile-friends-text-wrapper">
-                <p className="profile-donation-item-text">
-                    Follows you
-                </p>   
+                <span onClick={()=>onNavigate(username)}>
+                    <p className="profile-donation-item-text">
+                        {`@${username}`}
+                    </p>  
+                </span>
+ 
             </div>
         </div>
     </div>
@@ -109,38 +119,106 @@ export default function Profile() {
   const [hasBio, setHasBio] = useState(false)
   const [favorites, setFavorites] = useState([])
   const [isOwner, setIsOwner] = useState(username === name)
+  const [isFollower, setIsFollower] = useState(false)
   const [isFollowing, setIsFollowing] = useState(false)
-
+  const [isHovered, setIsHovered] = useState(false)
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
   function handleNavigate(id, name, type) {
     navigate(`/charity/${id}/${name}/${type.toLowerCase()}`)
   }
-
+  function navigateProfile(name) {
+    navigate(`/${name}`)
+  }
+  const handleRequest = async() => {
+    const idrequest = uuidv4()
+    try {
+        const res = await axios.post(`${connection}/api/followrequest`,
+        {idrequest:idrequest, requesterid:id, recipientid:userData&&userData.userid})
+        if (res.data) {
+            console.log("successfully followed user")
+            setIsFollowing(userData&&userData.public?"following":"pending")
+        }
+    } catch(e) {
+        console.log(e)
+    }
+}
+const confirmRequest = async() => {
+    try {
+        const res = await axios.put(`${connection}/api/acceptrequest`, 
+        {recipientid:id, requesterid:userData&&userData.userid})
+        if (res.data) {
+            console.log("successfully confirmed request")
+            setIsFollower("following")
+        }
+    } catch(e) {
+        console.log(e)
+    }
+}
+const removeRequest = async(recipientid, requesterid) => {
+    try {
+        const res = await axios.delete(`${connection}/api/removerequest`,
+        {data: {recipientid:recipientid, requesterid:requesterid}})
+        if (res.data) {
+            console.log("successfully canceled request")
+            setIsFollowing("not following")
+        }
+    } catch(e) {
+        console.log(e)
+    }
+}
   useEffect(()=> {
     const loadFavorites = (id) => {
         axios.get(`${connection}/api/getfavorites/${id}`)
         .then((res)=> {
             setLoading(false)
-            setFavorites(res.data)
+            setFavorites(res.data.slice(0,4))
         })
         .catch((e)=>console.log(e))
     }
     const loadUser = async() => {
         setLoading(true)
         try {
-            const res = await axios.get(`${connection}/api/getuser`,{
-                params: {
-                    username:username?username:'default'
+            if (isOwner) {
+                const res = await axios.get(`${connection}/api/getuser`,{
+                    params: {
+                        username:username?username:'default'
+                    }
+                })
+                if (res.data && res.data.length > 0) {
+                    setUserData(res.data[0])
+                    setIsOwner(res.data[0].userid === id)
+                    setHasBio(res.data[0].bio!==null && res.data[0].bio.length > 0)
+                    loadFavorites(res.data[0].userid)
+                } 
+                else {
+                    navigate('/dashboard')
                 }
-            })
-            if (res.data && res.data.length > 0) {
-                setUserData(res.data[0])
-                setIsOwner(res.data[0].userid === id)
-                setHasBio(res.data[0].bio!==null && res.data[0].bio.length > 0)
-                loadFavorites(res.data[0].userid)
-            } 
-            else {
-                navigate('/dashboard')
             }
+            else {
+                const res = await axios.get(`${connection}/api/getprofile`,{
+                    params: {
+                        userid:id,
+                        username:username?username:'default'
+                    }
+                })
+                if (res.data && res.data.length > 0) {
+                    setUserData(res.data[0])
+                    setIsFollower(res.data[0].isfollower)
+                    setIsFollowing(res.data[0].isfollowing)
+                    setIsOwner(res.data[0].userid === id)
+                    setHasBio(res.data[0].bio!==null && res.data[0].bio.length > 0)
+                    loadFavorites(res.data[0].userid)
+                } 
+                else {
+                    navigate('/dashboard')
+                }
+            }
+     
         } catch(e) {
             console.log(e)
         }
@@ -160,30 +238,30 @@ export default function Profile() {
                     </p>
                 </div>
                 {(!loading && userData)&&
-                <div className={`${(hasBio || (!isOwner && isFollowing))?'profile-header-wrapper-alt':'profile-header-wrapper'}`}>
-                    <p className={`${(hasBio || (!isOwner && isFollowing))?'profile-header-text-alt':'profile-header-text'}`}>
+                <div className={`${(hasBio || (!isOwner && (userData&&isFollower==="following")))?'profile-header-wrapper-alt':'profile-header-wrapper'}`}>
+                    <p className={`${(hasBio || (!isOwner && (userData&&isFollower==="following")))?'profile-header-text-alt':'profile-header-text'}`}>
                         {username&&username===name?`${firstname} ${lastname}`:
                         loading?'':userData&&`${userData.firstname} ${userData.lastname}`}
                     </p>
-                    {(isFollowing && !hasBio && !isOwner)&&
+                    {((userData&&isFollower==='following') && !hasBio && !isOwner)&&
                         <div className="profile-status-container-alt">
                             <BsCheck2Circle className="check-icon"/>
-                            <p className={`${(hasBio || (!isOwner && isFollowing))?'profile-header-subtext-alt':'profile-header-subtext'}`}>
+                            <p className={`${(hasBio || (!isOwner && (userData&&isFollower==='following')))?'profile-header-subtext-alt':'profile-header-subtext'}`}>
                                 {`Follows you`}
                             </p>
                         </div>
                     }
                     <div className="profile-header-subcontent">
-                        <div className={`${(hasBio || (!isOwner && isFollowing))?'profile-link-container-alt':'profile-link-container'}`}>
+                        <div className={`${(hasBio || (!isOwner && (userData&&isFollower==='following')))?'profile-link-container-alt':'profile-link-container'}`}>
                             <AiOutlineLink className="link-icon"/>
-                            <p className={`${(hasBio || (!isOwner && isFollowing))?'profile-header-subtext-alt':'profile-header-subtext'}`}>
+                            <p className={`${(hasBio || (!isOwner && (userData&&isFollower==='following')))?'profile-header-subtext-alt':'profile-header-subtext'}`}>
                                 {`link.springboard.gift/${username?username:''}`}
                             </p>
                         </div>
-                        {(isFollowing && hasBio && !isOwner)&&
+                        {((userData&&isFollower==='following') && hasBio && !isOwner)&&
                         <div className="profile-status-container-alt">
                             <BsCheck2Circle className="check-icon"/>
-                            <p className={`${(hasBio || (!isOwner && isFollowing))?'profile-header-subtext-alt':'profile-header-subtext'}`}>
+                            <p className={`${(hasBio || (!isOwner && (userData&&isFollower==='following')))?'profile-header-subtext-alt':'profile-header-subtext'}`}>
                                 {`Follows you`}
                             </p>
                         </div>
@@ -200,19 +278,51 @@ export default function Profile() {
                 </div>
                 }
                 {(!isOwner && !loading)&&
-                  <span className={`profile-follow-button follow-inactive`}>
-                        <div className={`profile-following-link-button`}>
-                            <p className="profile-follow-text-alt">
-                                {
-                                  "Following"
-                                }
+            
+                <>
+                {(!loading && userData && isFollower === "pending")&&
+                  <span className={`profile-follow-button-alt follow-active`} onClick={()=>(isHovered)?
+                  console.log("delete request mode"):confirmRequest()}>
+                        <div className={`profile-following-link-button-alt`}>
+                            <p className="profile-follow-text-alt" 
+                            style={{color:'#000'}}>
+                                  Accept
                             </p>
-                            {/*
-                            <AiOutlinePlus className={`profile-following-icon`}/>
-                            */ }
-                            <BsCheckLg className={`profile-following-icon`}/>
+                            {
+                                <span onClick={()=>removeRequest(id, userData&&userData.userid)}
+                                style={{alignSelf:"center", maxHeight:"1.25em", transform:"translateY(.025em)"}}>
+                                    <LiaTimesSolid className={`profile-accept-follow-icon`} />
+                                </span>
+                            }
                         </div>
                     </span>
+                    }
+                    <span onClick={()=>(userData&&isFollowing==="not following")?
+                    handleRequest():
+                    removeRequest(userData&&userData.userid, id)}
+                    className={`profile-follow-button 
+                  ${userData&&(isFollowing==='following' || isFollowing==="pending")?
+                  'follow-inactive':'follow-active'}`} style={{marginLeft:(userData&&isFollower==="pending")?"none":"auto"}}>
+                        <div className={`profile-${isFollowing==="pending"?"pending":"following"}-link-button`}>
+                            <p className={`${(isFollowing==="pending")?"profile-pending-text-alt":"profile-follow-text-alt"}`}
+                            style={{color:(userData&&isFollowing==="not following")?"#000":
+                            (userData&&isFollowing==="pending")?"#aaa":"#eee"}}>
+                                {(userData&&isFollowing==="following")?
+                                  "Following":
+                                  (userData&&isFollowing==="pending")?
+                                  "Requested":
+                                  "Follow"
+                                }
+                            </p>
+                            {(userData&&isFollowing==="not following")?
+                            <AiOutlinePlus className={`profile-following-icon`}
+                            style={{color:(userData&&isFollowing==="not following")?"#0a0a0a":"#eee"}}/>
+                            :(userData && isFollowing === "following")&&
+                            <BsCheckLg className={`profile-following-icon`}/>
+                            }
+                        </div>
+                    </span>
+                </>
                 }
             </div>
 
@@ -275,7 +385,7 @@ export default function Profile() {
                             Recent Donations
                         </p>
                         <p className="donation-details-subtext">
-                            View your latest donations and pledges here.
+                        {`View ${(isOwner)?'your':`${userData&&userData.firstname}'s`} latest donations and pledges here.`}
                    
                         </p>
                     </div>
@@ -294,15 +404,15 @@ export default function Profile() {
                             Followers List
                         </p>
                         <p className="donation-details-subtext">
-                            View your active followers and pending requests here.
+                            {`View ${(isOwner)?'your':`${userData&&userData.firstname}'s`} active followers and pending requests here.`}
                         </p>
                     </div>
                     <div className="account-friends-list">
                         <div className="account-friends-list-content">
-                            <FriendsItem name={'Henry Zheng'} status={'approved'}/>
-                            <FriendsItem name={'An Truong'} status={'approved'}/>
-                            <FriendsItem name={'Thompson Nguyen'} status={'approved'}/>
-                            <FriendsItem name={'Jason Damasco'} status={'approved'}/>
+                            <FriendsItem name={'Henry Zheng'} username={'hzenry'} status={'approved'} onNavigate={(name)=>navigateProfile(name)}/>
+                            <FriendsItem name={'An Truong'} username={'antruong_'} status={'approved'} onNavigate={(name)=>navigateProfile(name)}/>
+                            <FriendsItem name={'Thompson Nguyen'} username={'tnompson'} status={'approved'} onNavigate={(name)=>navigateProfile(name)}/>
+                            <FriendsItem name={'Jason Damasco'} username={'jdason'} status={'approved'} onNavigate={(name)=>navigateProfile(name)}/>
                         </div>
                     </div>
                 </div>
@@ -310,7 +420,7 @@ export default function Profile() {
             </>
             }
             
-          {/* <Footer route={'profile'}/>*/}
+          { <Footer route={'profile'}/>}
         </div>
     </div>
   )

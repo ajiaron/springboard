@@ -323,6 +323,28 @@ app.get('/api/getuser', (req,res)=> {
         }
     })
 })
+app.get('/api/getprofile', (req,res)=> {
+    const username = String(req.query.username)
+    const sql = `SELECT users.*, CASE `+
+    `WHEN ? IN (SELECT requesterid FROM andale_db.followers WHERE recipientid = users.userid AND approved = true) THEN 'following' `+
+    `WHEN ? IN (SELECT requesterid FROM andale_db.followers WHERE recipientid = users.userid AND approved = false) THEN 'pending' `+
+    `ELSE "not following" `+
+    `END as isfollowing, `+
+    `CASE `+
+    `WHEN ? IN (SELECT recipientid FROM andale_db.followers WHERE requesterid = users.userid AND approved = true) THEN 'following' `+
+    `WHEN ? IN (SELECT recipientid FROM andale_db.followers WHERE requesterid = users.userid AND approved = false) THEN 'pending' `+
+    `ELSE "not following" `+
+    `END as isfollower `+
+    `FROM andale_db.users WHERE username = ?`
+    db.query(sql, [userid, userid, userid, userid, username],
+    (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
 app.get('/api/getfollowstatus', (req, res)=> {
     const requesterid = req.query.requesterid
     const recipientid = req.query.recipientid

@@ -336,7 +336,7 @@
     flex-direction: column;
     //gap:1.5em;
     display: flex;
-    padding-top: .2em;
+    padding-top: .15em;
     padding-left: 4%;
     padding-right: 4%;
 //    background-color: rgba(46, 139, 86, 0.422);
@@ -394,14 +394,14 @@
 .feed-donation-dashboard-caption {
     width: 80%;
    // height:fit-content;
-   // padding-top: .025em;
+    padding-top: .025em;
     //background-color: red;
 
 }
 .feed-dashboard-text-wrapper {
     display: flex;
     align-items: center;
-    gap:0.35em;
+    gap:0.3em;
    // transform: translateX(-.1em);
 }
 .feed-dashboard-item-text {
@@ -413,9 +413,9 @@
     font-weight: 400;
 }
 .dashboard-check-icon {
-    width: 1em;
-    transform: translateY(-.025em);
-    height: 1em;
+    width: .875em;
+   // transform: translateY(-.01em);
+    height: .875em;
     color:#a0a0a0;
 }
 .feed-dashboard-item-text-alt {

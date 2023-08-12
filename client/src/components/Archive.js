@@ -177,7 +177,7 @@ export default function Archive() {
 
   return (
         <div className={`donations-page-container`}>
-            <SideNavigation route={'donations'}/>
+            <SideNavigation route={'archive'}/>
             <div className={`donations-page-content`}>
                 <div className="donations-page-wrapper">
                     <div className="settings-header-container">

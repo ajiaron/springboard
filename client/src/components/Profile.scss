@@ -10,7 +10,7 @@
 }
 
 .profile-page-content {
-    min-height: 100vh;
+    min-height: 100%;
     width: 90%;
     padding-top: 4em;
     margin:0;
@@ -495,14 +495,14 @@
     display: flex;
   //  gap:1em;
     flex-direction: column;
-    padding-top: 1.25em;
+    padding-top: 1.125em;
   //  background-color: rgba(46, 139, 86, 0.198);
 }
 .account-friends-list-content {
     width: 88.5%;
     max-height: 95%;
     gap:2.375em;
-    padding-top: 1.125em;
+    padding-top: 1em;
     padding-bottom: .25em;
     overflow-y: hidden;
     align-items: flex-start;
@@ -647,6 +647,9 @@
     border-radius: 3.25em;
     align-self: center;
     background-color: #2e2e2e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .profile-friends-item-info {
     height: 100%;
@@ -791,11 +794,30 @@
     height: 4%;
    // margin-top: .25em;
     border-radius: 24px;
-    margin-left: auto;
+  //  margin-left: auto;
     transition: all .2s linear;
     display: flex;
     justify-content: center;
     margin-right:1.5%;
+  //  transform: translateY(-.5em);
+   // margin-top: 2%;
+    align-self:center;
+   // margin-bottom: .25em;
+}
+.profile-follow-button:hover {
+    filter: brightness(1.15);
+}
+.profile-follow-button-alt {
+    height: 4%;
+   // margin-top: .25em;
+    border-radius: 24px;
+    width: 11.5%;
+    margin-left: auto;
+    transition: all .2s linear;
+    display: flex;
+    background-color: #eee;
+    justify-content: center;
+   // margin-right:.5%;
   //  transform: translateY(-.5em);
    // margin-top: 2%;
     align-self:center;
@@ -810,6 +832,10 @@
     background-color: #252525;
 }
 
+.profile-following-icon-alt:hover {
+    transform: scale(1.15);
+    color:lightcoral;
+}
 .profile-follow-link-button {
     text-decoration: none;
     min-height: 2.75em;
@@ -836,6 +862,32 @@
     align-items: center;
   //  align-self: center;
 }
+.profile-pending-link-button {
+    text-decoration: none;
+    min-height: 2.75em;
+    width: 100%;
+    border-radius: 24px;
+    gap:1em;
+ //   padding-left: 1em;
+   // padding-right: 1.125em;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  //  align-self: center;
+}
+.profile-following-link-button-alt {
+    text-decoration: none;
+    min-height: 2.75em;
+    width: 100%;
+    border-radius: 24px;
+    gap:.75em;
+ //   padding-left: 1em;
+    padding-right: 1.25em;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  //  align-self: center;
+}
 .profile-follow-text {
     margin-left: auto;
    // margin-right:auto;
@@ -844,6 +896,11 @@
     transform: translateY(.025em);
     font-weight: 00;
     z-index: 1;
+    user-select: none;
+    -webkit-user-select: none; 
+    -moz-user-select: none; 
+    -ms-user-select: none;
+    overflow: hidden;
     padding-top: .025em;
    // align-self: flex-end;
     background-color: transparent;
@@ -857,6 +914,31 @@
      font-family: "Rubik";
     // transform: translateY(.025em);
      font-weight: 00;
+     user-select: none;
+     -webkit-user-select: none; 
+     -moz-user-select: none; 
+     -ms-user-select: none;
+     overflow: hidden;
+     z-index: 1;
+   //  padding-top: .025em;
+    // align-self: flex-end;
+     background-color: transparent;
+     //color:#eee;
+     color:#aaa;
+}
+.profile-pending-text-alt {
+    margin-left: auto;
+    margin-right: auto;
+    // margin-right:auto;
+     font-size: clamp(10px, 3vw, 17px);
+     font-family: "Rubik";
+    // transform: translateY(.025em);
+     font-weight: 00;
+     user-select: none;
+     -webkit-user-select: none; 
+     -moz-user-select: none; 
+     -ms-user-select: none;
+     overflow: hidden;
      z-index: 1;
    //  padding-top: .025em;
     // align-self: flex-end;
@@ -877,3 +959,29 @@
     height: 1.175em;
     color:#aaa;
 }
+.profile-following-icon-alt {
+    width: 1.25em;
+    height: 1.25em;
+    transition: all .15s linear;
+    color:#aaa;
+
+}
+.profile-accept-follow-icon {
+    width: 1.25em;
+    height: 1.25em;
+    transition: all .15s linear;
+    color:#000;
+}
+.profile-accept-follow-icon:hover {
+    color:rgb(231, 80, 80);
+}
+.profile-page-item-text-alt {
+    font-size:clamp(10px,3.25em,26px);
+    color:#eee;
+    font-weight: 400;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: normal;
+    align-self: center;
+    font-family: 'Rubik';
+  }

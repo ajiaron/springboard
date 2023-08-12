@@ -9,9 +9,9 @@
     overflow: scroll;
 }
 .catalog-main-content {
-    min-height: 47.5vh;
+  //  min-height: 47vh;
     min-width: 100vw;
-    background-image: url('./assets/background8.svg');
+   // background-image: url('./assets/background8.svg');
     background-position:center;
     background-repeat:no-repeat;
     background-size: cover;
@@ -113,7 +113,7 @@
     min-width: 100vw;
     min-height:100vh;
 
-    padding-top:7.5vh;
+    padding-top:7.25vh;
     display: flex;
 
 }
@@ -240,4 +240,15 @@
   left: auto;
 
  // background-color: red;  // min-width: 1;
+}
+.loading-text-alt {
+  user-select: none;
+  -webkit-user-select: none; 
+  -moz-user-select: none; 
+  -ms-user-select: none;
+  overflow: hidden;
+  font-size: clamp(12px, 2vw, 14px);
+  font-weight: 400;
+  align-self: center;
+  content:""
 }

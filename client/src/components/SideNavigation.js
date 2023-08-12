@@ -48,19 +48,22 @@ export default function SideNavigation({route}) {
                     Catalog
                 </p>
             </Link>
-            <Link className="console-content-wrapper " to={'/donations'}>
+            <Link className="console-content-wrapper " to={'/donations'}
+            style={{filter:(route==='donations')?'brightness(1.25)':'brightness(1)'}}>
                 <AiOutlineGift className="home-icon"/>
                 <p className="console-item-subtext">
                     Donations
                 </p>
             </Link>
-            <Link className="console-content-wrapper " to={'/archive'}>
+            <Link className="console-content-wrapper " to={'/archive'}
+            style={{filter:(route==='archive')?'brightness(1.25)':'brightness(1)'}}>
                 <BiBookHeart className="home-icon"/>
                 <p className="console-item-subtext">
                     Archive
                 </p>
             </Link>
-            <Link className="console-content-wrapper " to={'/cart'}>
+            <Link className="console-content-wrapper " to={'/cart'}
+            style={{filter:(route==='basket')?'brightness(1.25)':'brightness(1)'}}>
                 <LiaShoppingBasketSolid className="home-icon"/>
                 <p className="console-item-subtext">
                     Your basket
@@ -69,7 +72,7 @@ export default function SideNavigation({route}) {
         </div>
 
         <div className="console-content-container first-content ">
-            <div className="console-content-wrapper">
+            <div className="console-content-wrapper-alt">
                 <p className="console-item-text">
                     ACCOUNT
                 </p>
@@ -87,7 +90,8 @@ export default function SideNavigation({route}) {
                     Friends 
                 </p>
             </Link>
-            <Link className="console-content-wrapper " to={'/settings'}>
+            <Link className="console-content-wrapper " to={'/settings'}
+            style={{filter:(route==='settings')?'brightness(1.25)':'brightness(1)'}}>
                 <FiSettings className="console-settings-icon"/>
                 <p className="console-item-subtext side-settings-subtext">
                     Settings
@@ -96,7 +100,7 @@ export default function SideNavigation({route}) {
         </div>
 
         <div className="console-content-container first-content ">
-            <div className="console-content-wrapper">
+            <div className="console-content-wrapper-alt">
                 <p className="console-item-text">
                     SUPPORT
                 </p>

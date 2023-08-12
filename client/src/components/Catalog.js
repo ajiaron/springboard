@@ -203,6 +203,11 @@ export default function Catalog() {
             <div className={`charity-catalog-container  ${paymentActive!== null?'dim-container':''}`}>
           
                 <div className="panel-container" >
+                    {(topInView)&&
+                        <div ref={loadingRef} className='showing-text-container' onClick={()=>handleTest()}>
+                            <p className="loading-text-alt" style={{color:'#00000000'}}> {`Showing ${entryList.length} of 245 entries`} </p>
+                        </div>
+                    }
                     <div className="panel-wrapper" ref={panelRef}
                             style={{ transform:`translateY(${scrollY}px)`}}
                         >

@@ -52,7 +52,7 @@ export default function FeedItem({id, name, username, charity, charityid, type, 
             </div>
             <div className={`feed-${route==='feed'?'friends':'dashboard'}-text-wrapper`}>
                 <p className={`feed-${route==='feed'?'donation':'dashboard'}-item-text`}>
-                    Follows you
+                   {`@${username}`}
                 </p>   
                 <BsCheckLg className="dashboard-check-icon"/>
             </div>

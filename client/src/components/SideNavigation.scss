@@ -84,6 +84,25 @@
    padding-right: .75em;
    transition: all .15s linear;
 }
+.console-content-wrapper-alt {
+    display: flex;
+   // flex-direction: column;
+   //padding-left: 1.75em;
+    width: 77.5%;
+    justify-content: flex-start;
+    gap:.775em;
+    
+    align-items: flex-end;
+    align-self: center;
+    padding-top: .75em;
+    padding-bottom: .75em;
+    text-decoration: none;
+    border-radius: 10px;
+   // background-color: red;
+   padding-left: .75em;
+   padding-right: .75em;
+   transition: all .15s linear;
+}
 .console-content-wrapper:hover {
     filter: brightness(1.25);
     background-color: #252525dd;
