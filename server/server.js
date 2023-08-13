@@ -6,6 +6,8 @@ const mysql = require('mysql')
 const cors = require('cors')
 app.use(express.json())
 app.use(cors())
+const stripe = require('stripe')('sk_test_51NbpB6H1mJlHYnBWQqiqjA7TDO7T3E3fvS5ewaLaU5bZg84xVQN47PexrTw76g55XNhts0gxLZRVkJw8MFlTzN6m00h9Pld2B0');
+const axios = require('axios')
 //app.use(express.static(path.join(__dirname, '../client/build')));
 //app.use(express.static("public"))
 //app.set('views', path.join(__dirname, 'views'));
@@ -20,16 +22,47 @@ const db = mysql.createConnection({
     database:'andale_db',
  }
 )
-
-/*
-app.get('/paypal/:description/:value', (req, res) => {
-    const description = req.params.description;
-    const value = Number(req.params.value); 
-    console.log(description)
-    console.log(value)
-    res.render('paypal', { description, value }); // pass them into the view
+app.post('/api/createaccount', async (req, res) => {
+    try {
+        const account = await stripe.accounts.create({
+            type: 'standard',
+        });
+        res.json(account);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: "Failed to create account link" });
+    }
 });
-*/
+app.post('/api/createaccountlink', async (req, res) => {
+    const accountid = req.body.accountid
+    const ownerid = req.body.ownerid
+    const campaignid = req.body.campaignid
+    const email = req.body.email
+    const firstname = req.body.firstname
+    const lastname = req.body.lastname
+    const username = req.body.username
+    db.query(`INSERT INTO campaigns (campaignid, ownerid, accountid, email, firstname, lastname, username) VALUES (?,?,?,?,?,?,?)`,
+    [campaignid, ownerid, accountid, email, firstname, lastname, username], (err, dbRes) => {
+        if (err) {
+            console.log(err)
+            return res.status(500).json({ error: "Failed to insert into database" });
+        } else {
+        stripe.accountLinks.create({
+            account: accountid, 
+            refresh_url: 'http://localhost:3000/',
+            return_url: 'http://localhost:3000/dashboard',
+            type: 'account_onboarding',
+        }, (stripeError, accountLink)=> {
+            if (stripeError) {
+                console.log(stripeError)
+                return res.status(500).json({ error: "Failed to create account link" });
+            }            
+            res.json(accountLink);
+        })
+    }
+    })
+});
+
 app.get('/api/getusers', (req, res) => {
     db.query('SELECT * FROM users', (err, result) => {
         if (err) {
@@ -323,8 +356,26 @@ app.get('/api/getuser', (req,res)=> {
         }
     })
 })
+app.get('/api/getaccount', (req,res)=> {
+    const username = String(req.query.username)
+    const userid = req.query.userid
+    const sql = `SELECT users.*, `+
+    `campaigns.campaignid, campaigns.accountid `+
+    `FROM andale_db.users `+
+    `INNER JOIN andale_db.campaigns ON users.userid = campaigns.ownerid `+
+    `WHERE users.username = ? AND users.userid = ?;`
+    db.query(sql, [username, userid],
+    (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
 app.get('/api/getprofile', (req,res)=> {
     const username = String(req.query.username)
+    const userid = req.query.userid
     const sql = `SELECT users.*, CASE `+
     `WHEN ? IN (SELECT requesterid FROM andale_db.followers WHERE recipientid = users.userid AND approved = true) THEN 'following' `+
     `WHEN ? IN (SELECT requesterid FROM andale_db.followers WHERE recipientid = users.userid AND approved = false) THEN 'pending' `+
@@ -334,8 +385,11 @@ app.get('/api/getprofile', (req,res)=> {
     `WHEN ? IN (SELECT recipientid FROM andale_db.followers WHERE requesterid = users.userid AND approved = true) THEN 'following' `+
     `WHEN ? IN (SELECT recipientid FROM andale_db.followers WHERE requesterid = users.userid AND approved = false) THEN 'pending' `+
     `ELSE "not following" `+
-    `END as isfollower `+
-    `FROM andale_db.users WHERE username = ?`
+    `END as isfollower, `+
+    `campaigns.campaignid, campaigns.accountid `+
+    `FROM andale_db.users `+
+    `INNER JOIN andale_db.campaigns ON users.userid = campaigns.ownerid `+
+    `WHERE users.username = ?;`
     db.query(sql, [userid, userid, userid, userid, username],
     (err, result)=> {
         if (err) {
@@ -629,6 +683,7 @@ app.post('/api/createuser', (req, res) => {
     })
 })
 
+
 app.post('/api/pushbasket', (req, res) => {
     const basketid = req.body.basketid
     const ownerid = req.body.userid
@@ -649,6 +704,93 @@ app.post('/api/pushbasket', (req, res) => {
     })
 })
 
+app.get('/api/getdonations', (req,res)=> {
+    const ownerid = req.query.userid
+    const sql = `SELECT DISTINCT * FROM donations WHERE ownerid = ?`
+    db.query(sql, [ownerid],
+    (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+
+app.get('/api/getdonationbatch', (req,res)=> {
+    const groupid = req.query.groupid
+    const sql = `SELECT * FROM donations WHERE groupid = ?`
+    db.query(sql, [groupid],
+    (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+app.post('/api/pushdonation', (req, res) => {
+    const donationid = req.body.donationid
+    const ownerid = req.body.ownerid
+    const charityid = req.body.charityid
+    const charityname = req.body.charityname
+    const type = req.body.type
+    const amount = req.body.amount
+    const message = req.body.message
+    const groupid = req.body.groupid
+    const shareEmail = req.body.shareEmail
+    const shareName = req.body.shareName
+    const public = req.body.public
+    db.query('INSERT INTO donations (donationid, ownerid, charityid, charityname, type, amount, message, groupid, shareEmail, shareName, public) VALUES (?,?,?,?,?,?,?,?,?,?,?)', 
+    [donationid, ownerid, charityid, charityname, type, amount, message, groupid, shareEmail, shareName, public], (err, result) => {
+        if(err) {
+            console.log(err)
+        } else {
+            res.send("successfully confirmed donation")
+        }
+    })
+})
+app.post('/api/postdonation', (req, res) => {
+    const inputData = req.body.donations;
+    if (!inputData || !Array.isArray(inputData) || inputData.length === 0) {
+        return res.status(400).send('Invalid data');
+    }
+    const valuesArray = inputData.map(donation => [
+        donation.donationid,
+        donation.ownerid,
+        donation.charityid,
+        donation.charityname,
+        donation.type,
+        donation.amount,
+        donation.message,
+        donation.groupid,
+        donation.subkey,
+        donation.shareEmail,
+        donation.shareName,
+        donation.public
+    ]);
+    const placeholders = valuesArray.map(() => '(?,?,?,?,?,?,?,?,?,?,?,?)').join(',');
+    const flattenedData = valuesArray.flat();
+    db.query(`INSERT INTO donations (donationid, ownerid, charityid, charityname, type, amount, message, groupid, subkey, shareEmail, shareName, public) VALUES ${placeholders}`, 
+    flattenedData, (err, result) => {
+        if(err) {
+            console.log(err)
+        } else {
+            res.send("successfully confirmed donation")
+        }
+    })
+})
+
+app.delete('/api/emptybasket', (req, res) => {
+    const groupid = req.body.groupid
+    db.query("DELETE FROM basket WHERE groupid = ?", [groupid], (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send('members cleared')
+        }
+    })
+})
 
 app.post('/api/addarchive', (req, res) => {
     const userid = req.body.userid
@@ -822,6 +964,17 @@ app.delete('/api/clearbasket', (req, res) => {
         }
     })
 })
+app.delete('/api/emptybasket', (req, res) => {
+    const groupid = req.body.groupid
+    db.query("DELETE FROM basket WHERE groupid = ?", [groupid], (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send('members cleared')
+        }
+    })
+})
+
 
 app.delete('/api/removerequest', (req, res) => {
     const recipientid = req.body.recipientid

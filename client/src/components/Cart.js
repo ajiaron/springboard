@@ -279,7 +279,8 @@ export default function Cart() {
                                 </>
                             }
                         </div>
-                        <div className="cart-checkout-confirm-container ">             
+                        <div className="cart-checkout-confirm-container ">        
+                            {(basketList.length>0)&&
                             <div className="checkout-cart-page-confirm-container">
                                 <span className="cart-confirm-checkout-button " onClick={()=>handleConfirm()}>
                                     <p className="cart-confirm-checkout-text">
@@ -289,6 +290,7 @@ export default function Cart() {
                                     </p>
                                 </span>
                             </div>
+                            }
                         </div>
                     </div>
                 </div>

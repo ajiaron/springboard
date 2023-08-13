@@ -6,6 +6,7 @@ import CharityItem from './CharityItem'
 import SideBar from "./SideBar";
 import Favorites from "./Favorites";
 import { v4 as uuidv4 } from 'uuid';
+import {GoArrowRight} from 'react-icons/go'
 import {LiaTimesSolid} from 'react-icons/lia'
 import { BsStars, BsPlusLg, BsCheckLg, BsArrowRight,BsCheck2Circle, BsCheckCircle } from 'react-icons/bs'
 import { Link, useParams, useNavigate } from "react-router-dom";
@@ -113,6 +114,7 @@ export default function Profile() {
   const name = localStorage.getItem("username")?JSON.parse(localStorage.getItem("username")):''
   const firstname = localStorage.getItem("firstname")?JSON.parse(localStorage.getItem("firstname")):''
   const lastname = localStorage.getItem("lastname")?JSON.parse(localStorage.getItem("lastname")):''
+  const email = localStorage.getItem("email")?JSON.parse(localStorage.getItem("email")):''
   const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
   const [loading, setLoading] = useState(true)
   const [userData, setUserData] = useState(null)
@@ -134,6 +136,14 @@ export default function Profile() {
   function navigateProfile(name) {
     navigate(`/${name}`)
   }
+  function navigateStripe() {
+    if (userData && userData.accountid !== null && isOwner) {
+        if (process.env.REACT_APP_ENV === 'production') {
+            window.location.href = `https://dashboard.stripe.com/connect/accounts/${userData.accountid}/profile`
+        }
+        window.location.href = `https://dashboard.stripe.com/test/connect/accounts/${userData.accountid}/profile`
+    }
+  }
   const handleRequest = async() => {
     const idrequest = uuidv4()
     try {
@@ -146,6 +156,24 @@ export default function Profile() {
     } catch(e) {
         console.log(e)
     }
+}
+const createCampaign = async() => {
+    const campaignid = uuidv4()
+    setLoading(true)
+    try {
+        const res = await axios.post(`${connection}/api/createaccount`)
+        if (res.data) {
+            const accountLink = await axios.post(`${connection}/api/createaccountlink`,
+            {accountid:res.data.id, ownerid:id, campaignid:campaignid,
+            email:email, firstname:firstname, lastname:lastname, username:username})
+            if (accountLink.data) {
+                window.location.href = accountLink.data.url;
+            }
+        }
+    } catch(e) {
+        console.log(e)
+    }
+    setLoading(false)
 }
 const confirmRequest = async() => {
     try {
@@ -184,12 +212,14 @@ const removeRequest = async(recipientid, requesterid) => {
         setLoading(true)
         try {
             if (isOwner) {
-                const res = await axios.get(`${connection}/api/getuser`,{
+                const res = await axios.get(`${connection}/api/getaccount`,{
                     params: {
-                        username:username?username:'default'
+                        username:username?username:'default',
+                        userid:id
                     }
                 })
                 if (res.data && res.data.length > 0) {
+                    console.log(res.data)
                     setUserData(res.data[0])
                     setIsOwner(res.data[0].userid === id)
                     setHasBio(res.data[0].bio!==null && res.data[0].bio.length > 0)
@@ -207,6 +237,7 @@ const removeRequest = async(recipientid, requesterid) => {
                     }
                 })
                 if (res.data && res.data.length > 0) {
+  
                     setUserData(res.data[0])
                     setIsFollower(res.data[0].isfollower)
                     setIsFollowing(res.data[0].isfollowing)
@@ -276,6 +307,26 @@ const removeRequest = async(recipientid, requesterid) => {
                     </div>
                     }
                 </div>
+                }
+                {(isOwner && !loading)&&
+                 <span className={`${(userData&&userData.accountid!==null)?'profile-campaign-button':'profile-campaign-button-alt'}`}
+                  onClick={()=>(userData&&userData.accountid!==null)?navigateStripe():createCampaign()}>
+                        <div className={`profile-campaign-link-button-alt`}>
+                            <p className="profile-campaign-text-alt" 
+                            style={{color:'#000'}}>
+                                {(loading)?
+                                (userData&&userData.accountid!==null)?
+                                'Processing...':'Start a Campaign':
+                                'View Campaign'}
+                            </p>
+                            {(userData&&userData.accountid !==null)?
+                            <GoArrowRight className="profile-following-icon"
+                            style={{color:"#000"}}/>:
+                            <AiOutlinePlus className={`profile-following-icon`}
+                            style={{color:'#000'}}/>
+                            }
+                        </div>
+                    </span>
                 }
                 {(!isOwner && !loading)&&
             

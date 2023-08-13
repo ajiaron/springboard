@@ -30,42 +30,52 @@ export default function SideNavigation({route}) {
         </div>
         <div className="console-content-container ">
             <Link className="console-content-wrapper " to={'/dashboard'} 
-            style={{filter:(route==='dashboard')?'brightness(1.25)':'brightness(1)'}}>
-                <AiOutlineHome className="home-icon"/>
-                <p className="console-item-subtext">
+            >
+                <AiOutlineHome className="home-icon"
+                style={{filter:(route==='dashboard')?'brightness(1.25)':'brightness(1)'}}/>
+                <p className="console-item-subtext"
+                style={{filter:(route==='dashboard')?'brightness(1.25)':'brightness(1)'}}>
                     Dashboard
                 </p>
             </Link>  
             <Link className="console-content-wrapper " to={'/feed'}>
-                <HiOutlineNewspaper className="home-icon"/>
-                <p className="console-item-subtext">
+                <HiOutlineNewspaper className="home-icon"
+                style={{filter:(route==='feed')?'brightness(1.25)':'brightness(1)'}}/>
+                <p className="console-item-subtext" 
+                style={{filter:(route==='feed')?'brightness(1.25)':'brightness(1)'}}>
                     Recent activity
                 </p>
             </Link>
             <Link className="console-content-wrapper " to={'/catalog'}>
-                <BiBookmarks className="home-icon"/>
-                <p className="console-item-subtext">
+                <BiBookmarks className="home-icon"
+                style={{filter:(route==='catalog')?'brightness(1.25)':'brightness(1)'}}/>
+                <p className="console-item-subtext"
+                style={{filter:(route==='catalog')?'brightness(1.25)':'brightness(1)'}}>
                     Catalog
                 </p>
             </Link>
-            <Link className="console-content-wrapper " to={'/donations'}
-            style={{filter:(route==='donations')?'brightness(1.25)':'brightness(1)'}}>
-                <AiOutlineGift className="home-icon"/>
-                <p className="console-item-subtext">
+            <Link className="console-content-wrapper " to={'/donations'}>
+                <AiOutlineGift className="home-icon"
+                style={{filter:(route==='donations')?'brightness(1.25)':'brightness(1)'}}/>
+                <p className="console-item-subtext"
+                style={{filter:(route==='donations')?'brightness(1.25)':'brightness(1)'}}>
                     Donations
                 </p>
             </Link>
             <Link className="console-content-wrapper " to={'/archive'}
-            style={{filter:(route==='archive')?'brightness(1.25)':'brightness(1)'}}>
-                <BiBookHeart className="home-icon"/>
-                <p className="console-item-subtext">
+            >
+                <BiBookHeart className="home-icon"
+                style={{filter:(route==='archive')?'brightness(1.25)':'brightness(1)'}}/>
+                <p className="console-item-subtext"
+                style={{filter:(route==='archive')?'brightness(1.25)':'brightness(1)'}}>
                     Archive
                 </p>
             </Link>
-            <Link className="console-content-wrapper " to={'/cart'}
-            style={{filter:(route==='basket')?'brightness(1.25)':'brightness(1)'}}>
-                <LiaShoppingBasketSolid className="home-icon"/>
-                <p className="console-item-subtext">
+            <Link className="console-content-wrapper " to={'/cart'}>
+                <LiaShoppingBasketSolid className="home-icon"
+                style={{filter:(route==='cart')?'brightness(1.25)':'brightness(1)'}}/>
+                <p className="console-item-subtext"
+                style={{filter:(route==='cart')?'brightness(1.25)':'brightness(1)'}}>
                     Your basket
                 </p>
             </Link>
@@ -78,22 +88,26 @@ export default function SideNavigation({route}) {
                 </p>
             </div>
             <Link className="console-content-wrapper " to={`/${username}`}>
-                <BsPerson className="home-icon" />
-                <p className="console-item-subtext">
+                <BsPerson className="home-icon" 
+                style={{filter:(route==='profile')?'brightness(1.25)':'brightness(1)'}}/>
+                <p className="console-item-subtext"
+                style={{filter:(route==='feed')?'brightness(1.25)':'brightness(1)'}}>
                     Your profile
                 </p>
             </Link>
-            <Link className="console-content-wrapper " to={'/friends'}
-            style={{filter:(route==='friends')?'brightness(1.25)':'brightness(1)'}}>
-                <LiaUserFriendsSolid className="home-icon"/>
-                <p className="console-item-subtext ">
+            <Link className="console-content-wrapper " to={'/friends'}>
+                <LiaUserFriendsSolid className="home-icon"
+                style={{filter:(route==='friends')?'brightness(1.25)':'brightness(1)'}}/>
+                <p className="console-item-subtext "
+                style={{filter:(route==='friends')?'brightness(1.25)':'brightness(1)'}}>
                     Friends 
                 </p>
             </Link>
-            <Link className="console-content-wrapper " to={'/settings'}
-            style={{filter:(route==='settings')?'brightness(1.25)':'brightness(1)'}}>
-                <FiSettings className="console-settings-icon"/>
-                <p className="console-item-subtext side-settings-subtext">
+            <Link className="console-content-wrapper " to={'/settings'}>
+                <FiSettings className="console-settings-icon" 
+                style={{filter:(route==='settings')?'brightness(1.25)':'brightness(1)'}}/>
+                <p className="console-item-subtext side-settings-subtext"
+                style={{filter:(route==='settings')?'brightness(1.25)':'brightness(1)'}}>
                     Settings
                 </p>
             </Link>

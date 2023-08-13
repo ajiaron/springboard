@@ -13,6 +13,7 @@ import Settings from './components/Settings';
 import Donations from './components/Donations';
 import Friends from './components/Friends'
 import ScrollToTop from "./components/ScrollToTop";
+import Confirmation from './components/Confirmation';
 import Archive from './components/Archive';
 import Charity from './components/Charity';
 import CharityItem from './components/CharityItem';
@@ -90,6 +91,11 @@ function AnimatedRoutes() {
                     <Route path='/donate/:groupid' element={
                         <ProtectedRoute>
                             <Donate/>
+                        </ProtectedRoute>
+                    }/>
+                     <Route path='/confirmation/:groupid' element={
+                        <ProtectedRoute>
+                            <Confirmation/>
                         </ProtectedRoute>
                     }/>
                      <Route path='/:username' element={
