@@ -49,9 +49,9 @@ export default function Navbar({route, blur}) {
                     </Link>
                     {(route !== 'landing')&&
                     <Link className={`${route==='cart'?'profile-cart-nav':'profile-nav-item'}`} to={`/${username}`}>
-                        <div className={`navigation-item-alt ${route==='cart'?'cart-nav':''}`}>
-                            <p className={`${route==='cart'?'cart-nav-text':'navigation-item-text-alt'}`}>
-                                {firstname!==null?firstname.charAt(0).toUpperCase():''}
+                    <div className="catalog-navbar-image-wrapper">
+                            <p className="catalog-navbar-image-text">
+                                {firstname?firstname.charAt(0).toUpperCase():''}
                             </p>
                         </div>
                     </Link>

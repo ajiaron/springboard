@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from "react"
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import {BiMenu, BiHome, BiSolidUser} from 'react-icons/bi'
 import {AiOutlineUser,AiOutlineShoppingCart,AiOutlineQuestionCircle,AiOutlineLink,AiOutlineStar,AiOutlineHome,AiOutlineGift} from 'react-icons/ai'
 import {BsPatchQuestion,BsFillSuitHeartFill,BsPerson} from 'react-icons/bs'
 import {FiSettings,FiShoppingCart} from 'react-icons/fi'
-import {FaShoppingBasket, FaShoppingCart} from 'react-icons/fa'
+import {FaShoppingBasket, FaShoppingCart, FaBars} from 'react-icons/fa'
 import {FaUserFriends,FaUserCircle} from 'react-icons/fa'
 import {RiSettings5Fill} from 'react-icons/ri'
 import {IoSettingsOutline} from 'react-icons/io'
@@ -16,18 +16,42 @@ import './Navbar.scss'
 import './SideNavigation.scss'
 
 export default function SideNavigation({route}) {
+  const navigate = useNavigate()
+  const [isHovered, setIsHovered] = useState(false)
+  const [expanded, setExpanded] = useState(route!=="profile"&&route!=="settings"&&route!=="charity")
   const userid = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0
-  const username = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("username")):0
+  const username = localStorage.getItem("username")?JSON.parse(localStorage.getItem("username")):0
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
+  function handleNavigate(url) {
+    navigate(`/${url}`)
+  }
+
   return (
-    <div className="side-console-container">
-        <div className="console-header-container">
-            <Link className="console-logo-text-container" to='/dashboard'>   
-                <div className="console-app-logo"/>
+    
+    <>{(expanded)?
+    <div className={(route==="profile"||route==="charity"||route==="settings")?
+    "side-console-container-alt":"side-console-container"}>
+            {(route==="profile"||route==="charity"||route==="settings")?
+                <div className="console-header-container-alt">
+                    <span className="console-content-wrapper-closed-alt" onClick={()=>setExpanded(!expanded)} >   
+                        <FaBars className="home-icon-closed"/>
+                    </span>
+                </div>
+        :
+            <div className="console-header-container">
+                <Link className="console-logo-text-container" to='/dashboard'>   
+                    <div className="console-app-logo"/>
                     <p className="console-logo-text">
                         Springboard
                     </p> 
-            </Link>
-        </div>
+                </Link>
+            </div>
+            }
         <div className="console-content-container ">
             <Link className="console-content-wrapper " to={'/dashboard'} 
             >
@@ -91,7 +115,7 @@ export default function SideNavigation({route}) {
                 <BsPerson className="home-icon" 
                 style={{filter:(route==='profile')?'brightness(1.25)':'brightness(1)'}}/>
                 <p className="console-item-subtext"
-                style={{filter:(route==='feed')?'brightness(1.25)':'brightness(1)'}}>
+                style={{filter:(route==='profile')?'brightness(1.25)':'brightness(1)'}}>
                     Your profile
                 </p>
             </Link>
@@ -145,6 +169,114 @@ export default function SideNavigation({route}) {
                 </p>
             </div>
         </div>                    
+    </div>:
+
+<div className={(route==="profile"||route==="charity"||route==="settings")?
+"side-console-container-closed":"side-console-container"}>
+    <div className={"console-content-container-closed"}>
+        <span className="console-content-wrapper-closed" onClick={()=>setExpanded(!expanded)} >   
+            <FaBars className="home-icon-closed"/>
+        </span>
     </div>
+    
+    <div className="console-content-container-closed ">
+        <Link className={(route==="dashboard")?"console-content-wrapper-active":"console-content-wrapper-closed"} to={'/dashboard'} 
+           onMouseEnter={handleMouseEnter} 
+           onMouseLeave={handleMouseLeave}>
+            <AiOutlineHome className="home-icon-closed"
+            style={{filter:(route==='dashboard')?'brightness(1.25)':'brightness(1)'}}/>
+           
+        </Link>  
+        <Link className={(route==="feed")?"console-content-wrapper-active":"console-content-wrapper-closed"} to={'/feed'}
+        onMouseEnter={handleMouseEnter} 
+        onMouseLeave={handleMouseLeave}>
+            <HiOutlineNewspaper className="home-icon-closed"
+            style={{filter:(route==='feed')?'brightness(1.25)':'brightness(1)'}}/>
+          
+        </Link>
+        <Link className={(route==="catalog")?"console-content-wrapper-active":"console-content-wrapper-closed"} to={'/catalog'}
+        onMouseEnter={handleMouseEnter} 
+        onMouseLeave={handleMouseLeave}>
+            <BiBookmarks className="home-icon-closed"
+            style={{filter:(route==='catalog')?'brightness(1.25)':'brightness(1)'}}/>
+      
+        </Link>
+        <Link className={(route==="donations")?"console-content-wrapper-active":"console-content-wrapper-closed"} to={'/donations'}
+        onMouseEnter={handleMouseEnter} 
+        onMouseLeave={handleMouseLeave}>
+            <AiOutlineGift className="home-icon-closed"
+            style={{filter:(route==='donations')?'brightness(1.25)':'brightness(1)'}}/>
+     
+        </Link>
+        <Link className={(route==="archive")?"console-content-wrapper-active":"console-content-wrapper-closed"} to={'/archive'}
+        onMouseEnter={handleMouseEnter} 
+        onMouseLeave={handleMouseLeave}>
+            <BiBookHeart className="home-icon-closed"
+            style={{filter:(route==='archive')?'brightness(1.25)':'brightness(1)'}}/>
+           
+        </Link>
+        <Link className={(route==="cart")?"console-content-wrapper-active":"console-content-wrapper-closed"} to={'/cart'}
+        onMouseEnter={handleMouseEnter} 
+        onMouseLeave={handleMouseLeave}>
+            <LiaShoppingBasketSolid className="home-icon-closed"
+            style={{filter:(route==='cart')?'brightness(1.25)':'brightness(1)'}}/>
+           
+        </Link>
+    </div>
+
+    <div className="console-content-container first-content ">
+
+        <Link className={(route==="profile" &&!isHovered)?"console-content-wrapper-active":"console-content-wrapper-closed"} to={`/${username}`}
+        onMouseEnter={handleMouseEnter} 
+        onMouseLeave={handleMouseLeave}>
+            <BsPerson className="home-icon-closed" 
+            style={{filter:(route==='profile')?'brightness(1.25)':'brightness(1)'}}/>
+          
+        </Link>
+        <Link className={(route==="friends")?"console-content-wrapper-active":"console-content-wrapper-closed"} to={'/friends'}
+        onMouseEnter={handleMouseEnter} 
+        onMouseLeave={handleMouseLeave}>
+            <LiaUserFriendsSolid className="home-icon-closed"
+            style={{filter:(route==='friends')?'brightness(1.25)':'brightness(1)'}}/>
+           
+        </Link>
+        <Link className={(route==="settings")?"console-content-wrapper-active":"console-content-wrapper-closed"} to={'/settings'}
+        onMouseEnter={handleMouseEnter} 
+        onMouseLeave={handleMouseLeave}>
+            <FiSettings className="console-settings-icon-closed" 
+            style={{filter:(route==='settings')?'brightness(1.25)':'brightness(1)'}}/>
+          
+        </Link>
+    </div>
+
+    <div className="console-content-container-closed first-content ">
+
+        <Link className="console-content-wrapper-closed "
+        onMouseEnter={handleMouseEnter} 
+        onMouseLeave={handleMouseLeave}>
+            <AiOutlineStar className="home-icon-closed" to={'https://github.com/ajiaron'}/>
+           
+        </Link>
+        <span className="console-content-wrapper-closed "
+        onMouseEnter={handleMouseEnter} 
+        onMouseLeave={handleMouseLeave}>
+            <AiOutlineQuestionCircle className="home-icon-closed"/>
+           
+        </span>
+    </div>
+    <div className="console-content-container-closed first-content ">
+
+        <div className="console-content-wrapper-closed "
+        onMouseEnter={handleMouseEnter} 
+        onMouseLeave={handleMouseLeave}>
+            <AiOutlineLink className="console-link-icon-closed" />
+        </div>
+    </div>   
+                   
+</div>
+
+    }
+    </>
+    
   )
 }

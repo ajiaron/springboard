@@ -14,6 +14,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineLink, AiOutlineEdit,AiOutlineClockCircle } from 'react-icons/ai'
 import { Amplify, Auth } from "aws-amplify";
 import config from '../aws-exports';
+import Notification from "./Notification";
+import SideNavigation from "./SideNavigation";
 Amplify.configure(config);
 const ToggleSwitch = ({label, value, onToggle}) => {
     const [isToggled, setIsToggled] = useState(value)
@@ -60,19 +62,10 @@ export default function Settings() {
     const [bio, setBio] = useState('')
     const [isPublic, setIsPublic] = useState(false)
     const [notifications, setNotifications] = useState(false)
+    const [shouldNotify, setShouldNotify] = useState(false)
     const [isUpdating, setIsUpdating] = useState(false)
     function handleTest() {
-        console.log(userData)
-        console.log({
-            nickname:nickname, 
-            email:email, 
-            firstName:firstName, 
-            lastName:lastName, 
-            social:social, 
-            profilepic:profilepic, 
-            isPublic:isPublic, 
-            location:location, 
-            bio:bio})
+        setShouldNotify(!shouldNotify)
     }
     const handleChanges = async() => {
         try {
@@ -146,8 +139,13 @@ export default function Settings() {
     }, [userData, nickname, email, firstName, lastName, bio, location, social, profilepic, isPublic])
     return (
         <div className={`settings-container`}>
-            <Navbar route={'settings'}/>
-            <div className={`settings-content`}>
+            {<>
+            {
+                (shouldNotify)&&
+                <Notification onClose={()=>setShouldNotify(false)}/>
+            }
+            <SideNavigation route={'settings'}/>
+            <div className={`settings-content `}>
 
                 <div className="settings-header-container ">
                     <div className="settings-image-wrapper">
@@ -173,7 +171,7 @@ export default function Settings() {
                         {`${(isUpdating)?'Please wait...':'Save Changes'}`}
                     </span>
                     }
-                    <span className="logout-container" onClick={()=>handleSignOut()}>
+                    <span className="logout-container" onClick={()=>handleTest()}>
                         Logout
                     </span>
                 </div>
@@ -375,6 +373,8 @@ export default function Settings() {
                 </>
                 }
             </div>
+            </>
+            }
         </div>
   )
 }

@@ -5,12 +5,14 @@
    // background-color: rgba(70, 180, 132, 0.274);
     overflow-x: hidden;
     display: flex;
+    flex-direction: column;
   
 }
 .settings-content {
     min-height: 100%;
     width: 90%;
-    padding-top: 4em;
+    padding-left: 10%;
+    padding-top: 3.75em;
     padding-bottom: 4em;
     margin:0;
     align-self: flex-start;
@@ -45,6 +47,11 @@
     color:#eee;
     font-family: 'Rubik';
     font-weight: 400;   
+    user-select: none;
+    -webkit-user-select: none; 
+    -moz-user-select: none; 
+    -ms-user-select: none;
+    overflow: hidden;
     margin-left: auto;
     text-shadow: 4px 3px 2px rgba(28, 28, 28, 0.25);
     margin-right: auto;

@@ -19,7 +19,7 @@ import { Link } from "react-router-dom";
 export default function Feed() {
   return (
     <div className={`feed-container`}>
-        <SideNavigation route={'settings'}/>
+        <SideNavigation route={'feed'}/>
         <div className={`feed-content`}>
             <div className="feed-header-container">
             <div className="feed-list-header-container">

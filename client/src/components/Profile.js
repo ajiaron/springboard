@@ -15,6 +15,7 @@ import {AiOutlineHeart, AiFillHeart, AiOutlineLink, AiOutlineEdit,AiFillCheckCir
 import { PolarArea, Doughnut, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, RadialLinearScale, BarElement, ArcElement, Tooltip, Legend, CategoryScale, LinearScale } from "chart.js";
 import axios from "axios";
+import SideNavigation from "./SideNavigation";
 ChartJS.register(RadialLinearScale, CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend);
 const FavoriteItem = ({charityid, charityname, value, size, type, index, onNavigate}) => {
     return (
@@ -237,7 +238,6 @@ const removeRequest = async(recipientid, requesterid) => {
                     }
                 })
                 if (res.data && res.data.length > 0) {
-  
                     setUserData(res.data[0])
                     setIsFollower(res.data[0].isfollower)
                     setIsFollowing(res.data[0].isfollowing)
@@ -259,8 +259,9 @@ const removeRequest = async(recipientid, requesterid) => {
 
   return (
     <div className="profile-page-container">
-        <Navbar route={'profile'}/>
-        <div className="profile-page-content">
+      {   <SideNavigation route={'profile'}/> }
+      {/* <Navbar route={'profile'}/>*/}
+        <div className="profile-page-content ">
             <div className="profile-header-container  ">
                 <div className="profile-image-wrapper">
                     <p className="profile-image-text">

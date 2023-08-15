@@ -195,7 +195,7 @@ export default function Cart() {
       {
           (editActive!==null)&&<Payment charityid={editActive} edit={shouldEdit} onClose={onClosePayment} onBlur={handleBlur}/>
       }
-        <SideNavigation route={'basket'}/>
+        <SideNavigation route={'cart'}/>
         <div className={`cart-page-container ${!isActive?(!firstRender)?'inactive-landing-container':'dim-landing-container':(!firstRender)?'active-container':''}`}>
             <div className={`cart-page-wrapper`}>
                 <p className="cart-page-header-text">

@@ -123,7 +123,7 @@ app.get('/api/searchuserlist/:next/:current/:query', (req, res) => {
         }
     })
 })
-app.get('/api/searchuserslist/:next/:current', (req, res) => {
+app.get('/api/searchuserslist/:next/:current/:query', (req, res) => {
     const next = Number(req.params.next)
     const current = Number(req.params.current)
     const query = String(req.params.query)

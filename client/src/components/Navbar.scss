@@ -368,3 +368,34 @@
         filter: brightness(1) blur(0);
     }
   }
+
+  .catalog-navbar-image-wrapper {
+    width: 3.875vw;
+    height: 3.875vw;
+    transition: all .15s linear;
+  //  outline:3px solid #eee;
+    display: flex;
+ // padding-bottom: .125em;
+   outline: 0px solid rgba(110, 110, 110, 0.2);
+    align-items: center;
+   // filter: blur(1px);
+   border-radius: 3.875vw;
+   // border-radius: 3.875vw;
+  //  background:linear-gradient(45deg, rgba(30, 160, 125, 0.65),#67de7999,#6777de99);
+    background-color: rgba(89, 201, 151, 0.591);
+
+}
+.catalog-navbar-image-wrapper:hover {
+  outline: 5px solid rgba(110, 110, 110, 0.2);
+//  filter: brightness(1.1);
+}
+.catalog-navbar-image-text {
+    font-size: clamp(12px, 3vw, 30px);
+    color:#eee;
+    font-family: 'Rubik';
+    font-weight: 400;   
+    margin-left: auto;
+    text-shadow: 4px 3px 2px rgba(28, 28, 28, 0.25);
+    margin-right: auto;
+    transform: translateY(-.0125em);
+}

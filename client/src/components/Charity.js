@@ -286,7 +286,7 @@ export default function Charity() {
           (paymentActive!==null)&&<Payment charityid={paymentActive} edit={null} onClose={onClosePayment} onBlur={handleBlur}/>
       }
       <div className={`header-blur blur-${categoryColor}`}/>
-        <Navbar route={'charity-page'} blur={paymentActive!==null && !isActive}/>
+        <SideNavigation route={'charity'}/>
         <div className={`charity-page-container ${!isActive?(!firstRender)?'inactive-landing-container':'dim-landing-container':(!firstRender)?'active-container':''}`}>
             <div className="charity-header-container">
                 <div style={{display:"flex", justifyContent:"center", height:"fit-content", alignItems:"center", gap:"2em", width:"fit-content"}}>
@@ -352,8 +352,8 @@ export default function Charity() {
                     </div>
                   */}
                     <div className='charity-donations-wrapper'>
-                      <div className='charity-insights-wrapper'>
-                        <div className="charity-insight-container">
+                      <div className='charity-insights-wrapper '>
+                        <div className="charity-insight-container ">
                             <div className="charity-chart-wrapper">
                               <div className='chart-container'>
                                   <Doughnut data={data} options={doughOptions} className='charity-chart'/>
