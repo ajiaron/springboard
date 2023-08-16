@@ -7,7 +7,8 @@ const cors = require('cors')
 app.use(express.json())
 app.use(cors())
 const stripe = require('stripe')('sk_test_51NbpB6H1mJlHYnBWQqiqjA7TDO7T3E3fvS5ewaLaU5bZg84xVQN47PexrTw76g55XNhts0gxLZRVkJw8MFlTzN6m00h9Pld2B0');
-const axios = require('axios')
+const axios = require('axios');
+const e = require('express');
 //app.use(express.static(path.join(__dirname, '../client/build')));
 //app.use(express.static("public"))
 //app.set('views', path.join(__dirname, 'views'));
@@ -22,10 +23,32 @@ const db = mysql.createConnection({
     database:'andale_db',
  }
 )
+app.post('/api/createintent', async(req, res) => {
+    const amount = req.body.amount
+    const userid = req.body.userid
+    const accountid = req.body.accountid
+    try {
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: amount,
+            currency: 'usd',
+            automatic_payment_methods: {
+              enabled: true,
+            },
+            application_fee_amount: 123,
+            transfer_data: {
+              destination: accountid,
+            },
+          });
+          res.json({client_secret: paymentIntent.client_secret});
+    } catch(e) {
+        console.log(e)
+        res.status(500).json({ error: "Failed to create payment intent" });
+    }
+})
 app.post('/api/createaccount', async (req, res) => {
     try {
         const account = await stripe.accounts.create({
-            type: 'standard',
+            type: 'express',
         });
         res.json(account);
     } catch (error) {
@@ -47,7 +70,7 @@ app.post('/api/createaccountlink', async (req, res) => {
             console.log(err)
             return res.status(500).json({ error: "Failed to insert into database" });
         } else {
-        stripe.accountLinks.create({
+          stripe.accountLinks.create({
             account: accountid, 
             refresh_url: 'http://localhost:3000/',
             return_url: 'http://localhost:3000/dashboard',
@@ -62,6 +85,42 @@ app.post('/api/createaccountlink', async (req, res) => {
     }
     })
 });
+app.get('/api/getconfirmedstripe/:accountid/:userid', async (req, res) => {
+    const accountid = req.params.accountid
+    const userid = req.params.userid
+    try {
+        const account = await stripe.accounts.retrieve(accountid)
+        if (account) {
+            db.query(`UPDATE users SET accountid = ?, payouts = ?, charges = ? WHERE userid = ?`, 
+            [accountid, account.payouts_enabled, account.charges_enabled, userid])
+            res.send(account)
+        }
+    } catch(e) {
+        console.log(e)
+        res.status(500).json({ success: false, message: 'Server error.' });
+    }
+})
+app.put('/api/confirmstripe/:accountid/:userid', async (req, res) => {
+    const accountid = req.params.accountid
+    const userid = req.params.userid
+    try {
+        const account = await stripe.accounts.retrieve(accountid)
+        if (account.details_submitted) {
+            db.query(`UPDATE users SET accountid = ?, payouts = ?, charges = ? WHERE userid = ?`, 
+            [accountid, account.payouts_enabled, account.charges_enabled, userid])
+            if (account.charges_enabled && account.payouts_enabled) {
+                res.json({ success: true, message: 'charges and payouts enabled' });
+            } else {
+                res.json({ success: false, message: 'details submitted, no charges or payouts' });
+            }
+        } else {
+            res.json({success:false, message: "details have not been submitted."})
+        } 
+    } catch(e) {
+        console.log(e)
+        res.status(500).json({ success: false, message: 'Server error.' });
+    }
+})
 
 app.get('/api/getusers', (req, res) => {
     db.query('SELECT * FROM users', (err, result) => {

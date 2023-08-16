@@ -6,7 +6,7 @@
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
-  
+
 }
 .settings-content {
     min-height: 100%;
@@ -16,6 +16,7 @@
     padding-bottom: 4em;
     margin:0;
     align-self: flex-start;
+    transition: all .25s linear;
 }
 
 

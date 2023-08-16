@@ -16,6 +16,7 @@ import { Amplify, Auth } from "aws-amplify";
 import config from '../aws-exports';
 import Notification from "./Notification";
 import SideNavigation from "./SideNavigation";
+import {AnimatePresence} from 'framer-motion'
 Amplify.configure(config);
 const ToggleSwitch = ({label, value, onToggle}) => {
     const [isToggled, setIsToggled] = useState(value)
@@ -64,6 +65,7 @@ export default function Settings() {
     const [notifications, setNotifications] = useState(false)
     const [shouldNotify, setShouldNotify] = useState(false)
     const [isUpdating, setIsUpdating] = useState(false)
+    const [firstRender, setFirstRender] = useState(true)
     function handleTest() {
         setShouldNotify(!shouldNotify)
     }
@@ -93,6 +95,18 @@ export default function Settings() {
             console.log(e)
         }
     }
+    function handleClose() {
+        setFirstRender(false)
+        setShouldNotify(!shouldNotify)
+    }
+    useEffect(()=>{
+        if (shouldNotify !== null) {
+            document.body.style.overflow='hidden'
+        }
+        else {
+            document.body.style.overflow='auto'
+        }
+      }, [shouldNotify])
     useEffect(()=> {
         const loadSettings = async() => {
             setLoading(true)
@@ -140,12 +154,15 @@ export default function Settings() {
     return (
         <div className={`settings-container`}>
             {<>
+            {<AnimatePresence>
             {
                 (shouldNotify)&&
-                <Notification onClose={()=>setShouldNotify(false)}/>
+                <Notification onClose={()=>handleClose()}/>
+            }
+            </AnimatePresence>
             }
             <SideNavigation route={'settings'}/>
-            <div className={`settings-content `}>
+            <div className={`settings-content  ${shouldNotify?(!firstRender)?'inactive-landing-container':'dim-landing-container':(!firstRender)?'active-container':''}`}>
 
                 <div className="settings-header-container ">
                     <div className="settings-image-wrapper">
@@ -171,7 +188,7 @@ export default function Settings() {
                         {`${(isUpdating)?'Please wait...':'Save Changes'}`}
                     </span>
                     }
-                    <span className="logout-container" onClick={()=>handleTest()}>
+                    <span className="logout-container" onClick={()=>handleSignOut()}>
                         Logout
                     </span>
                 </div>

@@ -267,11 +267,21 @@
   //  letter-spacing: .25px;
   //  align-self: flex-end;
    // line-height: 1.5em;
+   user-select: none;
+   -webkit-user-select: none; 
+   -moz-user-select: none; 
+   -ms-user-select: none;
+   overflow: hidden;
     font-weight: 400;
     padding-top: .05em;
     color: #aaa;
 }
 .console-link-subtext {
+    user-select: none;
+    -webkit-user-select: none; 
+    -moz-user-select: none; 
+    -ms-user-select: none;
+    overflow: hidden;
     font-size: clamp(10px, 3vw, 15px);
     font-family: "Rubik";// padding-left: .025em;
    // line-height: 20px;

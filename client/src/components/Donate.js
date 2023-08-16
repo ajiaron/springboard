@@ -14,10 +14,10 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { useInView } from 'react-intersection-observer';
 import _, { debounce } from 'lodash'; 
 import { FiMail } from "react-icons/fi";
-import {Elements} from '@stripe/react-stripe-js';
-import {PaymentElement} from '@stripe/react-stripe-js';
+import {useStripe, useElements, Elements, PaymentElement} from '@stripe/react-stripe-js';
 import {loadStripe} from '@stripe/stripe-js';
 const stripePromise = loadStripe('pk_test_51NbpB6H1mJlHYnBWRw9lhg4y7T8j2ORYSxbpGqaZSOyL1rabFvBnOmKVnuQpd2c3la3R6Nj9LsXR9aLqrPNW0Owy00tGbZTXh2');
+
 
 const CartItem = ({basketid, charityid, charityname, type, subkey, amount, index}) => {
     const [shouldDelete, setShouldDelete] = useState(false)
@@ -53,13 +53,50 @@ export default function Donate() {
     const navigate = useNavigate()
     const [donationList, setDonationList] = useState([])
     const [total, setTotal] = useState(0)
+    const [secret, setSecret] = useState(null)
+    const [testStripe, setTestStripe] = useState(true)
     const [loading, setLoading] = useState(true)
+    const [errorMessage, setErrorMessage] = useState(null)
+
+   // const stripe = useStripe();
+   // const elements = useElements();
     const userid = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0
     const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
     function handleTest() {
         console.log(params)
     }
+    /*
+    const stripeCheckout = async(e, stripe, elements) => {
+        e.preventDefault()
+        if (!stripe || !elements) {
+            return
+        }
+        const {error} = await stripe.confirmPayment({
+            elements:elements,
+            confirmParams: {
+              return_url: `http://localhost:3000/confirmation/${params.groupid}`,
+            },
+          });
+          if (error) {
+            setErrorMessage(error.message);
+          }
+    }*/
     useEffect(()=> {
+        const handleIntent = async(total) => {
+            try {
+                if (total) {
+                    const res = await axios.post(`${connection}/api/createintent`,
+                    {amount:Math.round(total*100), userid:userid, accountid:'acct_1NfVgoQhl7ws1DDA'})
+                    if (res.data) {
+                        setSecret(res.data.client_secret)
+                    }
+                    console.log(res.data.client_secret)
+                }
+            } catch(e) {
+                console.log(e)
+            }
+            setLoading(false)
+        }
         const loadDonation = async() => {
             setLoading(true)
             try {
@@ -72,13 +109,15 @@ export default function Donate() {
                     setDonationList(res.data)
                     setTotal(parseFloat(res.data.map((item)=>item.amount).reduce((a, b) => a + b, 0))
                     .toLocaleString(undefined,{minimumFractionDigits:2, maximumFractionDigits:2}))
+                    handleIntent(parseFloat(res.data.map((item)=>item.amount).reduce((a, b) => a + b, 0))
+                    .toLocaleString(undefined,{minimumFractionDigits:2, maximumFractionDigits:2}))
+                    
                 }
             } catch(e) {
                 console.log(e)
             }
         }
         loadDonation()
-        setLoading(false)
     }, [])
     const handleCheckout = async() => {
         try {
@@ -114,10 +153,16 @@ export default function Donate() {
         }
         setLoading(false)
     }
+  
+
     const options = {
         mode: 'payment',
         amount:total?Math.round(total*100):0,
         currency:'usd',
+        client_secret:secret,
+        automatic_payment_methods: {
+            enabled: true,
+        },
         appearance: {
             theme: 'flat',
             variables: {
@@ -163,13 +208,13 @@ export default function Donate() {
     }
     return (
     <>
-    {(!loading && total >0)&&
+    {(!loading && total > 0)&&
     <Elements stripe={stripePromise} options={options}>
         <div className="donate-page">
             <SideNavigation route={'donate'}/>
             <div className="donate-page-container">
-                <div className={`checkout-container`}>
-                    <div className={`checkout-content`}>
+                <div className={`checkout-container `}>
+                    <div className={`checkout-content `}>
                         <div className="checkout-header-container">
                             <p className="cart-header-text">
                                 Order Checkout
@@ -198,6 +243,7 @@ export default function Donate() {
                                 </p>
                             </div>
                         </div>
+                        <>
                         <div className="checkout-option-container">
                             <p className="checkout-option-header">
                                 Payment Method
@@ -220,7 +266,6 @@ export default function Donate() {
                                     or
                                 </p>
                             </div>
-                            
                             <div className="card-method-container">
                                 <Paypal 
                                     groupid={params?params.groupid:null}
@@ -229,19 +274,25 @@ export default function Donate() {
                                     type={'card'}
                                 />
                             </div>
-*/}
+                            */}
                         </div>
                         <div className="checkout-terms-footer">
                                 <p className="terms-text">
-                                    By confirming your order you agree to the 
+                                    {/*By confirming your order you agree to the */}
+                                    Click on the bolded text to toggle and test
                                 </p>
-                                <p className="terms-bold-text">
-                                    Terms {'&'} Conditions
-                                </p>
-                           
+                                <span onClick={()=>setTestStripe(!testStripe)}
+                                className={(testStripe)?"terms-bold-switch-container-alt":"terms-bold-switch-container"}>
+                                    <p className={`terms-bold-text${testStripe?'-alt':''}`}>
+                                       {/* Terms {'&'} Conditions */}
+                                       {(testStripe)?'Stripe Payouts':'Standard Checkout'}
+                                    </p>
+                                </span> 
                         </div>
                         <div className="checkout-confirm-container">
-                            <span className="confirm-checkout-button" onClick={()=>(loading)?console.log("loading"):handleCheckout()}>
+                         
+                            <span className="confirm-checkout-button" onClick={(e)=>(loading)?console.log("loading"):(testStripe)?
+                            console.log(secret):handleCheckout()}>
                                 <p className="confirm-checkout-text">
                                     {(loading)?'Processing...':
                                     'Confirm Order Checkout'
@@ -249,11 +300,12 @@ export default function Donate() {
                                 </p>
                                 <GoArrowRight className="arrow-checkout-icon"/>
                             </span>
+                            
                         </div>
+                        </>
                      
                     </div>
                                 
-                
                 </div>
                                 
                 <div className={`cart-container`}>

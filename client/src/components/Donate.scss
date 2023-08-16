@@ -166,6 +166,20 @@
    
    // transform: translateY(.5em);
 }
+.terms-bold-switch-container {
+    transition: all .15s linear;
+}
+.terms-bold-switch-container-alt {
+    color:rgb(243, 197, 79);
+    transition: all .15s linear;
+}
+.terms-bold-switch-container-alt:hover {
+    color:"#aaa";
+    filter: brightness(1.2);
+}
+.terms-bold-switch-container:hover {
+    filter: brightness(1.2);
+}
 .checkout-terms-footer {
     max-width: 87.5%;
     padding-top: .375rem;
@@ -195,6 +209,16 @@
 .terms-bold-text {
     font-size: clamp(8px, 2vw, 14px);
     color:#aaa;
+    font-family: 'Rubik';
+    font-weight: 600;
+    padding-left: .25em;
+    display: inline;
+    letter-spacing: -.25px;
+    font-size: clamp(8px, 2vw, 13px);
+}
+.terms-bold-text-alt {
+    font-size: clamp(8px, 2vw, 14px);
+    color:rgb(243, 197, 79);
     font-family: 'Rubik';
     font-weight: 600;
     padding-left: .25em;

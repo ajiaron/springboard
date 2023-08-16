@@ -125,6 +125,9 @@ export default function Profile() {
   const [isFollower, setIsFollower] = useState(false)
   const [isFollowing, setIsFollowing] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
+  const [confirmed, setConfirmed] = useState(false)
+  const [campaignLoading, setCampaignLoading] = useState(true)
+  const [capabilities, setCapabilities] = useState(false)
   const handleMouseEnter = () => {
     setIsHovered(true);
   };
@@ -200,11 +203,30 @@ const removeRequest = async(recipientid, requesterid) => {
         console.log(e)
     }
 }
+
   useEffect(()=> {
+    const confirmCampaign = async (accountid) => {
+        try {
+           // setCampaignLoading(true)
+            if (accountid && accountid !== null) {
+                const res = await axios.get(`${connection}/api/getconfirmedstripe/${accountid}/${id}`)
+                if (res.data) {
+                    console.log(res.data)
+                    setConfirmed(res.data.details_submitted)
+                    setCapabilities(res.data.payouts_enabled && res.data.charges_enabled)
+                }
+            } else {
+                console.log("not connected to stripe")
+            }
+        } catch(e) {
+            console.log(e)
+        }
+        setLoading(false)
+    } 
     const loadFavorites = (id) => {
         axios.get(`${connection}/api/getfavorites/${id}`)
         .then((res)=> {
-            setLoading(false)
+          //  setLoading(false)
             setFavorites(res.data.slice(0,4))
         })
         .catch((e)=>console.log(e))
@@ -225,6 +247,7 @@ const removeRequest = async(recipientid, requesterid) => {
                     setIsOwner(res.data[0].userid === id)
                     setHasBio(res.data[0].bio!==null && res.data[0].bio.length > 0)
                     loadFavorites(res.data[0].userid)
+                    confirmCampaign(res.data[0].accountid)
                 } 
                 else {
                     navigate('/dashboard')
@@ -310,17 +333,21 @@ const removeRequest = async(recipientid, requesterid) => {
                 </div>
                 }
                 {(isOwner && !loading)&&
-                 <span className={`${(userData&&userData.accountid!==null)?'profile-campaign-button':'profile-campaign-button-alt'}`}
+                 <span className={`${(userData&&userData.accountid!==null)?(confirmed)?'profile-campaign-button'
+                    :'profile-campaign-complete-button'
+                    :'profile-campaign-button-alt'}`}
                   onClick={()=>(userData&&userData.accountid!==null)?navigateStripe():createCampaign()}>
                         <div className={`profile-campaign-link-button-alt`}>
                             <p className="profile-campaign-text-alt" 
                             style={{color:'#000'}}>
-                                {(loading)?
+                                {(loading)?'Processing...':
                                 (userData&&userData.accountid!==null)?
-                                'Processing...':'Start a Campaign':
-                                'View Campaign'}
+                                (!confirmed || !capabilities)?
+                                'Complete Onboarding'
+                                :'View Campaign':
+                                'Start a Campaign'}
                             </p>
-                            {(userData&&userData.accountid !==null)?
+                            {(userData&&userData.accountid !== null)?
                             <GoArrowRight className="profile-following-icon"
                             style={{color:"#000"}}/>:
                             <AiOutlinePlus className={`profile-following-icon`}

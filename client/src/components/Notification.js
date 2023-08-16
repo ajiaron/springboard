@@ -15,43 +15,57 @@ import {AiOutlineHeart, AiFillHeart,AiOutlineCheck} from 'react-icons/ai'
 import { Link, useNavigate } from "react-router-dom";
 import { useInView } from 'react-intersection-observer';
 import { FiMail } from "react-icons/fi";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Notification({onClose}) {
   function handleClose() {
     onClose()
   }
+  const modalRef = useRef(null);
+  const handleOutsideClick = (event) => {
+    if (modalRef.current && !modalRef.current.contains(event.target)) {
+        handleClose();
+    }
+};
+useEffect(() => {
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => {
+    document.removeEventListener('mousedown', handleOutsideClick);
+    };
+}, []);
   return (
-    <motion.div
-    className="notification-container"
-    initial={{ scale: 0}}
-    animate={{ scale: 1}}
-    transition={{
-      type: "spring",
-      stiffness: 260,
-      damping: 20
-    }}
-  >
-    <div className={"notification-header "}>
-      <p className={"notification-header-text"}>
-        Feature Unavailable
-     </p>
-     <div className="notification-header-subtext-container">
-        <p className={"notification-header-subtext"}>
-            This feature is currently unavailable, please check back again soon.
+        <motion.div
+            ref={modalRef}
+            className="notification-container"
+            initial={{ scale: 0}}
+            animate={{ scale: 1}}
+            exit= {{ opacity:0 }}
+            transition={{
+            type: "spring",
+            stiffness: 260,
+            damping: 20,
+        }}
+    >
+        <div className={"notification-header "}>
+        <p className={"notification-header-text"}>
+            Feature Unavailable
         </p>
-        <p className={"notification-header-subtext"}>
-            Email notifications have not been implemented, and will be in a future update. 
-        </p>
-     </div>
-     <div className="notification-footer-container">
-        <span className="notification-footer-button" onClick={()=>handleClose()}> 
-            <p className="notification-footer-button-text">
-                Got it
+        <div className="notification-header-subtext-container">
+            <p className={"notification-header-subtext"}>
+                This feature is currently unavailable, please check back again soon.
             </p>
-        </span>
-     </div>
-    </div>
-  </motion.div>
+            <p className={"notification-header-subtext"}>
+                Email notifications have not been implemented, and will be in a future update. 
+            </p>
+        </div>
+        <div className="notification-footer-container">
+            <span className="notification-footer-button" onClick={()=>handleClose()}> 
+                <p className="notification-footer-button-text">
+                    Got it
+                </p>
+            </span>
+        </div>
+        </div>
+    </motion.div>
   )
 }
