@@ -81,12 +81,11 @@
   //background-color: rgba(255, 0, 0, 0.223);
 }
 .profile-campaign-complete-button {
-
     height: 4%;
     // margin-top: .25em;
     border-radius: 24px;
     width: fit-content;
-    padding-left: 2.5%;
+
     margin-left: auto;
     transition: all .2s linear;
     display: flex;
@@ -828,14 +827,31 @@
     padding-right: 15%;
 
 }
-
-.profile-follow-button {
-    height: 4%;
+.profile-campaign-donate-button {
+    min-height: 4%;
    // margin-top: .25em;
+    min-width: 90%;
     border-radius: 24px;
   //  margin-left: auto;
     transition: all .2s linear;
     display: flex;
+  //  padding-left: 15%;
+    justify-content: center;
+    margin-right:1.5%;
+  //  transform: translateY(-.5em);
+   // margin-top: 2%;
+    align-self:center;
+   // margin-bottom: .25em;
+}
+.profile-follow-button {
+    min-height: 4%;
+   // margin-top: .25em;
+    min-width: 100%;
+    border-radius: 24px;
+  //  margin-left: auto;
+    transition: all .2s linear;
+    display: flex;
+  //  padding-left: 15%;
     justify-content: center;
     margin-right:1.5%;
   //  transform: translateY(-.5em);
@@ -902,6 +918,28 @@
     align-self:center;
    // margin-bottom: .25em;
 }
+.profile-header-subwrapper {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 4%;
+    gap:.75em;
+   // margin-top: .25em;
+    border-radius: 24px;
+  //  margin-left: auto;
+  //  background-color: rgba(255, 0, 0, 0.184);
+    transition: all .2s linear;
+    display: flex;
+    justify-content: center;
+    margin-right:1.5%;
+    margin-left: auto;
+    padding-top: .75em;
+  //  transform: translateY(-.5em);
+   // margin-top: 2%;
+    align-self:center;
+   // margin-bottom: .25em;
+
+}
 .profile-campaign-button-alt:hover {
     transform: scale(1.05);
 }
@@ -924,8 +962,21 @@
     width: 100%;
     border-radius: 24px;
     gap:1em;
- //   padding-left: 1em;
+    padding-left: 10%;
     padding-right: 1em;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  //  align-self: center;
+}
+.profile-support-link-button {
+    text-decoration: none;
+    min-height: 2.75em;
+    width: 100%;
+    border-radius: 24px;
+    gap:1.075em;
+    padding-left: 1.75em;
+    padding-right: 1.075em;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -937,7 +988,7 @@
     width: 100%;
     border-radius: 24px;
     gap:1em;
- //   padding-left: 1em;
+    padding-left: 1.8em;
     padding-right: 1.125em;
     display: flex;
     justify-content: flex-start;
@@ -1071,6 +1122,12 @@
 .profile-following-icon {
     width: 1.175em;
     height: 1.175em;
+    color:#aaa;
+}
+.profile-following-support-icon {
+    width: 1.05em;
+    padding-top: .05em;
+    height: 1.05em;
     color:#aaa;
 }
 .profile-following-icon-alt {

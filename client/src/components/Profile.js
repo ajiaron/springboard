@@ -2,9 +2,6 @@ import React, {useState, useEffect, useRef} from "react"
 import './Profile.scss'
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import CharityItem from './CharityItem'
-import SideBar from "./SideBar";
-import Favorites from "./Favorites";
 import { v4 as uuidv4 } from 'uuid';
 import {GoArrowRight} from 'react-icons/go'
 import {LiaTimesSolid} from 'react-icons/lia'
@@ -12,7 +9,6 @@ import { BsStars, BsPlusLg, BsCheckLg, BsArrowRight,BsCheck2Circle, BsCheckCircl
 import { Link, useParams, useNavigate } from "react-router-dom";
 import {BiEdit, BiEditAlt,BiPencil,BiCheckDouble} from 'react-icons/bi'
 import {AiOutlineHeart, AiFillHeart, AiOutlineLink, AiOutlineEdit,AiFillCheckCircle, AiOutlineClockCircle, AiOutlinePlus } from 'react-icons/ai'
-import { PolarArea, Doughnut, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, RadialLinearScale, BarElement, ArcElement, Tooltip, Legend, CategoryScale, LinearScale } from "chart.js";
 import axios from "axios";
 import SideNavigation from "./SideNavigation";
@@ -261,6 +257,7 @@ const removeRequest = async(recipientid, requesterid) => {
                     }
                 })
                 if (res.data && res.data.length > 0) {
+                    console.log(res.data)
                     setUserData(res.data[0])
                     setIsFollower(res.data[0].isfollower)
                     setIsFollowing(res.data[0].isfollowing)
@@ -271,6 +268,7 @@ const removeRequest = async(recipientid, requesterid) => {
                 else {
                     navigate('/dashboard')
                 }
+                setLoading(false)
             }
      
         } catch(e) {
@@ -376,31 +374,49 @@ const removeRequest = async(recipientid, requesterid) => {
                         </div>
                     </span>
                     }
-                    <span onClick={()=>(userData&&isFollowing==="not following")?
-                    handleRequest():
-                    removeRequest(userData&&userData.userid, id)}
-                    className={`profile-follow-button 
-                  ${userData&&(isFollowing==='following' || isFollowing==="pending")?
-                  'follow-inactive':'follow-active'}`} style={{marginLeft:(userData&&isFollower==="pending")?"none":"auto"}}>
-                        <div className={`profile-${isFollowing==="pending"?"pending":"following"}-link-button`}>
-                            <p className={`${(isFollowing==="pending")?"profile-pending-text-alt":"profile-follow-text-alt"}`}
-                            style={{color:(userData&&isFollowing==="not following")?"#000":
-                            (userData&&isFollowing==="pending")?"#aaa":"#eee"}}>
-                                {(userData&&isFollowing==="following")?
-                                  "Following":
-                                  (userData&&isFollowing==="pending")?
-                                  "Requested":
-                                  "Follow"
+                    <div className="profile-header-subwrapper"
+                     style={{marginRight:(userData&&userData.accountid!==null&&userData.charges&&userData.payouts)?"1.5%":"1.5%",
+                        paddingTop:(userData&&userData.accountid!==null&&userData.charges&&userData.payouts)?"1em":"0"}}>
+                        <span onClick={()=>(userData&&isFollowing==="not following")?
+                        handleRequest():
+                        removeRequest(userData&&userData.userid, id)}
+                        className={`profile-follow-button 
+                        ${userData&&(isFollowing==='following' || isFollowing==="pending")?
+                        'follow-inactive':'follow-active'}`} style={{marginLeft:(userData&&isFollower==="pending")?"none":"auto"}}>
+                            <div className={`profile-${isFollowing==="pending"?"pending":"following"}-link-button`}>
+                                <p className={`${(isFollowing==="pending")?"profile-pending-text-alt":"profile-follow-text-alt"}`}
+                                style={{color:(userData&&isFollowing==="not following")?"#000":
+                                (userData&&isFollowing==="pending")?"#aaa":"#eee"}}>
+                                    {(userData&&isFollowing==="following")?
+                                    "Following":
+                                    (userData&&isFollowing==="pending")?
+                                    "Requested":
+                                    "Follow"
+                                    }
+                                </p>
+                                {(userData&&isFollowing==="not following")?
+                                <AiOutlinePlus className={`profile-following-icon`}
+                                style={{color:(userData&&isFollowing==="not following")?"#0a0a0a":"#eee"}}/>
+                                :(userData && isFollowing === "following")&&
+                                <BsCheckLg className={`profile-following-icon`} style={{color:"#bbb"}}/>
                                 }
-                            </p>
-                            {(userData&&isFollowing==="not following")?
-                            <AiOutlinePlus className={`profile-following-icon`}
-                            style={{color:(userData&&isFollowing==="not following")?"#0a0a0a":"#eee"}}/>
-                            :(userData && isFollowing === "following")&&
-                            <BsCheckLg className={`profile-following-icon`}/>
-                            }
-                        </div>
-                    </span>
+                            </div>
+                        </span>
+                        {(userData&&userData.accountid!==null&&userData.charges&&userData.payouts)?
+                        <span onClick={()=>(userData&&isFollowing==="not following")?
+                        handleRequest():
+                        removeRequest(userData&&userData.userid, id)}
+                        className={`profile-campaign-donate-button follow-inactive`} style={{marginLeft:(userData&&isFollower==="pending")?"none":"auto"}}>
+                            <div className={`profile-support-link-button`}>
+                                <p className={`profile-follow-text-alt`} style={{color:"#eee"}}>
+                                    Support
+                                </p>
+                                {<AiFillHeart className="profile-following-support-icon" color={{color:"#eee"}}/>
+                                }
+                            </div>
+                        </span>:null
+                        }
+                    </div>
                 </>
                 }
             </div>

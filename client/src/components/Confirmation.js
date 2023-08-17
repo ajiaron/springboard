@@ -291,7 +291,7 @@ export default function Confirmation() {
                 </>
             }
             
-                <div className='confirmation-footer-container ' style={{paddingTop:".7em"}}>
+                <div className='confirmation-footer-container ' style={{paddingTop:".75em"}}>
                     {(basketList.length > 3)?
                     <p className="confirmation-footer-text"> {`+ ${basketList.length-3} more items`} </p>
                     :
