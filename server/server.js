@@ -839,6 +839,17 @@ app.post('/api/postdonation', (req, res) => {
         }
     })
 })
+app.put('/api/confirmdonations', (req, res) => {
+    const groupid = req.body.groupid
+    const sql = `UPDATE donations SET confirmed = true WHERE groupid = ?`
+    db.query(sql, [groupid], (err, result) => {
+        if(err) {
+            console.log(err)
+        } else {
+            res.send("successfully confirmed donations")
+        }
+    })
+})
 
 app.delete('/api/emptybasket', (req, res) => {
     const groupid = req.body.groupid
@@ -859,7 +870,7 @@ app.post('/api/addarchive', (req, res) => {
         if(err) {
             console.log(err)
         } else {
-            res.send("succ")
+            res.send("successfully added to archive")
         }
     })
 })
@@ -1034,6 +1045,17 @@ app.delete('/api/emptybasket', (req, res) => {
     })
 })
 
+app.delete('/api/canceldonations', (req, res) => {
+    const groupid = req.body.groupid
+    db.query("DELETE FROM andale_db.donations WHERE groupid = ?", 
+    [groupid], (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send('members cleared')
+        }
+    })
+})
 
 app.delete('/api/removerequest', (req, res) => {
     const recipientid = req.body.recipientid

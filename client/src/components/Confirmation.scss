@@ -42,6 +42,26 @@
     color:#eee;
     line-height:46px;
 }
+.contact-subtext {
+    transition: all .15s linear;
+    font-size: clamp(10px, 3vw, 17px);
+    font-family: "Rubik";
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 36px;
+    padding-top: .2em;
+    letter-spacing: -.25px;
+    user-select: none;
+    -webkit-user-select: none; 
+    -moz-user-select: none; 
+    -ms-user-select: none;
+    overflow: hidden;
+    font-weight: 400;
+    color: #bababa;
+}
+.contact-subtext:hover {
+    color:#eee;
+}
 .confirmation-header-subtext {
     font-size: clamp(10px, 3vw, 17px);
     font-family: "Rubik";
@@ -50,11 +70,23 @@
     line-height: 36px;
     padding-top: .2em;
     letter-spacing: -.25px;
+    user-select: none;
+    -webkit-user-select: none; 
+    -moz-user-select: none; 
+    -ms-user-select: none;
+    overflow: hidden;
     font-weight: 400;
     color: #959595;
+
 }
 .confirmation-footer-container {
     align-self: flex-start;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: flex-start;
+   // gap:.375em;
+    justify-content: flex-start;
 }
 .confirmation-check-container {
     width: 100%;
@@ -64,21 +96,42 @@
     justify-content: center;
     align-items: center;
 }
+.confirmation-footer-text {
+    font-family: "Rubik";
+    color: #a0a0a0;
+    font-size: clamp(12px, 2vw, 14px);
+    font-weight: 400;
+    user-select: none;
+    -webkit-user-select: none; 
+    -moz-user-select: none; 
+    -ms-user-select: none;
+    overflow: hidden;
+}
 .confirmation-check-patch {
     border-radius: 100%;
     filter: contrast(1.05) brightness(1.05);
-    min-width:6.25vw;
-    min-height: 6.25vw;
+    min-width:6.3vw;
+    min-height: 6.3vw;
     color:rgba(28, 190, 166, 0.825);
     background: -webkit-linear-gradient(135deg,rgba(240, 202, 105, 0.875),rgba(50, 198, 176, 0.875));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
    // color: linear-gradient(135deg,rgba(240, 202, 105, 0.875),rgba(50, 198, 176, 0.875));
 }
+.confirmation-check-patch-alt {
+    border-radius: 100%;
+    filter: contrast(1.05) brightness(1.05);
+    min-width:6.35vw;
+    min-height: 6.35vw;
+    color:rgb(244, 116, 116,0.825);
+    background-color: rgba(246, 100, 100, 0.3);
+   // color: linear-gradient(135deg,rgba(240, 202, 105, 0.875),rgba(50, 198, 176, 0.875));
+}
+
 
 .confirmation-page-item-list {
     display: flex;
-    width: 77.5%;
+    width: 76.5%;
     flex-direction: column;
     height: 88.5%;
     margin-left: auto;
@@ -93,14 +146,14 @@
     border-bottom: 1px dashed #3a3a3a;
     padding-top: .125em;
     width: 100%;
-    min-height: 19.65%;
+    height: auto;
 }
 .confirmation-last-item {
     margin-top: 0.5px;
     display: flex;
    // border-bottom: 1px dashed #3a3a3a;
     width: 100%;
-    min-height: 19.65%;
+    height: auto;
 }
 .confirmation-page-item {
     display: flex;
@@ -108,7 +161,7 @@
     border-top: 1px solid #151515;
     border-bottom: 1px dashed #3a3a3a;
     width: 100%;
-    min-height: 19.65%;
+    height: auto;
 }
 
 .confirmation-page-item-info {

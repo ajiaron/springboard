@@ -18,10 +18,83 @@ import {useStripe, useElements, Elements, PaymentElement} from '@stripe/react-st
 import {loadStripe} from '@stripe/stripe-js';
 const stripePromise = loadStripe('pk_test_51NbpB6H1mJlHYnBWRw9lhg4y7T8j2ORYSxbpGqaZSOyL1rabFvBnOmKVnuQpd2c3la3R6Nj9LsXR9aLqrPNW0Owy00tGbZTXh2');
 
-
+const CheckoutForm = ({testStripe, secret, loading, url, toggleStripe, onCheckout, onCancel}) => {
+    const stripe = useStripe();
+    const elements = useElements();
+    const navigate = useNavigate()  
+    const [confirmLoading, setConfirmLoading] = useState(false)
+    const [errorMessage, setErrorMessage] = useState(null);
+    function handleCheckout(e) {
+        onCheckout()
+        handleSubmit(e)
+    }
+    const handleSubmit = async (event) => {
+        setConfirmLoading(true)
+        event.preventDefault();
+        if (!stripe || !elements || !secret) {
+          return;
+        } 
+        onCheckout()
+        const result = elements.submit();
+       // console.log(result)
+        const {error} = await stripe.confirmPayment({
+          elements,
+          clientSecret: secret, 
+          confirmParams: {
+            return_url: url,
+          },
+        });
+        if (error) {
+          setErrorMessage(error.message);
+          onCancel()
+          console.log(error)
+        } else {
+            console.log("successful payment")
+        }
+        setConfirmLoading(false)
+      };
+    return (
+        <>
+        <div className="checkout-option-container">
+            <p className="checkout-option-header">
+                Payment Method
+            </p>
+            <div className="stripe-payment-container">
+                <div className="payment-method-container">
+                <PaymentElement />
+                </div>
+            </div>
+            <div className="checkout-footer-wrapper">
+                <div className="checkout-terms-footer">
+                        <p className="terms-text">
+                            {/*By confirming your order you agree to the */}
+                            Click on the bolded text to toggle and test
+                        </p>
+                        <span onClick={()=>toggleStripe()}
+                        className={(testStripe)?"terms-bold-switch-container-alt":"terms-bold-switch-container"}>
+                            <p className={`terms-bold-text${testStripe?'-alt':''}`}>
+                            {/* Terms {'&'} Conditions */}
+                            {(testStripe)?'Stripe Payouts':'Standard Checkout'}
+                            </p>
+                        </span> 
+                </div>
+                <div className="checkout-confirm-container">
+                    <span className="confirm-checkout-button" onClick={(e)=>(loading || confirmLoading)?console.log("loading"):(testStripe && stripe)?
+                    handleSubmit(e):onCheckout()}>
+                        <p className="confirm-checkout-text">
+                            {(loading || confirmLoading)?'Processing...':
+                            'Confirm Order Checkout'
+                            }
+                        </p>
+                        <GoArrowRight className="arrow-checkout-icon"/>
+                    </span>
+                </div>
+            </div>
+        </div>
+        </>
+    )
+}
 const CartItem = ({basketid, charityid, charityname, type, subkey, amount, index}) => {
-    const [shouldDelete, setShouldDelete] = useState(false)
-
     return (
         <div className={`cart-item`}>
             <div className="donate-page-item-info">
@@ -38,12 +111,10 @@ const CartItem = ({basketid, charityid, charityname, type, subkey, amount, index
                 </div>
             </div>
             <div className={`donate-page-item-price`}>
-
                 <p className="item-price-text" style={{marginLeft:'auto', marginRight:'auto'}}>
                     {`$${parseFloat(amount).toLocaleString(undefined,
                     {minimumFractionDigits:2, maximumFractionDigits:2})}`}
                 </p>
-                
             </div>
         </div>
     )
@@ -57,30 +128,12 @@ export default function Donate() {
     const [testStripe, setTestStripe] = useState(true)
     const [loading, setLoading] = useState(true)
     const [errorMessage, setErrorMessage] = useState(null)
-
-   // const stripe = useStripe();
-   // const elements = useElements();
     const userid = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0
+    const destination = process.env.REACT_APP_ENV === 'production'?'https://demo-springboard.netlify.app':'http://localhost:3000'
     const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
     function handleTest() {
         console.log(params)
     }
-    /*
-    const stripeCheckout = async(e, stripe, elements) => {
-        e.preventDefault()
-        if (!stripe || !elements) {
-            return
-        }
-        const {error} = await stripe.confirmPayment({
-            elements:elements,
-            confirmParams: {
-              return_url: `http://localhost:3000/confirmation/${params.groupid}`,
-            },
-          });
-          if (error) {
-            setErrorMessage(error.message);
-          }
-    }*/
     useEffect(()=> {
         const handleIntent = async(total) => {
             try {
@@ -111,7 +164,6 @@ export default function Donate() {
                     .toLocaleString(undefined,{minimumFractionDigits:2, maximumFractionDigits:2}))
                     handleIntent(parseFloat(res.data.map((item)=>item.amount).reduce((a, b) => a + b, 0))
                     .toLocaleString(undefined,{minimumFractionDigits:2, maximumFractionDigits:2}))
-                    
                 }
             } catch(e) {
                 console.log(e)
@@ -119,9 +171,22 @@ export default function Donate() {
         }
         loadDonation()
     }, [])
+    const cancelCheckout = async() => {
+        try {
+            const res = await axios.delete(`${connection}/api/canceldonations`,
+            {data: {
+                groupid:params.groupid
+            }})
+            if (res) {
+                console.log("removed bad donations")
+            }
+        } catch(e) {
+            console.log(e)
+        }
+    }
     const handleCheckout = async() => {
         try {
-            setLoading(true)
+          //  setLoading(true)
             const donations = donationList.map(item => ({
                 donationid: uuidv4(),
                 ownerid: userid,
@@ -138,20 +203,12 @@ export default function Donate() {
             }));
             const res = await axios.post(`${connection}/api/postdonation`, { donations });
             if (res.data) {
-                const result = await axios.delete(`${connection}/api/clearbasket`, {
-                    data: {
-                        ownerid:userid
-                    }
-                })
-                if (result.data) {
-                    console.log("basket cleared")
-                    navigate(`/confirmation/${params.groupid}`)
-                }
+                console.log("donations successfully posted to database")
             }
         } catch(e) {
             console.log(e)
         }
-        setLoading(false)
+     //   setLoading(false)
     }
   
 
@@ -184,7 +241,7 @@ export default function Donate() {
                 color:'#eee'
               },
               '.Input:disabled, .Input--invalid:disabled': {
-                color: 'lightgray'
+                color: '#aaa'
               },
               '.Tab': {
                 padding: '10px 12px 8px 12px',
@@ -243,66 +300,15 @@ export default function Donate() {
                                 </p>
                             </div>
                         </div>
-                        <>
-                        <div className="checkout-option-container">
-                            <p className="checkout-option-header">
-                                Payment Method
-                            </p>
-                            <div className="paypal-method-container">
-                            <PaymentElement />
-                            </div>
-                        
-                            {/*
-                            <div className="paypal-method-container">
-                            <Paypal 
-                                groupid={params?params.groupid:null}
-                                names={donationList&&donationList.map((item)=>item.charityname)}
-                                amount={total!==0&&total}
-                                type={'paypal'}
-                            />
-                            </div>
-                            <div className="checkout-option-footer">
-                                <p className="checkout-option-footer-text">
-                                    or
-                                </p>
-                            </div>
-                            <div className="card-method-container">
-                                <Paypal 
-                                    groupid={params?params.groupid:null}
-                                    names={donationList&&donationList.map((item)=>item.charityname)}
-                                    amount={total!==0&&total}
-                                    type={'card'}
-                                />
-                            </div>
-                            */}
-                        </div>
-                        <div className="checkout-terms-footer">
-                                <p className="terms-text">
-                                    {/*By confirming your order you agree to the */}
-                                    Click on the bolded text to toggle and test
-                                </p>
-                                <span onClick={()=>setTestStripe(!testStripe)}
-                                className={(testStripe)?"terms-bold-switch-container-alt":"terms-bold-switch-container"}>
-                                    <p className={`terms-bold-text${testStripe?'-alt':''}`}>
-                                       {/* Terms {'&'} Conditions */}
-                                       {(testStripe)?'Stripe Payouts':'Standard Checkout'}
-                                    </p>
-                                </span> 
-                        </div>
-                        <div className="checkout-confirm-container">
-                         
-                            <span className="confirm-checkout-button" onClick={(e)=>(loading)?console.log("loading"):(testStripe)?
-                            console.log(secret):handleCheckout()}>
-                                <p className="confirm-checkout-text">
-                                    {(loading)?'Processing...':
-                                    'Confirm Order Checkout'
-                                    }
-                                </p>
-                                <GoArrowRight className="arrow-checkout-icon"/>
-                            </span>
-                            
-                        </div>
-                        </>
+                      
+                      <CheckoutForm 
+                        testStripe={testStripe} 
+                        secret={secret} 
+                        url={`${destination}/confirmation/${params.groupid}`}
+                        toggleStripe={()=>setTestStripe(!testStripe)}
+                        onCheckout={()=>handleCheckout()}
+                        onCancel = {()=>cancelCheckout()}
+                      />
                      
                     </div>
                                 
