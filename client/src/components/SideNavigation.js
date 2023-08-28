@@ -18,7 +18,8 @@ import './SideNavigation.scss'
 export default function SideNavigation({route}) {
   const navigate = useNavigate()
   const [isHovered, setIsHovered] = useState(false)
-  const [expanded, setExpanded] = useState(route!=="profile"&&route!=="settings"&&route!=="charity")
+  const [expanded, setExpanded] = useState(route!=="profile"&&route!=="settings"&&route!=="charity"&&
+  route!=='campaign'&&route!=='createcampaign')
   const userid = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0
   const username = localStorage.getItem("username")?JSON.parse(localStorage.getItem("username")):0
   const handleMouseEnter = () => {
@@ -30,13 +31,15 @@ export default function SideNavigation({route}) {
   function handleNavigate(url) {
     navigate(`/${url}`)
   }
-
+  useEffect(()=> {
+    console.log(route==='createcampaign')
+  }, [])
   return (
     
     <>{(expanded)?
-    <div className={(route==="profile"||route==="charity"||route==="settings")?
+    <div className={(route==="profile"||route==="charity"||route==="settings"||route==='campaign'||route==="createcampaign")?
     "side-console-container-alt":"side-console-container"}>
-            {(route==="profile"||route==="charity"||route==="settings")?
+            {(route==="profile"||route==="charity"||route==="settings" ||route==='campaign'||route==='createcampaign')?
                 <div className="console-header-container-alt">
                     <span className="console-content-wrapper-closed-alt" onClick={()=>setExpanded(!expanded)} >   
                         <FaBars className="home-icon-closed"/>
@@ -149,12 +152,12 @@ export default function SideNavigation({route}) {
                      Updates
                 </p>
             </Link>
-            <span className="console-content-wrapper ">
+            <Link className="console-content-wrapper " to={`#`}>
                 <AiOutlineQuestionCircle className="home-icon"/>
                 <p className="console-item-subtext">
                     Help {'&'} feedback
                 </p>
-            </span>
+            </Link>
         </div>
         <div className="console-content-container first-content ">
             <div className="console-content-wrapper">
@@ -171,7 +174,7 @@ export default function SideNavigation({route}) {
         </div>                    
     </div>:
 
-<div className={(route==="profile"||route==="charity"||route==="settings")?
+<div className={(route==="profile"||route==="charity"||route==="settings"||route==="campaign"||route==="createcampaign")?
 "side-console-container-closed":"side-console-container"}>
     <div className={"console-content-container-closed"}>
         <span className="console-content-wrapper-closed" onClick={()=>setExpanded(!expanded)} >   

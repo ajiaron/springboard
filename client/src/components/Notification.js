@@ -17,7 +17,7 @@ import { useInView } from 'react-intersection-observer';
 import { FiMail } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 
-export default function Notification({onClose}) {
+export default function Notification({prompt, message, onClose}) {
   function handleClose() {
     onClose()
   }
@@ -48,14 +48,15 @@ useEffect(() => {
     >
         <div className={"notification-header "}>
         <p className={"notification-header-text"}>
-            Feature Unavailable
+            {prompt==="unavailable"?"Feature Unavailable":"An error occured."}
         </p>
         <div className="notification-header-subtext-container">
             <p className={"notification-header-subtext"}>
-                This feature is currently unavailable, please check back again soon.
+                {prompt==="unavailable"?'This feature is currently unavailable, please check back again soon.':
+                "Please ensure all input fields are filled in propertly."}
             </p>
             <p className={"notification-header-subtext"}>
-                Email notifications have not been implemented, and will be in a future update. 
+               {message}
             </p>
         </div>
         <div className="notification-footer-container">

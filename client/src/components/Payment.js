@@ -162,7 +162,7 @@ export default function Payment({charityid, edit, onClose, onBlur}) {
         
         <div className={`payment-screen-wrapper ${shouldClose?'payment-screen-active':'payment-screen-inactive'}`} ref={modalRef}>
             <span className="exit-container" onClick={()=>handleClose()}>
-                <LiaTimesSolid className="exit-icon"/>
+                <LiaTimesSolid className="payment-exit-icon"/>
             </span>
             <div className="payment-inner-container">
                 <>

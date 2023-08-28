@@ -15,8 +15,10 @@ import Friends from './components/Friends'
 import ScrollToTop from "./components/ScrollToTop";
 import Confirmation from './components/Confirmation';
 import Archive from './components/Archive';
+import CreateCampaign from './components/CreateCampaign';
 import Charity from './components/Charity';
 import CharityItem from './components/CharityItem';
+import Campaign from './components/Campaign'
 import { Auth } from 'aws-amplify';
 
 function ProtectedRoute({ children }) {
@@ -63,6 +65,7 @@ function AnimatedRoutes() {
                         </ProtectedRoute>
                     }/>
                     <Route path='/charity/:charityid/:charityname/:category' element={<Charity/>}/>
+                    <Route path='/campaign/:campaignid' element={<Campaign/>}/>
                     <Route path='/cart' element={
                         <ProtectedRoute>
                             <Cart/>
@@ -86,6 +89,11 @@ function AnimatedRoutes() {
                     <Route path='/donations'element={
                         <ProtectedRoute>
                             <Donations/>
+                        </ProtectedRoute>
+                    }/>
+                    <Route path='/createcampaign/:campaignid' element={
+                        <ProtectedRoute>
+                            <CreateCampaign/>
                         </ProtectedRoute>
                     }/>
                     <Route path='/donate/:groupid' element={

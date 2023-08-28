@@ -2,6 +2,7 @@ import React, {useState, useEffect, useRef} from "react"
 import './Profile.scss'
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import Popup from "./Popup";
 import { v4 as uuidv4 } from 'uuid';
 import {GoArrowRight} from 'react-icons/go'
 import {LiaTimesSolid} from 'react-icons/lia'
@@ -12,6 +13,7 @@ import {AiOutlineHeart, AiFillHeart, AiOutlineLink, AiOutlineEdit,AiFillCheckCir
 import { Chart as ChartJS, RadialLinearScale, BarElement, ArcElement, Tooltip, Legend, CategoryScale, LinearScale } from "chart.js";
 import axios from "axios";
 import SideNavigation from "./SideNavigation";
+import { motion, AnimatePresence, useAnimation } from 'framer-motion'
 ChartJS.register(RadialLinearScale, CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend);
 const FavoriteItem = ({charityid, charityname, value, size, type, index, onNavigate}) => {
     return (
@@ -122,27 +124,60 @@ export default function Profile() {
   const [isFollowing, setIsFollowing] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
   const [confirmed, setConfirmed] = useState(false)
-  const [campaignLoading, setCampaignLoading] = useState(true)
   const [capabilities, setCapabilities] = useState(false)
+  const [status, setStatus] = useState("")
+  const [renderStatus, setRenderStatus] = useState(false)
   const handleMouseEnter = () => {
     setIsHovered(true);
   };
   const handleMouseLeave = () => {
     setIsHovered(false);
   };
+  const closePopup = () => {
+    setRenderStatus(false)
+    setStatus(false)
+  }
   function handleNavigate(id, name, type) {
     navigate(`/charity/${id}/${name}/${type.toLowerCase()}`)
   }
   function navigateProfile(name) {
     navigate(`/${name}`)
   }
-  function navigateStripe() {
-    if (userData && userData.accountid !== null && isOwner) {
-        if (process.env.REACT_APP_ENV === 'production') {
-            window.location.href = `https://dashboard.stripe.com/connect/accounts/${userData.accountid}/profile`
+  
+  const navigateStripe = async() => {
+    setStatus("loading")
+    try {
+        if (userData && userData.accountid !== null && isOwner) {
+            const accountLink = await axios.get(`${connection}/api/getaccountlink`,
+            {params: {
+                accountid:userData.accountid,
+                username:username
+            }})
+            if (accountLink.data) {
+                setStatus("success")
+                window.location.href = accountLink.data.url;
+            } else {
+                setStatus("error")
+            }
+            /*
+            if (process.env.REACT_APP_ENV === 'production') {
+                window.location.href = `https://dashboard.stripe.com/connect/accounts/${userData.accountid}/profile`
+            }
+            window.location.href = `https://dashboard.stripe.com/test/connect/accounts/${userData.accountid}/profile`
+            */   
         }
-        window.location.href = `https://dashboard.stripe.com/test/connect/accounts/${userData.accountid}/profile`
+    } catch(e) {
+        setStatus("error")
+        console.log(e)
     }
+  }
+  function navigateCampaign(campaignid, verified) {
+    if (verified) {
+        navigate(`/campaign/${campaignid}`)
+    } else {
+        navigate(`/createcampaign/${campaignid}`)
+    }
+
   }
   const handleRequest = async() => {
     const idrequest = uuidv4()
@@ -162,7 +197,7 @@ const createCampaign = async() => {
     setLoading(true)
     try {
         const res = await axios.post(`${connection}/api/createaccount`)
-        if (res.data) {
+        if (res.data) { // create campaign entry
             const accountLink = await axios.post(`${connection}/api/createaccountlink`,
             {accountid:res.data.id, ownerid:id, campaignid:campaignid,
             email:email, firstname:firstname, lastname:lastname, username:username})
@@ -199,8 +234,18 @@ const removeRequest = async(recipientid, requesterid) => {
         console.log(e)
     }
 }
-
-  useEffect(()=> {
+ useEffect(()=> {  // for loading status bar
+    if (status.length>0) {
+      setRenderStatus(true)
+      if (status!=='loading') {
+        setTimeout(() => {
+          setRenderStatus(false)
+          setStatus('')
+        }, 4000);
+      }
+    }
+  }, [status])
+ useEffect(()=> {
     const confirmCampaign = async (accountid) => {
         try {
            // setCampaignLoading(true)
@@ -282,6 +327,11 @@ const removeRequest = async(recipientid, requesterid) => {
     <div className="profile-page-container">
       {   <SideNavigation route={'profile'}/> }
       {/* <Navbar route={'profile'}/>*/}
+      <AnimatePresence>     
+        {(renderStatus && status.length > 0)&&  // gives request status
+          <Popup status={status} onClose={()=>closePopup()}/>
+        }
+      </AnimatePresence>
         <div className="profile-page-content ">
             <div className="profile-header-container  ">
                 <div className="profile-image-wrapper">
@@ -334,8 +384,10 @@ const removeRequest = async(recipientid, requesterid) => {
                  <span className={`${(userData&&userData.accountid!==null)?(confirmed)?'profile-campaign-button'
                     :'profile-campaign-complete-button'
                     :'profile-campaign-button-alt'}`}
-                  onClick={()=>(userData&&userData.accountid!==null)?navigateStripe():createCampaign()}>
-                        <div className={`profile-campaign-link-button-alt`}>
+                  onClick={()=>(userData&&userData.accountid!==null)?
+                    (!confirmed || !capabilities)?navigateStripe():
+                    navigateCampaign(userData.campaignid, userData.verified):createCampaign()}>
+                        <div className={`profile-campaign-link-button-alt ${(!confirmed || !capabilities)?'complete-onboard':''}`}>
                             <p className="profile-campaign-text-alt" 
                             style={{color:'#000'}}>
                                 {(loading)?'Processing...':
@@ -375,7 +427,8 @@ const removeRequest = async(recipientid, requesterid) => {
                     </span>
                     }
                     <div className="profile-header-subwrapper"
-                     style={{marginRight:(userData&&userData.accountid!==null&&userData.charges&&userData.payouts)?"1.5%":"1.5%",
+                     style={{alignSelf:(userData&&userData.accountid!==null&&userData.charges&&userData.payouts)?"flex-end":"center",
+                        marginRight:(userData&&userData.accountid!==null&&userData.charges&&userData.payouts)?"1.5%":"1.5%",
                         paddingTop:(userData&&userData.accountid!==null&&userData.charges&&userData.payouts)?"1em":"0"}}>
                         <span onClick={()=>(userData&&isFollowing==="not following")?
                         handleRequest():
@@ -406,7 +459,9 @@ const removeRequest = async(recipientid, requesterid) => {
                         <span onClick={()=>(userData&&isFollowing==="not following")?
                         handleRequest():
                         removeRequest(userData&&userData.userid, id)}
-                        className={`profile-campaign-donate-button follow-inactive`} style={{marginLeft:(userData&&isFollower==="pending")?"none":"auto"}}>
+                        className={`profile-campaign-donate-button follow-inactive`} 
+                        style={{marginLeft:(userData&&isFollower==="pending")?"none":"auto",
+                        minWidth:(isFollowing==="following"?"93%":"100%")}}>
                             <div className={`profile-support-link-button`}>
                                 <p className={`profile-follow-text-alt`} style={{color:"#eee"}}>
                                     Support
@@ -445,7 +500,7 @@ const removeRequest = async(recipientid, requesterid) => {
                     </p>
                     <div style={{display:"flex", alignItems:"center", justifyContent:"flex-start", gap:'.5em'}}>
                         <p className="donation-details-subtext">
-                            {(isOwner)? 'Your ':`${userData&&userData.firstname}'s `}collection of charities to be displayed on your profile.
+                            {(isOwner)? 'Your ':`${userData&&userData.firstname}'s`} collection of charities to be displayed on {`${isOwner?'your':'their'} profile.`}
                         </p>
                         {(isOwner)&&
                         <Link to={`/archive`}

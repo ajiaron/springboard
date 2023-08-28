@@ -73,7 +73,7 @@ app.post('/api/createaccountlink', async (req, res) => {
           stripe.accountLinks.create({
             account: accountid, 
             refresh_url: 'http://localhost:3000/',
-            return_url: 'http://localhost:3000/dashboard',
+            return_url: `http://localhost:3000/createcampaign/${campaignid}`,
             type: 'account_onboarding',
         }, (stripeError, accountLink)=> {
             if (stripeError) {
@@ -85,6 +85,22 @@ app.post('/api/createaccountlink', async (req, res) => {
     }
     })
 });
+app.get('/api/getaccountlink', async(req, res)=> {
+    const accountid = req.query.accountid
+    const username = req.query.username
+    stripe.accountLinks.create({
+        account: accountid, 
+        refresh_url: 'http://localhost:3000/',
+        return_url: `http://localhost:3000/${username}`,
+        type: 'account_onboarding',
+    }, (stripeError, accountLink)=> {
+        if (stripeError) {
+            console.log(stripeError)
+            return res.status(500).json({ error: "Failed to create account link" });
+        }            
+        res.json(accountLink);
+    })
+})
 app.get('/api/getconfirmedstripe/:accountid/:userid', async (req, res) => {
     const accountid = req.params.accountid
     const userid = req.params.userid
@@ -121,6 +137,43 @@ app.put('/api/confirmstripe/:accountid/:userid', async (req, res) => {
         res.status(500).json({ success: false, message: 'Server error.' });
     }
 })
+
+// new
+app.get('/api/getcampaign/:campaignid/:ownerid', (req, res) => {
+    const campaignid = req.params.campaignid
+    const ownerid = req.params.ownerid
+    db.query(`SELECT DISTINCT * FROM campaigns WHERE campaignid = ? AND ownerid = ?`,
+    [campaignid, ownerid], (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+
+app.put('/api/confirmcampaign', (req,res) => {
+    const ownerid = req.body.ownerid
+    const campaignid = req.body.campaignid
+    const campaignname = req.body.campaignname
+    const goal = req.body.goal
+    const description = req.body.description
+    const shareName = req.body.shareName
+    const theme = req.body.theme
+    const sql = `UPDATE campaigns SET `+
+    `campaignname = ?, goal = ?, description = ?, shareName = ?, theme = ?, verified = true ` +
+    `WHERE campaignid = ? AND ownerid = ?;` 
+    db.query(sql, 
+    [campaignname, goal, description, shareName, theme, campaignid, ownerid],
+    (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+//
 
 app.get('/api/getusers', (req, res) => {
     db.query('SELECT * FROM users', (err, result) => {
@@ -419,7 +472,7 @@ app.get('/api/getaccount', (req,res)=> {
     const username = String(req.query.username)
     const userid = req.query.userid
     const sql = `SELECT users.*, `+
-    `campaigns.campaignid, campaigns.accountid `+
+    `campaigns.campaignid, campaigns.accountid, campaigns.verified `+
     `FROM andale_db.users `+
     `INNER JOIN andale_db.campaigns ON users.userid = campaigns.ownerid `+
     `WHERE users.username = ? AND users.userid = ?;`

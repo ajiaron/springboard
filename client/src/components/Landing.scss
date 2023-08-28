@@ -33,7 +33,6 @@ p {
   transition: all .15s linear;
   filter: brightness(.6) blur(4px);
   pointer-events: none;
- // overflow: hidden;
 }
 
 .inactive-landing-container {
@@ -42,8 +41,6 @@ p {
   animation-duration: .25s;
   pointer-events: none;
   animation-fill-mode: forwards;
-
-  //transition: all .25s linear;
 }
 @keyframes animate-dimming {
   from {
