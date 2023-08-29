@@ -67,7 +67,6 @@ export default function CreateCampaign() {
   }
 
   const handleChange = (e) => {
-    const value = e.target.value;
     if (isValidColor( e.target.value)) {
       setThemeColor( e.target.value);
     } else {

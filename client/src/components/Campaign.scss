@@ -1,0 +1,148 @@
+.campaign-stats-container {
+    width: 42.5%;
+    height: 100%;
+   // transform: translateY(-.025em);
+    //padding-left: 1em;
+   //background-color: rgba(46, 139, 86, 0.207);
+    display: flex;
+  //  transform: translateX(-.5em);
+    flex-direction: column;
+    margin-left: auto;
+}
+.campaign-donations-list {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    justify-content:flex-end;
+
+  //  background-color: rgba(46, 139, 86, 0.198);
+}
+.campaign-donations-list-content {
+    width: 100%;
+    padding-top: .875em;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+   // padding-left: .025em;
+    //margin-top: .5em;
+ //   background-color: rgba(46, 103, 139, 0.198);
+}
+
+.campaign-details-container {
+    padding-top: .5em;
+    width: 92.25%;
+    height: 36vh;
+   // overflow: hidden;
+   // padding-left: .125em;
+   // background-color: rgba(0, 139, 139, 0.228);
+    display: flex;
+  
+}
+.campaign-donations-wrapper {
+    height: 90%;
+  //  background-color: rgba(255, 0, 0, 0.211);
+    width: 40%;
+   // margin-top: .25em;
+    display: flex;
+}
+.campaign-figure-wrapper {
+    height: 90%;
+  //  background-color: rgba(255, 0, 0, 0.211);
+    width: 60%;
+   // margin-top: .25em;
+ //  margin-left: auto;
+    display: flex;
+}
+.campaign-insights-wrapper {
+    margin-top: 1.25em;
+    width: 100%;
+    border-radius: 20px;
+   // background-color: rgba(70, 131, 180, 0.27);
+    min-height:96.25%;
+
+    //height:57.25%
+}
+.campaign-insights-wrapper-alt {
+    margin-top: 1.25em;
+    width: 96%;
+    margin-left: auto;
+    border-radius: 20px;
+   // background-color: rgba(70, 131, 180, 0.27);
+    min-height:96.25%;
+
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    //align-items: center;
+    //height:57.25%
+}
+.campaign-insights-wrapper-row {
+    width: 100%;
+    height: 46.5%;
+    justify-content: space-between;
+    border-radius: 20px;
+    display: flex;
+}
+.campaign-insights-wrapper-item {
+    width: 48.5%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+ //   padding-left: 1em;
+    border-radius: 20px;
+
+    background-color: #252525bd;
+}
+.campaign-page-donations-container {
+    height: 100%;
+  //  background-color: rgba(0, 255, 217, 0.211);
+    width: 100%;  
+    display: flex;
+   // padding-left: .125em;
+}
+.campaign-insight-container {
+    width: 94.5%;
+    background-color: #252525bd;
+    overflow-x: hidden;
+    border-radius: 16px;
+    //padding-left:1.5em;
+    display: flex;
+    margin-left: auto;
+    align-items: center;
+  //  border:1px solid #303030;
+    height: 100%;
+   // outline:1px solid #303030;
+    transition: all .15s linear;
+  //  box-shadow: 3px 3px 2px 4px rgba(0,0,0,0.2);
+  }
+  .campaign-insights-subcontent-header {
+    font-size: clamp(14px, 3vw, 16px);
+    font-family: "Rubik";
+    letter-spacing: -.25px;
+    font-weight: 400;
+    color:#eee;
+    line-height:22px;
+   // width: 70%;
+}
+.campaign-insights-subcontent-subtext {
+    font-size: clamp(10px, 3vw, 16px);
+    font-family: "Rubik";
+    letter-spacing: -.25px;
+    font-weight: 600;
+    color:#eee;
+    //color:#eeeeeebd;
+    //line-height:22px;
+   // width: 70%;
+}
+  .campaign-insights-subcontent-text {
+    font-size:clamp(24px, 3vw, 36px);
+    color:#eee;
+    font-family: 'Inter';
+    font-weight: 800;
+    text-align: center;
+    letter-spacing: -0.25px;
+   // line-height: 44px;
+}

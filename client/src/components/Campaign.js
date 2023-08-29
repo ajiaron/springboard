@@ -4,11 +4,13 @@ import Footer from "./Footer";
 import { Link, useParams, useLocation } from "react-router-dom";
 import {AiOutlineHeart, AiFillHeart} from 'react-icons/ai'
 import './Charity.scss'
+import './Campaign.scss'
 import {GoArrowRight} from 'react-icons/go'
 import SideNavigation from './SideNavigation';
 import UserContext from '../contexts/UserContext';
 import Payment from './Payment';
-import Axios from "axios";
+import { Oval } from 'react-loader-spinner'
+import { motion, AnimatePresence, useAnimation } from 'framer-motion'
 import { PolarArea, Doughnut, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, RadialLinearScale, BarElement, ArcElement, Tooltip, Legend, CategoryScale, LinearScale } from "chart.js";
 import { AiOutlineLink, AiOutlineEdit, AiOutlineClockCircle } from 'react-icons/ai'
@@ -17,7 +19,7 @@ ChartJS.register(RadialLinearScale, CategoryScale, LinearScale, BarElement, ArcE
 
 const CharityDonation = ({name, location, category, index}) => {
   return (
-  <div className={`profile-donation-item ${index===2?'donation-item-last':''}`}>
+  <div className={`profile-donation-item ${index===3?'donation-item-last':''}`}>
       <div className="profile-donation-item-info" style={{paddingLeft:'.125em'}}>
           <p className="profile-donation-item-title">
               {name}
@@ -28,174 +30,64 @@ const CharityDonation = ({name, location, category, index}) => {
                   3 weeks ago
               </p>   
           </div>
-
-          <div className={`profile-donation-item-type-wrapper profile-${category}`}>
-              <p className={`profile-donation-item-type-text ${category==='education'?'donation-item-type-text-alt':''}`}>
-                {location}
-              </p>
-          </div>
       </div>
   </div>
   )
 }
-const InsightItem = ({name, value}) => {
-  return (
 
-      <div className={`charity-stats-item-info ${name==='Location'?'location-insight-wrapper':''}`}>
-          <p className="profile-friends-item-title">
-              {name}
-          </p>
-          <div className="profile-friends-text-wrapper">
-            {(name !== 'Affiliate Payments' && name !== 'Admin Exp. Ratio' && name !== 'Organization Focus' && name !== 'Location')?
-              <p className={`profile-donation-item-text ${name==='Excess/Deficit'?value>=0?'excess-text':'deficit-text':''}`} style={{paddingTop:'.175em', paddingLeft:'.125em'}}>
-                  {`${name==='Excess/Deficit'?(value>=0)?'+':'-':''}$${Math.abs(value).toLocaleString()}`}
-              </p>  :
-              <p className={`profile-donation-item-text ${name==='Excess/Deficit'?value>=0?'excess-text':'deficit-text':name==='Location'?'location-insight-text':''}`} style={{paddingTop:'.175em', paddingLeft:'.125em'}}>
-                {(name==='Admin Exp. Ratio')? parseFloat(value).toFixed(2): value}
-              </p>
-            }
-          </div>
-      </div>
-  )
-}
 
 export default function Campaign() {
   const userid = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0
   const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
+  const controls = useAnimation()
   const [firstRender, setFirstRender] = useState(true)
   const [isActive, setIsActive] = useState(true)  // background is active
   const [loading, setLoading] = useState(true)
   const [paymentActive, setPaymentActive] = useState(null)
   const [charityInfo, setCharityInfo] = useState(null)
   const [shouldArchive, setShouldArchive] = useState()
-  const { charityid, charityname, category: categoryColor } = useParams();
-  const themeColors = {
-    healthcare: 'rgba(214, 72, 86, ',
-    environment: 'rgba(66, 160, 110, ',
-    education: 'rgba(230, 184, 93, ',
-    human: 'rgba(73, 128, 173, ',
-    research: 'rgba(78, 142, 138, ',
-    animals: 'rgba(122, 188, 69, ',
-    community: 'rgba(154, 129, 106, '
-  }
-  const [theme, setTheme] = useState(themeColors[categoryColor] || 'rgba(90,90,90,0.75)');
-  
-  const barData = {
-    labels: ['Overall', 
-    `${charityInfo?charityInfo[0].type1==='Human'?'H. Services':charityInfo[0].type1:'Loading..'}`,
-     'Location',
-     `${charityInfo&&charityInfo[0].size}-sized`,
-      'Personal'],
-    datasets: [
-      {
-          label: 'Dataset 2',
-          data: [30, 55, 20, 38, 35],
-          backgroundColor: 'rgba(62, 62, 62, .75)',
-          // backgroundColor: 'rgba(255, 99, 132, 0.1)',
-          borderColor: 'rgba(255, 99, 132, .75)',
-          borderWidth: 0,
-          borderRadius: {
-              topLeft:20,
-              topRight:20,
-          },
-          barPercentage:.4,
-          categoryPercentage:1,
-      },
-      {
-          label: 'Dataset 1',
-          data: [50, 20, 30, 45, 25],
-          backgroundColor: `${theme}${categoryColor==='healthcare'||categoryColor==='education'||categoryColor==='animals'?'0.75)':'.8)'}`,
-          borderColor: `${theme}0.75)`,
-          borderWidth: 0,
-          hoverBackgroundColor: [
-            `${theme}.95)`,
-          ],
-          borderRadius: {
-              topLeft:20,
-              topRight:20,
-          },
-          barPercentage:.4,
-          categoryPercentage:1,
-      },
-    ],
-  }
-  const barOptions = {
-    scales: {
-      y: {
-        beginAtZero: true,
-        offset:false,
-        stacked: false,
-        grid: {
-            display:false,
-            color: function(context) {
-                return context.tick.value === 0 ? 'rgba(214, 72, 86, 0.6)' : 'rgba(0, 0, 0, 0)';
-            },
-      
-            borderColor: 'rgba(255, 99, 132, 0.6)', // sets color of axis line
-        },
-        ticks: {
-            color:'#151515',
-            padding:0,
-            stepSize:5,
-            display:false,
-            position:'right',
-            backdropPadding:0
-          },
-      },
-      x: {
-        offset:true,
-        beginAtZero:true,
-        stacked: true,
-        grid: {
-            display:true,
-            color:'transparent',
-            borderColor:'transparent'
-  
-          },
-        ticks: {
-            padding:2,
-            color:"#aaa",
-            backgroundColor:'#151515',
-            backdropColor: 'transparent',
-          },
-      },
-    },
-    responsive:true,
-    plugins: {
-        legend: {
-          display:false,
-          labels: {
-            color: '#151515'  // changes color of legend labels
-          }
+  const [campaignInfo, setCampaignInfo] = useState(null)
+  const { campaignid } = useParams()
+  function hexToRgba(hex, a){
+    var c;
+    if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
+        c= hex.substring(1).split('');
+        if(c.length === 3){
+            c= [c[0], c[0], c[1], c[1], c[2], c[2]];
         }
-      }
-  }
+        c= '0x'+c.join('');
+        return `${'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')},${a?a:1})`;
+    }
+    else {
+        console.log(hex)
+    }
+}
+
+  const [theme, setTheme] = useState('#5a5a5abf');
   const data = {
-      labels: ['Red', 'Blue'],
+      labels: ['Current', 'Goal'],
+
       datasets: [
         {
-          label: '# of Votes',
-          data: [charityInfo?parseFloat(charityInfo[0].overall_score).toFixed(1):0,
-          charityInfo?charityInfo[0].overall_score < 100?
-          102-parseFloat(charityInfo[0].overall_score).toFixed(1):
-          100-parseFloat(charityInfo[0].overall_score).toFixed(1):0.0],
+          label: 'Funds Raised',
+          data: [campaignInfo?campaignInfo.total:0,
+          campaignInfo?campaignInfo.goal-campaignInfo.total:0],
           backgroundColor: [
-            `${theme}${categoryColor==='healthcare'||categoryColor==='education'||categoryColor==='animals'?'0.75)':'.8)'}`,
+            (campaignInfo)?`${hexToRgba('#'+campaignInfo.theme.substring(0,6),0.75)}`:`rgba(92,92,92,0.8)`,
             'rgba(92, 92, 92, 0.8)',
-        //   'rgba(255, 99, 132, 0.15)',
           ],
           borderColor: ['#252525bb','#252525bb'],
           borderWidth:0,
-          spacing:charityInfo?charityInfo[0].overall_score<100?3:0:3,
+          spacing:campaignInfo?campaignInfo.total<campaignInfo.goal?4:0:4,
           hoverBackgroundColor: [
-            `${theme}0.95)`,
+            (campaignInfo)?`${hexToRgba('#'+campaignInfo.theme.substring(0,6),0.95)}`:`rgba(92,92,92,0.8)`,
             'rgba(92, 92, 92, .75)',
           ],
           borderRadius: {
-            outerEnd:charityInfo?charityInfo[0].overall_score<100?20:0:20,
-            innerEnd:charityInfo?charityInfo[0].overall_score<100?20:0:20,
-            outerStart:charityInfo?charityInfo[0].overall_score<100?20:0:20,
-            innerStart:charityInfo?charityInfo[0].overall_score<100?20:0:20,
+            outerEnd:campaignInfo?campaignInfo.total<campaignInfo.goal?20:0:20,
+            innerEnd:campaignInfo?campaignInfo.total<campaignInfo.goal?20:0:20,
+            outerStart:campaignInfo?campaignInfo.total<campaignInfo.goal?20:0:20,
+            innerStart:campaignInfo?campaignInfo.total<campaignInfo.goal?20:0:20,
           },
         },
       ],
@@ -220,7 +112,7 @@ export default function Campaign() {
   }
   const handlePayment = () => {
     setFirstRender(false)
-    setPaymentActive(charityid)
+   // setPaymentActive(charityid)
     setIsActive(false)
 }
   const onClosePayment = () => {
@@ -229,49 +121,35 @@ export default function Campaign() {
   function handleTest() {
     console.log(charityInfo)
   }
-  const handleArchive = () => {
-    if (!shouldArchive) {
-      axios.post(`${connection}/api/addarchive`, {userid:userid, charityid:charityid})
-      .then(()=>{
-        setShouldArchive(true)
-      })
-      .catch((e)=>console.log(e))
+
+  useEffect(() => {
+    if (!loading) {
+      controls.start({
+        y: 0,
+        opacity: 1,
+      });
     }
-    else {
-      axios.delete(`${connection}/api/removearchiveitem`, {
-        data:{
-          userid:userid,
-          charityid:charityid
-        }
-      })
-      .then(()=>{
-        setShouldArchive(false)
-      })
-      .catch((e)=>console.log(e))
-    }
-   
-  }
+  }, [loading, controls]);
   useEffect(()=> {
-    const loadCharity = async() => {
-      setLoading(true)
-      try {
-        const url = `${connection}/api/getcharitypage`;
-        const res = await Axios.get(url, {
-          params: {
-              charityid:charityid,
-              userid:userid
-          }
-        })
-        setCharityInfo(res.data)
-        setShouldArchive(res.data[0].archived)
-      }
-      catch(e) {
-        console.log(e)
-      }
+    const loadCampaign = async() => {
+        setLoading(true)
+        try {
+            const res = await axios.get(`${connection}/api/getcampaign/${campaignid}`)
+            if (res.data) {
+                console.log(res.data)
+                setCampaignInfo(res.data[0])
+                setTheme(res.data[0].theme)
+                setLoading(false)
+                // handle whether or not the campaign is archived here
+            }
+        } catch(e) {
+            console.log(e)
+        }
     }
-    loadCharity()
-    setLoading(false)
-  },[])
+    loadCampaign()
+
+  }, [])
+
   useEffect(()=>{
     if (paymentActive !== null) {
         document.body.style.overflow='hidden'
@@ -282,27 +160,54 @@ export default function Campaign() {
   }, [paymentActive])
   return (
     <div className={`charity-page`}>
+        {(loading || campaignInfo === null)?
+        <div className="create-campaign-loading-container">
+            <Oval
+                color="#959595"
+                wrapperStyle={{}}
+                wrapperClass=""
+                visible={true}
+                ariaLabel='oval-loading'
+                secondaryColor="#454545"
+                strokeWidth={2}
+                strokeWidthSecondary={2}
+            />
+            <p className="settings-loading-text" style={{paddingTop:"1.25em", paddingLeft:".3em", textAlign:"center"}}>
+                {`${(loading)?'Please wait a moment...':`Viewing all matching results`}`}
+            </p>
+        </div>:
+        <>
       {
           (paymentActive!==null)&&<Payment charityid={paymentActive} edit={null} onClose={onClosePayment} onBlur={handleBlur}/>
       }
-      <div className={`header-blur blur-${categoryColor}`}/>
-        <SideNavigation route={'charity'}/>
-        <div className={`charity-page-container ${!isActive?(!firstRender)?'inactive-landing-container':'dim-landing-container':(!firstRender)?'active-container':''}`}>
+      {(campaignInfo)&&
+      <div className={`header-blur`} style={{background:
+     `linear-gradient(180deg, ${hexToRgba('#'+campaignInfo.theme.substring(0,6),0.6)}, rgba(238, 77, 93, 0))`}}/>
+      }
+        <SideNavigation route={'campaign'}/>
+          <motion.div 
+            className={`charity-page-container ${!isActive?(!firstRender)?'inactive-landing-container':'dim-landing-container':(!firstRender)?'active-container':''}`}
+            initial={{opacity:0, y:15}}
+            animate={controls}
+            transition={{
+              type: "tween",
+              duration:.3
+            }}>
             <div className="charity-header-container">
                 <div style={{display:"flex", justifyContent:"center", height:"fit-content", alignItems:"center", gap:"2em", width:"fit-content"}}>
-                  <span className="profile-image-wrapper" style={{backgroundColor:`${theme}0.7)`}} onClick={()=>handleTest()}>
+                  <span className="profile-image-wrapper" style={{backgroundColor:`${hexToRgba('#'+campaignInfo.theme.substring(0,6),0.7)}`}} onClick={()=>handleTest()}>
                       <p className="profile-image-text">
-                      {`${charityname?charityname.charAt(0).toUpperCase():'P'}`}
+                      {`${campaignInfo?campaignInfo.campaignname.charAt(0).toUpperCase():'P'}`}
                       </p>
                   </span>
                   <div className="profile-header-wrapper">
                       <p className="profile-header-text">
-                          {`${charityname?charityname:'No Charity Info'}`}
+                          {`${campaignInfo?campaignInfo.campaignname:'No Charity Info'}`}
                       </p>
                       <div className="profile-link-container">
                           <AiOutlineLink className="link-icon"/>
                           <p className="profile-header-subtext">
-                              link.springboard.app/{charityname?charityname.replace(/\s+/g, '-').toLowerCase():''}
+                              link.springboard.app/{campaignInfo?campaignInfo.campaignname.replace(/\s+/g, '-').toLowerCase():''}
                           </p>
                       </div>
                   </div>
@@ -320,10 +225,10 @@ export default function Campaign() {
                     </div>
                     <div className='charity-page-donate-subcontainer'>
                       <span className={`${(shouldArchive)?'charity-page-like-icon-wrapper-alt':'charity-page-like-icon-wrapper'}`}
-                      onClick={()=>handleArchive()}>
+                      onClick={()=>console.log("handleArchive")}>
                         <AiFillHeart className="charity-page-like-icon"/>
                       </span>
-                      <span className='charity-page-donate-button' onClick={()=>handlePayment(charityid)}>
+                      <span className='charity-page-donate-button' onClick={()=>console.log("handle payment")}>
                         <div className="donate-page-link-button">
                             <p className="charity-confirm-checkout-text">
                                 {
@@ -339,30 +244,21 @@ export default function Campaign() {
             <div className='loading-text-container' onClick={()=>handleTest()}>
                 <p className="loading-text"> {`${(loading)?'Loading...':`Showing all matching results`}`} </p>
             </div>:
-            <div className="charity-details-container">
-                <div className="charity-page-donations-container">
-                  {/*
-                    <div className="donation-details-container">
-                        <p className="donation-details-text">
-                            Contribution Statistics
-                        </p>
-                        <p className="donation-details-subtext">
-                            See how this organization compares to others in the given category.
-                        </p>
-                    </div>
-                  */}
-                    <div className='charity-donations-wrapper'>
-                      <div className='charity-insights-wrapper '>
+            <div className="campaign-details-container">
+             
+   
+                    <div className='campaign-donations-wrapper'>
+                      <div className='campaign-insights-wrapper '>
                         <div className="charity-insight-container ">
                             <div className="charity-chart-wrapper">
                               <div className='chart-container'>
                                   <Doughnut data={data} options={doughOptions} className='charity-chart'/>
                                   <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
                                       <p className="charity-insight-figure-score">
-                                          {charityInfo?parseFloat(charityInfo[0].overall_score).toFixed(1):0.0}
+                                          {`${campaignInfo?Math.round(parseFloat((campaignInfo.total/campaignInfo.goal)*100)):0}%`}
                                       </p>
                                       <p className={`charity-chart-details-text`}>
-                                        Overall
+                                        Progress
                                       </p>
                                   </div>
                                 </div>
@@ -370,106 +266,140 @@ export default function Campaign() {
                             <div className='charity-insights-subcontent'>
                                 <div style={{display:'flex', flexDirection:'column', width:'100%',gap:'.25em', alignItems:'flex-end', paddingBottom:'1.25em', borderBottom:'1px dashed #555555'}}>
                                     <p className='charity-insights-subcontent-header'>
-                                        Financial Score
+                                        Campaign Total
                                     </p>
                                     <p className='charity-insights-subcontent-text'>
-                                    {charityInfo?parseFloat(charityInfo[0].financial_score).toFixed(1):0.0}
+                                    {`$${campaignInfo?parseFloat(campaignInfo.total).toLocaleString():0}`}
                                     </p>
                                 </div>
                                 <div style={{display:'flex', flexDirection:'column', width:'100%', gap:'.25em', alignItems:'flex-end', paddingTop:'1.25em'}}>
                                     <p className='charity-insights-subcontent-header'>
-                                        Accountability Score
+                                        Crowdfunding Goal
                                     </p>
                                     <p className='charity-insights-subcontent-text'>
-                                    {charityInfo?parseFloat(charityInfo[0].accountability_score).toFixed(1):0.0}
+                                    {`$${campaignInfo?parseFloat(campaignInfo.goal).toLocaleString():0}`}
                                     </p>
                                 </div>
                             </div>
                         </div>
                       </div>
                     </div>
-                    <div className='charity-statistics-wrapper'>
-                        <div className='charity-context-wrapper'>
-                            <div className='charity-donations-legend'>
-                                <p className="chart-details-text">
-                                    Total contributions vs. group average
-                                </p>
-                                <div className='charity-legend-item-wrapper'>
-                                    <div className='charity-legend-item'>
-                                        <p className='charity-legend-text'>
-                                            Current Organization
+                   {
+                    <div className='campaign-figure-wrapper'>
+                       <div className='campaign-insights-wrapper-alt '>
+                            <div className='campaign-insights-wrapper-row'>
+                                <div className='campaign-insights-wrapper-item'
+                                style={{backgroundColor:campaignInfo?hexToRgba('#'+campaignInfo.theme.substring(0,6),0.5):"transparent"}}>
+                                    <div style={{display:'flex', flexDirection:'column', width:'100%', gap:'.75em', alignItems:'flex-start', marginLeft:"1.75em"}}>
+                                        <p className='campaign-insights-subcontent-header'>
+                                            Contribution Count
                                         </p>
-                                        <div className={`charity-legend-color charity-legend-${categoryColor}`}/>
+                                        <div style={{display:"flex", justifyContent:"flex-start", gap:"1em", alignItems:"flex-end"}}>
+                                            <p className='campaign-insights-subcontent-text'>
+                                                {11}
+                                            </p>
+                                            <p className='campaign-insights-subcontent-subtext' style={{paddingBottom:".325em"}}>
+                                               total &nbsp;donations
+                                            </p>
+                                        </div>
                                     </div>
-                                    <div className='charity-legend-item'>
-                                        <p className='charity-legend-text'>
-                                            Average Contributions
+                                </div>
+                                <div className='campaign-insights-wrapper-item'
+                                style={{backgroundColor:campaignInfo?hexToRgba('#'+campaignInfo.theme.substring(0,6),0.3):"transparent"}}>
+                                    <div style={{display:'flex', flexDirection:'column', width:'100%', gap:'.75em', alignItems:'flex-start', marginLeft:"1.75em"}}>
+                                        <p className='campaign-insights-subcontent-header'
+                                          style={{color:campaignInfo?hexToRgba('#'+campaignInfo.theme.substring(0,6),1):"transparent"}}>
+                                            Archived By
                                         </p>
-                                        <div className='charity-legend-color-avg'/>
+                                        <div style={{display:"flex", justifyContent:"flex-start", gap:"1em", alignItems:"flex-end"}}>
+                                            <p className='campaign-insights-subcontent-text'>
+                                                {4}
+                                            </p>
+                                            <p className='campaign-insights-subcontent-subtext' style={{paddingBottom:".325em"}}>
+                                                active &nbsp;users
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div className='charity-donations-bar-wrapper'>
-                                <Bar data={barData} options={barOptions} className="bar-chart" />
+                            <div className='campaign-insights-wrapper-row'>
+                                <div className='campaign-insights-wrapper-item'
+                                style={{backgroundColor:campaignInfo?hexToRgba('#'+campaignInfo.theme.substring(0,6),0.3):"transparent"}}>
+                                    <div style={{display:'flex', flexDirection:'column', width:'100%', gap:'.75em', alignItems:'flex-start', marginLeft:"1.75em"}}>
+                                        <p className='campaign-insights-subcontent-header'
+                                          style={{color:campaignInfo?hexToRgba('#'+campaignInfo.theme.substring(0,6),1):"transparent"}}>
+                                            Average Views
+                                        </p>
+                                        <div style={{display:"flex", justifyContent:"flex-start", gap:"1em", alignItems:"flex-end"}}>
+                                            <p className='campaign-insights-subcontent-text'>
+                                                {29}
+                                            </p>
+                                            <p className='campaign-insights-subcontent-subtext' style={{paddingBottom:".325em"}}>
+                                                per &nbsp;week
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className='campaign-insights-wrapper-item'
+                                style={{backgroundColor:campaignInfo?hexToRgba('#'+campaignInfo.theme.substring(0,6),0.5):"transparent"}}>
+                                    <div style={{display:'flex', flexDirection:'column', width:'100%', gap:'.75em', alignItems:'flex-start', marginLeft:"1.75em"}}>
+                                        <p className='campaign-insights-subcontent-header'
+                                       >
+                                           Media Content
+                                        </p>
+                                        <div style={{display:"flex", justifyContent:"flex-start", gap:"1em", alignItems:"flex-end"}}>
+                                            <p className='campaign-insights-subcontent-text'>
+                                                {'0'}
+                                            </p>
+                                            <p className='campaign-insights-subcontent-subtext' style={{paddingBottom:".325em",}}>
+                                                featured &nbsp;posts
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                       </div>
                     </div>
-                </div>
+                    }
+
+
+
+       
               </div>
             }
             <div className="charity-details-container-low">
                 <div className="account-donations-container">
                     <div className="donation-details-container">
                         <p className="donation-details-text">
+                            Featured Content
+                        </p>
+                        <p className="donation-details-subtext">
+                            View this campaign's projects, updates, and more. 
+                        </p>
+                    </div>
+
+                </div>
+                <div className='campaign-stats-container'>
+                    <div className="donation-details-container">
+                        <p className="donation-details-text">
                             Recent Donations
                         </p>
                         <p className="donation-details-subtext">
-                            View the latest donations made to American Heart Association.
+                            Explore the contributions made to this campaign in real time.
                         </p>
                     </div>
-                    <div className="account-donations-list" style={{paddingTop:'.2em'}}>
-                      <div className="account-donations-list-content">
-                          <CharityDonation name={'Henry Zheng'} location={'Riverside, CA'} category={categoryColor} index={0}/>
-                          <CharityDonation name={'An Truong'} location={'Irvine, CA'} category={categoryColor} index={1}/>
-                          <CharityDonation name={'Thompson Nguyen'} location={'San Francisco, CA'} category={categoryColor} index={2}/>
+                    <div className="campaign-donations-list " >
+                      <div className="campaign-donations-list-content">
+                          <CharityDonation name={'Henry Zheng'} location={'Riverside, CA'} index={0}/>
+                          <CharityDonation name={'An Truong'} location={'Irvine, CA'} index={1}/>
+                          <CharityDonation name={'Thompson Nguyen'} location={'San Francisco, CA'} index={2}/>
+                          <CharityDonation name={'Tim Wang'} location={'Los Angeles, CA'} index={3}/>
                       </div>
                    </div>
                 </div>
-                <div className='charity-stats-container'>
-                    <div className="donation-details-container">
-                        <p className="donation-details-text">
-                            Charity Information
-                        </p>
-                        <p className="donation-details-subtext">
-                            See how this organization compares to other charities.
-                        </p>
-                    </div>
-                    <div style={{display:"flex", flexDirection:"column"}}>
-                      <div className='charity-stats'>
-                        <div className='charity-stat-col'>
-                          <InsightItem name={'Total Compensation'} value={charityInfo?charityInfo[0].total_contributions:0}/>          
-                          <InsightItem name={'Program Expense'} value={charityInfo?charityInfo[0].program_expenses:0}/>  
-                          <InsightItem name={'Fundraising Expense'} value={charityInfo?charityInfo[0].fundraising_expenses:0}/>    
-                        </div>
-                        <div className='charity-stat-col'>
-                          <InsightItem name={'Net Assets'} value={charityInfo?charityInfo[0].net_assets:0}/>  
-                          <InsightItem name={'Admin Expense'} value={charityInfo?charityInfo[0].administrative_expenses:0}/>     
-                          <InsightItem name={'Admin Exp. Ratio'} value={charityInfo?charityInfo[0].admin_expense_ratio:0}/>              
-                        </div>
-                        <div className='charity-stat-col'>
-                          <InsightItem name={'Excess/Deficit'} value={charityInfo?charityInfo[0].excess:0}/>     
-                          <InsightItem name={'Other Revenue'} value={charityInfo?charityInfo[0].other_revenue:0 }/>  
-                          <InsightItem name={'Affiliate Payments'} value={charityInfo?charityInfo[0].payments_to_affiliates:0}/> 
-                        </div>
-                      </div>
-                      <div style={{paddingTop:'2.125em', display:"flex", width:"70%",justifyContent:"space-between"}}>
-                        <InsightItem name={'Organization Focus'} value={charityInfo?charityInfo[0].type2:"n/a"}/> 
-                        <InsightItem name={'Location'} value={charityInfo?`${charityInfo[0].city} ${charityInfo[0].state}, USA`:"n/a"}/> 
-                      </div>
-                    </div>
-                </div>
             </div>
-        </div>
+        </motion.div>
+        </>}
     </div>
   )
 }

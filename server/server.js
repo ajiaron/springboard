@@ -139,11 +139,10 @@ app.put('/api/confirmstripe/:accountid/:userid', async (req, res) => {
 })
 
 // new
-app.get('/api/getcampaign/:campaignid/:ownerid', (req, res) => {
+app.get('/api/getcampaign/:campaignid', (req, res) => {
     const campaignid = req.params.campaignid
-    const ownerid = req.params.ownerid
-    db.query(`SELECT DISTINCT * FROM campaigns WHERE campaignid = ? AND ownerid = ?`,
-    [campaignid, ownerid], (err, result)=> {
+    db.query(`SELECT DISTINCT * FROM campaigns WHERE campaignid = ?`,
+    [campaignid], (err, result)=> {
         if (err) {
             console.log(err)
         } else {
