@@ -115,7 +115,7 @@ export default function Cart() {
   const [reload, setReload] = useState(false)
   const navigate = useNavigate()
   const userid = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0
-  const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
+  const connection = process.env.REACT_APP_API_URL
   const handleBlur = () => {
     setIsActive(true)
   }

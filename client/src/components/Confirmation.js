@@ -221,7 +221,7 @@ export default function Confirmation() {
     const [confirmed, setConfirmed] = useState(true)
     const navigate = useNavigate()
     const userid = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0
-    const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
+    const connection = process.env.REACT_APP_API_URL
     function handleTest() {
         console.log(basketList)
     }

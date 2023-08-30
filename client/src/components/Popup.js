@@ -6,7 +6,6 @@ import {BiTimeFive} from 'react-icons/bi'
 import { LiaTimesSolid,LiaHourglass } from 'react-icons/lia'
 
 export default function Popup ({ status, onClose }) {
-    // this is the tab at the bottom that renders when a request goes off
     return (
           <motion.div
               className="popup-container"

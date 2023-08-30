@@ -61,7 +61,7 @@ const InsightItem = ({name, value}) => {
 
 export default function Charity() {
   const userid = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0
-  const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
+  const connection = process.env.REACT_APP_API_URL
   const [firstRender, setFirstRender] = useState(true)
   const [isActive, setIsActive] = useState(true)  // background is active
   const [loading, setLoading] = useState(true)

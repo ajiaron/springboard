@@ -5,7 +5,7 @@ import UserContext from "../contexts/UserContext";
 import { Link } from "react-router-dom";
 export default function DonationItem({type, value, name, size, date}) {
     const user = useContext(UserContext)
-    const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
+    const connection = process.env.REACT_APP_API_URL
     const [loading, setLoading] = useState(true)
     const [charityid, setCharityid] = useState(null)
     useEffect(()=> {

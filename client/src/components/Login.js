@@ -11,7 +11,7 @@ Amplify.configure(config);
 
 export default function Login() {
   const user = useContext(UserContext)
-  const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
+  const connection = process.env.REACT_APP_API_URL
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState('')

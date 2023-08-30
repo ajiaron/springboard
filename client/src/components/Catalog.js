@@ -17,7 +17,7 @@ import _, { debounce } from 'lodash';
 import { FiMail } from "react-icons/fi";
 
 export default function Catalog() {
-    const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
+    const connection = process.env.REACT_APP_API_URL
     const [query, setQuery] = useState('')
     const initialPos = useRef(null)
     const user = useContext(UserContext)

@@ -130,7 +130,7 @@ export default function Donate() {
     const [errorMessage, setErrorMessage] = useState(null)
     const userid = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0
     const destination = process.env.REACT_APP_ENV === 'production'?'https://demo-springboard.netlify.app':'http://localhost:3000'
-    const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
+    const connection = process.env.REACT_APP_API_URL
     function handleTest() {
         console.log(params)
     }

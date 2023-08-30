@@ -5,6 +5,7 @@ import { Link, useParams, useLocation } from "react-router-dom";
 import {AiOutlineHeart, AiFillHeart} from 'react-icons/ai'
 import './Charity.scss'
 import './Campaign.scss'
+import CampaignPost from './CampaignPost';
 import {GoArrowRight} from 'react-icons/go'
 import SideNavigation from './SideNavigation';
 import UserContext from '../contexts/UserContext';
@@ -19,8 +20,8 @@ ChartJS.register(RadialLinearScale, CategoryScale, LinearScale, BarElement, ArcE
 
 const CharityDonation = ({name, location, category, index}) => {
   return (
-  <div className={`profile-donation-item ${index===3?'donation-item-last':''}`}>
-      <div className="profile-donation-item-info" style={{paddingLeft:'.125em'}}>
+  <div className={`campaign-donation-item ${index===4?'campaign-item-last':''}`}>
+      <div className="profile-donation-item-info" style={{paddingLeft:'0.1em'}}>
           <p className="profile-donation-item-title">
               {name}
           </p>
@@ -38,7 +39,7 @@ const CharityDonation = ({name, location, category, index}) => {
 
 export default function Campaign() {
   const userid = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0
-  const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
+  const connection = process.env.REACT_APP_API_URL
   const controls = useAnimation()
   const [firstRender, setFirstRender] = useState(true)
   const [isActive, setIsActive] = useState(true)  // background is active
@@ -73,7 +74,7 @@ export default function Campaign() {
           data: [campaignInfo?campaignInfo.total:0,
           campaignInfo?campaignInfo.goal-campaignInfo.total:0],
           backgroundColor: [
-            (campaignInfo)?`${hexToRgba('#'+campaignInfo.theme.substring(0,6),0.75)}`:`rgba(92,92,92,0.8)`,
+            (campaignInfo)?`${hexToRgba('#'+campaignInfo.theme.substring(0,6),0.8)}`:`rgba(92,92,92,0.8)`,
             'rgba(92, 92, 92, 0.8)',
           ],
           borderColor: ['#252525bb','#252525bb'],
@@ -186,7 +187,7 @@ export default function Campaign() {
       }
         <SideNavigation route={'campaign'}/>
           <motion.div 
-            className={`charity-page-container ${!isActive?(!firstRender)?'inactive-landing-container':'dim-landing-container':(!firstRender)?'active-container':''}`}
+            className={`campaign-page-container  ${!isActive?(!firstRender)?'inactive-landing-container':'dim-landing-container':(!firstRender)?'active-container':''}`}
             initial={{opacity:0, y:15}}
             animate={controls}
             transition={{
@@ -224,8 +225,8 @@ export default function Campaign() {
                         </p>
                     </div>
                     <div className='charity-page-donate-subcontainer'>
-                      <span className={`${(shouldArchive)?'charity-page-like-icon-wrapper-alt':'charity-page-like-icon-wrapper'}`}
-                      onClick={()=>console.log("handleArchive")}>
+                      <span className={`${(shouldArchive)?'campaign-page-like-icon-wrapper-alt':'campaign-page-like-icon-wrapper'}`}
+                      onClick={()=>setShouldArchive(!shouldArchive)}>
                         <AiFillHeart className="charity-page-like-icon"/>
                       </span>
                       <span className='charity-page-donate-button' onClick={()=>console.log("handle payment")}>
@@ -249,7 +250,7 @@ export default function Campaign() {
    
                     <div className='campaign-donations-wrapper'>
                       <div className='campaign-insights-wrapper '>
-                        <div className="charity-insight-container ">
+                        <div className="campaign-doughnut-container ">
                             <div className="charity-chart-wrapper">
                               <div className='chart-container'>
                                   <Doughnut data={data} options={doughOptions} className='charity-chart'/>
@@ -289,34 +290,37 @@ export default function Campaign() {
                        <div className='campaign-insights-wrapper-alt '>
                             <div className='campaign-insights-wrapper-row'>
                                 <div className='campaign-insights-wrapper-item'
-                                style={{backgroundColor:campaignInfo?hexToRgba('#'+campaignInfo.theme.substring(0,6),0.5):"transparent"}}>
-                                    <div style={{display:'flex', flexDirection:'column', width:'100%', gap:'.75em', alignItems:'flex-start', marginLeft:"1.75em"}}>
+                                style={{backgroundColor:campaignInfo?hexToRgba('#'+campaignInfo.theme.substring(0,6),0.55):"transparent",
+                                background:campaignInfo?`linear-gradient(36deg, ${hexToRgba('#'+campaignInfo.theme.substring(0,6),0.55)} 84%, ${hexToRgba('#'+campaignInfo.theme.substring(0,6),0.25)} 16%)`:
+                                `linear-gradient(35deg, #5a5a5abf 80%, #2a2a2abf 20%`}}>
+                                    <div style={{display:'flex', flexDirection:'column', width:'100%', gap:'.875em', alignItems:'flex-start', marginLeft:"1.75em"}}>
                                         <p className='campaign-insights-subcontent-header'>
                                             Contribution Count
                                         </p>
-                                        <div style={{display:"flex", justifyContent:"flex-start", gap:"1em", alignItems:"flex-end"}}>
+                                        <div style={{display:"flex", justifyContent:"flex-start", gap:".7em", alignItems:"flex-end"}}>
                                             <p className='campaign-insights-subcontent-text'>
                                                 {11}
                                             </p>
                                             <p className='campaign-insights-subcontent-subtext' style={{paddingBottom:".325em"}}>
-                                               total &nbsp;donations
+                                               total donations
                                             </p>
                                         </div>
                                     </div>
                                 </div>
                                 <div className='campaign-insights-wrapper-item'
-                                style={{backgroundColor:campaignInfo?hexToRgba('#'+campaignInfo.theme.substring(0,6),0.3):"transparent"}}>
-                                    <div style={{display:'flex', flexDirection:'column', width:'100%', gap:'.75em', alignItems:'flex-start', marginLeft:"1.75em"}}>
-                                        <p className='campaign-insights-subcontent-header'
-                                          style={{color:campaignInfo?hexToRgba('#'+campaignInfo.theme.substring(0,6),1):"transparent"}}>
+                                style={{backgroundColor:campaignInfo?hexToRgba('#'+campaignInfo.theme.substring(0,6),0.25):"transparent",
+                                background:campaignInfo?`linear-gradient(36deg, ${hexToRgba('#'+campaignInfo.theme.substring(0,6),0.25)} 85%, ${hexToRgba('#'+campaignInfo.theme.substring(0,6),0.55)} 15%)`:
+                                `linear-gradient(35deg, #5a5a5abf 80%, #2a2a2abf 20%`}}>
+                                    <div style={{display:'flex', flexDirection:'column', width:'100%', gap:'.875em', alignItems:'flex-start', marginLeft:"1.75em"}}>
+                                        <p className='campaign-insights-subcontent-header'>
                                             Archived By
                                         </p>
-                                        <div style={{display:"flex", justifyContent:"flex-start", gap:"1em", alignItems:"flex-end"}}>
+                                        <div style={{display:"flex", justifyContent:"flex-start", gap:".75em", alignItems:"flex-end"}}>
                                             <p className='campaign-insights-subcontent-text'>
                                                 {4}
                                             </p>
                                             <p className='campaign-insights-subcontent-subtext' style={{paddingBottom:".325em"}}>
-                                                active &nbsp;users
+                                                active users
                                             </p>
                                         </div>
                                     </div>
@@ -324,35 +328,40 @@ export default function Campaign() {
                             </div>
                             <div className='campaign-insights-wrapper-row'>
                                 <div className='campaign-insights-wrapper-item'
-                                style={{backgroundColor:campaignInfo?hexToRgba('#'+campaignInfo.theme.substring(0,6),0.3):"transparent"}}>
-                                    <div style={{display:'flex', flexDirection:'column', width:'100%', gap:'.75em', alignItems:'flex-start', marginLeft:"1.75em"}}>
-                                        <p className='campaign-insights-subcontent-header'
-                                          style={{color:campaignInfo?hexToRgba('#'+campaignInfo.theme.substring(0,6),1):"transparent"}}>
+                                style={{backgroundColor:campaignInfo?hexToRgba('#'+campaignInfo.theme.substring(0,6),0.25):"transparent",
+                                background:campaignInfo?`linear-gradient(36deg, ${hexToRgba('#'+campaignInfo.theme.substring(0,6),0.25)} 85%, ${hexToRgba('#'+campaignInfo.theme.substring(0,6),0.55)} 15%)`:
+                                `linear-gradient(35deg, #5a5a5abf 80%, #2a2a2abf 20%`}}>
+
+
+                                    <div style={{display:'flex', flexDirection:'column', width:'100%', gap:'.875em', alignItems:'flex-start', marginLeft:"1.75em"}}>
+                                        <p className='campaign-insights-subcontent-header'>
                                             Average Views
                                         </p>
-                                        <div style={{display:"flex", justifyContent:"flex-start", gap:"1em", alignItems:"flex-end"}}>
+                                        <div style={{display:"flex", justifyContent:"flex-start", gap:".75em", alignItems:"flex-end"}}>
                                             <p className='campaign-insights-subcontent-text'>
                                                 {29}
                                             </p>
                                             <p className='campaign-insights-subcontent-subtext' style={{paddingBottom:".325em"}}>
-                                                per &nbsp;week
+                                                per week
                                             </p>
                                         </div>
                                     </div>
                                 </div>
                                 <div className='campaign-insights-wrapper-item'
-                                style={{backgroundColor:campaignInfo?hexToRgba('#'+campaignInfo.theme.substring(0,6),0.5):"transparent"}}>
-                                    <div style={{display:'flex', flexDirection:'column', width:'100%', gap:'.75em', alignItems:'flex-start', marginLeft:"1.75em"}}>
+                                style={{backgroundColor:campaignInfo?hexToRgba('#'+campaignInfo.theme.substring(0,6),0.55):"transparent",
+                                background:campaignInfo?`linear-gradient(36deg, ${hexToRgba('#'+campaignInfo.theme.substring(0,6),0.55)} 84%, ${hexToRgba('#'+campaignInfo.theme.substring(0,6),0.25)} 16%)`:
+                                `linear-gradient(35deg, #5a5a5abf 80%, #2a2a2abf 20%`}}>
+                                    <div style={{display:'flex', flexDirection:'column', width:'100%', gap:'.875em', alignItems:'flex-start', marginLeft:"1.75em"}}>
                                         <p className='campaign-insights-subcontent-header'
                                        >
                                            Media Content
                                         </p>
-                                        <div style={{display:"flex", justifyContent:"flex-start", gap:"1em", alignItems:"flex-end"}}>
+                                        <div style={{display:"flex", justifyContent:"flex-start", gap:".7em", alignItems:"flex-end"}}>
                                             <p className='campaign-insights-subcontent-text'>
                                                 {'0'}
                                             </p>
                                             <p className='campaign-insights-subcontent-subtext' style={{paddingBottom:".325em",}}>
-                                                featured &nbsp;posts
+                                                featured posts
                                             </p>
                                         </div>
                                     </div>
@@ -360,15 +369,11 @@ export default function Campaign() {
                             </div>
                        </div>
                     </div>
-                    }
-
-
-
-       
+                    }       
               </div>
             }
-            <div className="charity-details-container-low">
-                <div className="account-donations-container">
+            <div className="campaign-details-container-low">
+                <div className="campaign-donations-container">
                     <div className="donation-details-container">
                         <p className="donation-details-text">
                             Featured Content
@@ -377,9 +382,9 @@ export default function Campaign() {
                             View this campaign's projects, updates, and more. 
                         </p>
                     </div>
-
+                    <CampaignPost name={'Milestone'} theme={campaignInfo?hexToRgba('#'+campaignInfo.theme.substring(0,6),0.6):"#5a5a5abd"}/>
                 </div>
-                <div className='campaign-stats-container'>
+                <div className='campaign-stats-container '>
                     <div className="donation-details-container">
                         <p className="donation-details-text">
                             Recent Donations
@@ -394,6 +399,7 @@ export default function Campaign() {
                           <CharityDonation name={'An Truong'} location={'Irvine, CA'} index={1}/>
                           <CharityDonation name={'Thompson Nguyen'} location={'San Francisco, CA'} index={2}/>
                           <CharityDonation name={'Tim Wang'} location={'Los Angeles, CA'} index={3}/>
+                          <CharityDonation name={'Jason Damasco'} location={'Sacramento, CA'} index={4}/>
                       </div>
                    </div>
                 </div>

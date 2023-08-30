@@ -18,7 +18,7 @@ import { Auth } from 'aws-amplify'
 import axios from "axios";
 
 export default function Dashboard() {
-    const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
+    const connection = process.env.REACT_APP_API_URL
     const [screenWidth, setScreenWidth] = useState(window.innerWidth)
     const [screenHeight, setScreenHeight] = useState(window.innerHeight)
     const [isAuthenticated, setIsAuthenticated] = useState(false)

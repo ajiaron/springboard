@@ -20,7 +20,7 @@ import { set } from "lodash";
 export default function CharityTab({ id, ownerid, type, overall, financial, accountability, name, size, display, shouldFavorite ,isFavorite, index, isEmpty, onRemove, onFavorite }) {
     const navigate = useNavigate()
     const figures = ["OVERALL", "FINANCIAL", "ACCOUNTABILITY"]
-    const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
+    const connection = process.env.REACT_APP_API_URL
     const [loading, setLoading] = useState()
     const [charityid, setCharityid] = useState(0)
     const [width, setWidth] = useState(0)

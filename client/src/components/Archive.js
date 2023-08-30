@@ -101,7 +101,7 @@ export default function Archive() {
     const userid = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0
     const name = localStorage.getItem("firstname")?JSON.parse(localStorage.getItem("firstname")):'none'
     const username = localStorage.getItem("username")?JSON.parse(localStorage.getItem("username")):'none'
-    const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
+    const connection = process.env.REACT_APP_API_URL
     const [charityData, setCharityData] = useState()
     const [removeFavorite, setRemoveFavorite] = useState(0)
     const handleRemove = (charityid) => {
@@ -136,6 +136,7 @@ export default function Archive() {
     }
     useEffect(()=> {
         const loadCharity = async() => {
+            console.log(connection)
           setLoading(true)
           try {
             const url = `${connection}/api/getarchive/${userid}`;

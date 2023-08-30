@@ -119,7 +119,7 @@ const FriendsItem = ({id, userid, username, firstname, lastname, isPublic, profi
 }
 export default function Friends() {
     const id = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0
-    const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
+    const connection = process.env.REACT_APP_API_URL
     const [allUsers, setAllUsers] = useState(false)
     const [filter, setFilter] = useState("followers")
     const [query, setQuery] = useState('')

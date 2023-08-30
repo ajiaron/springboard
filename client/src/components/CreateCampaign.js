@@ -20,7 +20,7 @@ export default function CreateCampaign() {
   const name = localStorage.getItem("username")?JSON.parse(localStorage.getItem("username")):''
   const firstname = localStorage.getItem("firstname")?JSON.parse(localStorage.getItem("firstname")):''
   const email = localStorage.getItem("email")?JSON.parse(localStorage.getItem("email")):''
-  const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
+  const connection = process.env.REACT_APP_API_URL
   const [firstRender, setFirstRender] = useState(true)
   const [loading, setLoading] = useState(false)
   const [shouldScroll, setShouldScroll] = useState(false)

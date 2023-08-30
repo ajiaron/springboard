@@ -49,7 +49,7 @@ export default function Settings() {
     // wont change until update is confirmed
     const firstname = localStorage.getItem("firstname")?JSON.parse(localStorage.getItem("firstname")):0
     const lastname = localStorage.getItem("lastname")?JSON.parse(localStorage.getItem("lastname")):0
-    const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
+    const connection = process.env.REACT_APP_API_URL
     const [loading, setLoading] = useState(true)
     const [profilepic, setProfilePic] = useState(null) 
     const [shouldUpdate, setShouldUpdate] = useState()

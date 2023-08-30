@@ -114,7 +114,7 @@ export default function Profile() {
   const firstname = localStorage.getItem("firstname")?JSON.parse(localStorage.getItem("firstname")):''
   const lastname = localStorage.getItem("lastname")?JSON.parse(localStorage.getItem("lastname")):''
   const email = localStorage.getItem("email")?JSON.parse(localStorage.getItem("email")):''
-  const connection = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://api.springboard.gift:3000'
+  const connection = process.env.REACT_APP_API_URL
   const [loading, setLoading] = useState(true)
   const [userData, setUserData] = useState(null)
   const [hasBio, setHasBio] = useState(false)
