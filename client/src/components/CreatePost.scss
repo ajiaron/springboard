@@ -1,0 +1,208 @@
+.create-post-container {
+    width: 50%;
+
+    height: 80%;
+    width: 57%;  
+   // padding-left: .25em;
+    margin-left: auto;
+    margin-right: auto;
+    left: 2.25vw;
+    right: 0;
+    outline: 1px solid #272727;
+    z-index: 999;
+    background-color: #212121;
+    top:10%;
+    border-radius: 16px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;   
+}
+.create-post-wrapper {
+    width: 100%;
+    height:100%;
+  
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    border-radius: 20px;
+   // background-color: #515151bd;
+  }
+  .create-post-content-container {
+    width: 90%;
+    height: 88.5%;
+
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .campaign-create-post-image-wrapper {
+    border-radius: 10px;
+   // background-color: #1a1a1a;
+  
+   // width: 100%;
+   // margin-left: auto;
+   // margin-right: auto;
+  
+    border-radius: 10px;
+    
+  //  height:64.5%;
+
+    width: 300px;
+    height: 168.5px;
+    display: flex;
+  }
+  .campaign-create-post-image {
+    background-image: url('./assets/v9.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    aspect-ratio: 1920/1080;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 10px;
+  //  background:linear-gradient(35deg, steelblue, seagreen);
+  }
+  .create-post-media-wrapper {
+    width: 100%;
+    display: flex;
+    height: fit-content;
+    
+  }
+
+  .create-post-footer {
+    display: flex;
+    width: 100%;
+    height: 11%;
+   // padding-bottom: .25%;
+
+    border-top:1px dashed #454545;
+    
+  //  background-color: #824545;
+    margin-top: auto;
+    align-items: center;
+    justify-content: flex-end;
+
+  }
+  .create-post-footer-wrapper {
+    display: flex;
+    min-height: fit-content;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: flex-end;
+    gap:1rem;
+  }
+  .create-post-caption-title {   // may be unused
+    font-size: clamp(14px, 3vw, 20px);
+    font-family: "Rubik";
+    letter-spacing: -.25px;
+    font-weight: 600;
+    color:#eeeeee;
+   // line-height:38px;
+  }
+  .create-post-caption-title-input {
+    font-size: clamp(14px, 3vw, 20px);
+    font-family: "Rubik";
+    letter-spacing: -.25px;
+    font-weight: 600;
+    color:#eeeeee;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    padding: 0;
+    margin: 0;
+  }
+  .create-post-caption-title-input::placeholder {
+    color:#eee;
+  }
+  .create-post-caption-text {   // may be unused
+    font-size: clamp(14px, 3vw, 16px);
+    font-family: "Rubik";
+    letter-spacing: -.25px;
+    font-weight: 400;
+    color:#eee;
+    //line-height:38px;
+  }
+  .create-post-caption-subtext {
+    font-size: clamp(10px, 4vw, 18px);
+    font-family: "Rubik";// padding-left: .025em;
+    line-height: 20px;
+    letter-spacing: -.25px;
+    font-weight: 400;
+    color: #959595;
+  }
+  .create-post-caption-content {
+    color:transparent;
+    outline:none;
+    border: none;
+    background-color: transparent;
+
+    font-size: clamp(10px, 4vw, 18px);
+    font-family: "Rubik";// padding-left: .025em;
+   // line-height: 20px;
+    letter-spacing: -.25px;
+    font-weight: 400;
+    color: #ccc;
+    padding: 0;
+    margin: 0;
+    
+
+  }
+.create-post-caption-content::placeholder {
+    font-size: clamp(10px, 4vw, 18px);
+    font-family: "Rubik";// padding-left: .025em;
+   // line-height: 20px;
+    letter-spacing: -.25px;
+    font-weight: 400;
+    color: #959595;
+}
+  .create-post-top-content {
+    display:"flex";
+    flex-direction: "column";
+    width: 100%;
+   // padding-bottom: 1%;
+    height:60%;
+    padding-top:4%;
+  }
+  .create-post-caption-wrapper {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    gap:1.5em;
+    padding-top: 1.875em;
+    padding-left: .5em;
+  
+  }
+  .create-post-header {
+    display: flex;
+    width: 100%;
+    height: fit-content;
+    //justify-content: center;
+    gap:1em;
+   // padding-top: .25%;
+    align-items: center;
+  }
+  .campaign-create-post-edit-icon {
+    width: 1.6em;
+    height: 1.6em;
+    border-radius: 1.6em;
+    display: flex;
+    background-color: #eeeeeeee;
+    align-items: center;
+    box-shadow: 2px 2px 1px 2px rgb(10,10,10, 0.2);
+    justify-content: center;
+    transform: translateX(-150%) translateY(50%);
+    
+  }
+  .edit-image-icon {
+    width: 65%;
+    height: 65%;
+    color:rgb(34, 34, 34);
+  }

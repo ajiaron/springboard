@@ -1,3 +1,4 @@
+
 .campaign-page-container {
   min-height: 100vh;
   width: 90%;
@@ -154,24 +155,25 @@
     line-height: 40px;
 }
 .campaign-page-like-icon-wrapper {
-  min-width:20%;
-  min-height: 25%;
+  min-width:2.75em;
+  min-height: 2.75em;
   background-color: #5a5a5a;
   display: flex;
   transition: all .2s linear;
-  transform: translateX(-.125em);
+
   justify-content: center;
   align-items: center;
-  border-radius: 2em;
+  align-self: flex-end;
+  border-radius: 2.75em;
 }
 .campaign-page-like-icon-wrapper:hover {
   filter: brightness(1.2);
 }
 .campaign-page-like-icon-wrapper-alt {
-  min-width:20%;
   transition: all .2s linear;
-  min-height: 25%;
-  transform: translateX(-.125em);
+  min-width:2.75em;
+  min-height: 2.75em;
+  //transform: translateX(-.125em);
   background:linear-gradient(45deg, rgba(66, 96, 245, 0.7),#f1579faa,#fbe432cc);
   //background-color: #eee;
  // background-color: rgb(190, 64, 106);
@@ -204,7 +206,7 @@
   height:100%;
 }
 .campaign-donations-container {
-  min-height: 75vh;
+  min-height: 80vh;
   width: 57%;  
   padding-left: .25em;
  // overflow-x: hidden;
@@ -258,18 +260,19 @@
 }
 .campaign-post-content {
   width: 89%;
-  height: 90.5%;
+  height: 91.5%;
   display: flex;
  // padding: 2.5%;
   padding-left: 2.5%;
   padding-right: 2.5%;
-  padding-bottom: 1.5%;
-  padding-top: 2%;
+  padding-bottom: 1.25%;
+  padding-top: 1.75%;
   flex-direction: column;
   align-self: flex-end;
   justify-content: center;
+  background-color: rgb(34,34,34);
   border-radius: 20px;
-  background-color: #252525bd;
+ // background-color: #252525bd;
   transform: translateX(-.25em);
 
 }
@@ -279,6 +282,7 @@
   height: fit-content;
   //justify-content: center;
   gap:1em;
+ // padding-top: .25%;
   align-items: center;
 }
 .campaign-post-profile-image {
@@ -290,17 +294,17 @@
   align-items: center;
 }
 .campaign-post-profile-image-wrapper {
-  width: 2.75em;
-  height: 2.75em;
+  width: 2.5em;
+  height: 2.5em;
   background-color: #5a5a5abd;
-  border-radius: 2.75em;
+  border-radius: 2.5em;
 }
 .campaign-post-top-content {
   display:"flex";
   flex-direction: "column";
   width: 100%;
-  padding-bottom: 1%;
-  height: 26.5%;
+ // padding-bottom: 1%;
+  height: 24.25%;
 
 }
 .campaign-post-caption-wrapper {
@@ -319,27 +323,29 @@
   width: 100%;
   margin-left: auto;
   margin-right: auto;
-  height: 60.5%;
+
+  border-radius: 20px;
+  height:64.5%;
   display: flex;
 }
 .campaign-post-image {
   background-image: url('./assets/v9.png');
   background-repeat: no-repeat;
   background-position: center;
-  aspect-ratio: 1680/1050;
+  aspect-ratio: 1920/1080;
   background-size: cover;
   width: 100%;
   height: 100%;
-
+  border-radius: 20px;
   //box-shadow: 2px 2px 3px 2px rgba(0,0,0,0.15);
 //  background:linear-gradient(35deg, steelblue, seagreen);
-  border-radius: 20px;
+
 }
 .campaign-post-footer {
   display: flex;
   width: 98%;
-  height: 12%;
- // padding-top: 2%;
+  height: 10%;
+  padding-top: 1.25%;
 
   //background-color: #202020;
   margin-top: auto;
@@ -370,13 +376,17 @@
   letter-spacing: -.25px;
   font-weight: 400;
   color: #a0a0a0;
+  user-select: none;
+  -webkit-user-select: none; 
+  -moz-user-select: none; 
+  -ms-user-select: none;
 }
 .campaign-post-header-text {
   font-size: clamp(10px, 3vw, 16px);
   font-family: "Rubik";
   letter-spacing: -.25px;
   font-weight: 600;
-  color:#bbb;
+  color:#ccc;
   //color:#eeeeeebd;
   //line-height:22px;
 }
@@ -401,38 +411,47 @@
   color:#eee;
   font-family: "Rubik";
  // transform: translateY(-.01em);
-  font-size: clamp(10px, 3vw, 22px);
+  font-size: clamp(10px, 3vw, 20px);
 }
 
 .campaign-post-footer-item-wrapper {
   border-radius: 10px;
   padding-left: .7em;
   padding-right:.85em;
-  padding-top:.1em;
-  padding-bottom:.1em;
+  padding-top:.5em;
+  padding-bottom:.5em;
   display: flex;
-  min-height: 55%;
+  transition: all .15s linear;
   line-height: 20px;
   align-items: center;
   justify-content: center;
   gap:.5em;
   background-color: #353535;
 }
+.campaign-post-footer-item-wrapper:hover {
+  filter: brightness(1.2);
+}
 .campaign-post-icon {
   width: 1rem;
   height: 1rem;
-  color:#aaa;
+  color:#ccc;
 }
 .campaign-post-icon-repost {
   width: 1rem;
   height: 1rem;
-  color:#a0a0a0;
+  color:#bbb;
   transform: scaleX(1.1) scaleY(1.2);
 }
 .campaign-post-icon-views {
   width: 1rem;
   height: 1rem;
-  color:#aaa;
+  color:#ccc;
+  transform: scaleX(1.1) scaleY(1.15);
+}
+.campaign-post-icon-views-alt {
+  min-width: 1em;
+  min-height: 1em;
+  color:#ccc;
   transform: scaleX(1.1) scaleY(1.15);
 }
 // end of campaign post
@@ -445,13 +464,114 @@
  // margin-left: .125em;
   margin-left: auto;
   margin-right: .5em;
-  //transform: translateY(-.25em);
- // margin-top: .25em;
+
+  //margin-top: .125em;
+
+
 }
 
 .campaign-post-edit-icon {
   width: 100%;
   height: 100%;
-  color:#5a5a5a;
+  //color:#555;
+  color: transparent;
 
+}
+
+
+.campaign-page-donate-button {
+  width: 52%;
+  height: 100%;
+ // margin-top: .25em;
+  border-radius: 20px;
+  background-color: #eee;
+  margin-left: auto;
+
+  display: flex;
+  justify-content: center;
+  margin-right:.75em;
+//  transform: translateY(-.5em);
+  align-self: flex-end;
+ // margin-bottom: .25em;
+}
+.campaign-page-donate-subcontainer {
+  width:24.25%;
+  align-self: center;
+  //background-color: rgba(255, 0, 0, 0.096);
+  display: flex;
+  margin-left: auto;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 2.75em;
+  gap:1em;
+}
+.campaign-page-pen-icon-wrapper {
+  min-width:2.75em;
+  min-height: 2.75em;
+  background-color: #5a5a5a;
+  display: flex;
+  transition: all .2s linear;
+  justify-content: center;
+  align-items: center;
+  align-self: flex-end;
+  border-radius: 2.75em;
+}
+.campaign-page-pen-icon-wrapper:hover {
+  filter: brightness(1.2);
+}
+.campaign-post-link-wrapper {
+  animation: show-input .5s ease-in-out;
+  animation-delay: .5s;
+  animation-fill-mode: forwards;
+}
+
+.campaign-post-link-text {
+  animation: typing .5s ease-in-out;
+  animation-fill-mode: forwards;
+}
+.campaign-post-link-input {
+  //background-color: transparent;
+ // height: fit-content;  
+  border:none;
+  outline:none;
+  padding-top:0;
+  padding-bottom:0;
+  padding-right:0;
+  margin-right: auto;
+//  padding-top:0;
+
+  //background-color: rgba(255, 0, 0, 0.25);
+ //background-color: red;
+ background-color: transparent;
+  margin:0;
+  overflow: hidden;
+  font-size: clamp(10px, 3vw, 15px);
+  font-family: "Rubik";
+  letter-spacing: -.25px;
+  transform: translateY(-0.025em);
+  font-weight: 600;
+
+  color:#959595;
+  height: 100%;
+}
+.post-footer-text {
+  user-select: none;
+  -webkit-user-select: none; 
+  -moz-user-select: none; 
+  -ms-user-select: none;
+}
+.campaign-post-link-input-wrapper {
+  background-color: #353535;
+
+
+  //background-color: rgba(234, 0, 255, 0.238);
+}
+
+@keyframes show-input {
+  from {
+    width: fit-content;
+  }
+  to {
+    width: 100%;
+  }
 }

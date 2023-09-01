@@ -21,6 +21,7 @@ export default function CreateCampaign() {
   const firstname = localStorage.getItem("firstname")?JSON.parse(localStorage.getItem("firstname")):''
   const email = localStorage.getItem("email")?JSON.parse(localStorage.getItem("email")):''
   const connection = process.env.REACT_APP_API_URL
+  const [campaignData, setCampaignData] = useState(null)
   const [firstRender, setFirstRender] = useState(true)
   const [loading, setLoading] = useState(false)
   const [shouldScroll, setShouldScroll] = useState(false)
@@ -82,12 +83,12 @@ export default function CreateCampaign() {
   useEffect(()=> {  // for loading status bar
     if (status.length>0) {
       setRenderStatus(true)
+      if (status === "success") {
+        navigate((campaignData&&campaignData.verified)?`/campaign/${campaignid}`:`/${name}`)
+      }
       if (status!=='loading') {
         setTimeout(() => {
           setRenderStatus(false)
-          if (status === "success") {
-            navigate(`/${name}`)
-          }
           setStatus('')
         }, 3000);
       }
@@ -119,7 +120,29 @@ export default function CreateCampaign() {
       setPrompt("error")
     }
   }, [errorMessage])
+  useEffect(()=> {
+    const loadCampaign = async() => {
+      try {
+        setLoading(true)
+        const res = await axios.get(`${connection}/api/getcampaign/${campaignid}`)
+        if (res.data) {
+          setCampaignData(res.data[0])
+          setCampaignName(res.data[0].campaignname)
+          setGoal(res.data[0].goal)
+          setDescription(res.data[0].description)
+          setShareName(res.data[0].sharename)
+          setThemeColor(res.data[0].theme)
+          setLoading(false)
+        } else {
+          setStatus("error")
+        }
+      } catch(e) {
+        console.log(e)
+      }
+    }
+    loadCampaign()
 
+  }, [])
   return (
     <div className="settings-container ">
       {<AnimatePresence>
@@ -136,7 +159,7 @@ export default function CreateCampaign() {
       </AnimatePresence>
       {<SideNavigation route={"createcampaign"}/>}
       <div className={`create-campaign-content ${shouldNotify?(!firstRender)?'inactive-landing-container':'dim-landing-container':(!firstRender)?'active-container':''}`}>
-        {(loading)?
+        {(loading || campaignData===null)?
           <div className="create-campaign-loading-container">
           <Oval
                color="#959595"
@@ -166,7 +189,7 @@ export default function CreateCampaign() {
             }}>
                 <div className='register-header-container'>
                     <p className='create-campaign-inner-text'>
-                    Complete your campaign.
+                    {`${(campaignData&&campaignData.verified)?'Update':'Register'} your campaign.`}
                     </p>
                     <p className='create-campaign-inner-subtext'>
                     {`Fill out a couple details and you'll be ready to accept payouts. `}
@@ -175,7 +198,7 @@ export default function CreateCampaign() {
                 <div className='create-campaign-inner-content '>
                     <div className='create-campaign-fields-container '> 
                         <div className='create-campaign-field-wrapper'>
-                            <p className='payment-inner-input-text'>
+                            <p className='payment-inner-input-text' style={{color:'#ccc'}}>
                                 Enter the display name of your campaign:
                             </p>
                             <div className='payment-inner-input-wrapper'>                
@@ -187,7 +210,7 @@ export default function CreateCampaign() {
                             </div>
                         </div>
                         <div className='create-campaign-field-wrapper'>
-                            <p className='payment-inner-input-text'>
+                            <p className='payment-inner-input-text' style={{color:'#ccc'}}>
                                 Set your crowdfunding goal:
                             </p>
                             <div className='payment-inner-input-wrapper'>                
@@ -206,7 +229,7 @@ export default function CreateCampaign() {
                         </div>
 
                         <div className='payment-inner-input-container'>
-                            <p className='payment-inner-input-text'>
+                            <p className='payment-inner-input-text' style={{color:'#ccc'}}>
                                 Give a short description of your campaign:
                             </p>
                             <div className='payment-inner-message-input-wrapper'>
@@ -222,8 +245,8 @@ export default function CreateCampaign() {
 
                       
                             <div className="create-campaign-field-alt">
-                              <p className='payment-inner-input-text'>
-                                  {`Privacy Preferences:`}
+                              <p className='payment-inner-input-text' style={{color:'#ccc'}}>
+                                  {`Privacy Preference:`}
                               </p>
                               <div className='payment-inner-button-container' style={{paddingTop:"0em",transform:"translateY(.25em)"}}>
                                   <span className={`create-campaign-share-button`} onClick={()=>setShareName(!shareName)}>
@@ -240,13 +263,13 @@ export default function CreateCampaign() {
                             </div>
 
                             <div className="create-campaign-field-alt">
-                              <p className='payment-inner-input-text' style={{width:"90%", marginLeft:"auto"}}>
-                                  {`Accent Color:`}
+                              <p className='payment-inner-input-text' style={{width:"90%", marginLeft:"auto", color:"#ccc"}}>
+                                  {`Theme Color:`}
                               </p>
                               <div className='payment-inner-button-container' style={{paddingTop:"0em",transform:"translateY(.25em)"}}>
                                   <span className={`create-campaign-color-button`}>
-                                      <div className={`create-campaign-color-option`} 
-                                      style={{transform:"translateX(.75em)", 
+                                      <input type="color" className={`create-campaign-color-option`} value={'#'+themeColor} onChange={(e)=>setThemeColor(e.target.value.slice(1))}
+                                      style={{transform:"translateX(.75em)",
                                       backgroundColor:`#${isValidColor(themeColor)?themeColor:'151515'}`}}/>
                                       <div style={{transform:"translateX(1em)",display:"flex", justifyContent:"center", alignItems:"center", marginLeft:"auto", paddingRight:".875em"}}>
                                         <p className="create-campaign-color-text">

@@ -1,12 +1,17 @@
 import React, {useState, useEffect, useRef, useContext} from 'react'
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import { Link, useParams, useLocation } from "react-router-dom";
-import {AiOutlineHeart, AiFillHeart} from 'react-icons/ai'
+import CreatePost from './CreatePost'
+import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
+import {AiOutlineHeart, AiOutlinePlus, AiFillHeart} from 'react-icons/ai'
 import './Charity.scss'
 import './Campaign.scss'
 import CampaignPost from './CampaignPost';
 import {GoArrowRight} from 'react-icons/go'
+import {FiPlus} from 'react-icons/fi'
+import {RiQuillPenFill} from 'react-icons/ri'
+import {FaPlus,FaPenNib} from 'react-icons/fa'
+import {BiPen} from 'react-icons/bi'
 import SideNavigation from './SideNavigation';
 import UserContext from '../contexts/UserContext';
 import Payment from './Payment';
@@ -40,6 +45,7 @@ const CharityDonation = ({name, location, category, index}) => {
 export default function Campaign() {
   const userid = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0
   const connection = process.env.REACT_APP_API_URL
+  const navigate = useNavigate()
   const controls = useAnimation()
   const [firstRender, setFirstRender] = useState(true)
   const [isActive, setIsActive] = useState(true)  // background is active
@@ -113,14 +119,17 @@ export default function Campaign() {
   }
   const handlePayment = () => {
     setFirstRender(false)
-   // setPaymentActive(charityid)
+    setPaymentActive(true)
     setIsActive(false)
 }
   const onClosePayment = () => {
     setPaymentActive(null)
+    handleBlur()
   }
   function handleTest() {
-    console.log(charityInfo)
+    //console.log(charityInfo)
+    navigate(`/createcampaign/${campaignid}`)
+
   }
 
   useEffect(() => {
@@ -178,8 +187,11 @@ export default function Campaign() {
             </p>
         </div>:
         <>
-      {
-          (paymentActive!==null)&&<Payment charityid={paymentActive} edit={null} onClose={onClosePayment} onBlur={handleBlur}/>
+      {<AnimatePresence>
+          {(paymentActive!==null)&&<CreatePost name={'Milestone'} theme={campaignInfo?hexToRgba('#'+campaignInfo.theme.substring(0,6),0.6):"#5a5a5abd"}
+          onClose={()=>onClosePayment()}/>}
+          {/*<Payment charityid={paymentActive} edit={null} onClose={onClosePayment} onBlur={handleBlur}/>*/}
+        </AnimatePresence>
       }
       {(campaignInfo)&&
       <div className={`header-blur`} style={{background:
@@ -224,19 +236,23 @@ export default function Campaign() {
                             Learn about the impact of this organization.
                         </p>
                     </div>
-                    <div className='charity-page-donate-subcontainer'>
-                      <span className={`${(shouldArchive)?'campaign-page-like-icon-wrapper-alt':'campaign-page-like-icon-wrapper'}`}
-                      onClick={()=>setShouldArchive(!shouldArchive)}>
-                        <AiFillHeart className="charity-page-like-icon"/>
-                      </span>
-                      <span className='charity-page-donate-button' onClick={()=>console.log("handle payment")}>
-                        <div className="donate-page-link-button">
-                            <p className="charity-confirm-checkout-text">
-                                {
-                                  "Donate"
-                                }
-                            </p>
-                        </div>
+                    <div className='campaign-page-donate-subcontainer'>
+                        <span className={`campaign-page-like-icon-wrapper`}
+                        onClick={()=>handlePayment()}>
+                            <FaPenNib className="charity-page-like-icon" style={{width:"1.25em", height:"1.25em"}}/>
+                        </span>
+                        <span className={`${(shouldArchive)?'campaign-page-like-icon-wrapper-alt':'campaign-page-like-icon-wrapper'}`}
+                        onClick={()=>setShouldArchive(!shouldArchive)}>
+                            <AiFillHeart className="charity-page-like-icon"/>
+                        </span>
+                        <span className='campaign-page-donate-button' onClick={()=>handlePayment()}>
+                            <div className="donate-page-link-button">
+                                <p className="charity-confirm-checkout-text">
+                                    {
+                                    "Donate"
+                                    }
+                                </p>
+                            </div>
                       </span>
                     </div>
                 </div>

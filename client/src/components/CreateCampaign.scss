@@ -8,9 +8,9 @@
 }
 .create-campaign-content {
     min-height: 100%;
-    width: 95.5vw;
+    width: 95vw;
     margin-left: auto;
-    padding-top: 3.625em;
+    padding-top: 3.5em;
     //padding-bottom: 4em;
     //margin:0;
     align-self: flex-start;
@@ -97,14 +97,14 @@
 .create-campaign-confirm-button {
     width: 100%;
     border-radius: 12px;
-    margin-top:2%;
+    margin-top:1.75%;
     padding-bottom: .875em;
     padding-top: .875em;
     margin-left: auto;
     margin-right: auto;
-    background: linear-gradient(-135deg, rgba(211, 185, 119, 0.875), rgba(221, 180, 102, 0.875));
-   //  background-color: rgba(211, 184, 116, 0.875);
-  //  background-color: rgba(28, 190, 166, 0.875);
+   // background: linear-gradient(-135deg, rgba(211, 185, 119, 0.875), rgba(212, 153, 64, 0.875));
+     background-color:rgba(108, 202, 177, 0.8);
+   //   background-color: rgba(79, 198, 180, 0.875);
     display: flex;
     text-decoration: none;
     filter: contrast(1.05) brightness(1.05);
@@ -129,7 +129,7 @@
 .create-campaign-fields-container {
     min-width: 100%;
     height:100%;
-    gap:1.125em;
+    gap:1.25em;
     display: flex;
     flex-direction: column;
   
@@ -138,7 +138,7 @@
 }
 .create-campaign-field-wrapper {
     min-width: 100%;
-    gap:.2em;
+    gap:.125em;
     height:13%;
     display:flex;
 
@@ -216,10 +216,22 @@
     width: 1em;
     height: 1em;
     border-radius:3px;
-    outline:1px solid #555;
+    //outline:1px solid #555;
+    border:none;
+    outline:none;
+    color:transparent;
     margin-left:.5em;
   //  background-color: #656565;
     align-self: center;
+}
+::-webkit-color-swatch {
+    border-color: rgba(255, 0, 0, 0);
+}
+::-moz-color-swatch {
+    border-color: rgba(255, 0, 0, 0);
+}
+.create-campaign-color-option:focus {
+    outline-width: 0;
 }
 .create-campaign-color-text {
     font-size: clamp(10px, 3vw, 16px);
