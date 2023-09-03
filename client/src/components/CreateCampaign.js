@@ -12,6 +12,22 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { Oval } from 'react-loader-spinner'
 import { motion, AnimatePresence, useAnimation } from 'framer-motion'
 
+const Dropdown = ({categories, onSelect}) => {
+  const [selected, setSelected] = useState(false)
+  return (
+    <span className={`create-campaign-share-button `} onClick={()=>setSelected()}>
+    <div className={`payment-inner-option-content-alt ${selected?'create-inner-option-content-on':''}`}>
+            Choose a category
+        {(selected)?
+            <BsCheckLg className="payment-check-icon"/>
+            :null
+        }
+    </div>
+</span>
+
+  )
+}
+
 export default function CreateCampaign() {
   const {campaignid} = useParams()
   const controls = useAnimation()
@@ -21,6 +37,8 @@ export default function CreateCampaign() {
   const firstname = localStorage.getItem("firstname")?JSON.parse(localStorage.getItem("firstname")):''
   const email = localStorage.getItem("email")?JSON.parse(localStorage.getItem("email")):''
   const connection = process.env.REACT_APP_API_URL
+  const categories = ["Entertainment", "Technology", "Healthcare", "Environment", "Community", "Athletics", "Just For Fun"]
+  const [category, setCategory] = useState(null)
   const [campaignData, setCampaignData] = useState(null)
   const [firstRender, setFirstRender] = useState(true)
   const [loading, setLoading] = useState(false)
@@ -248,17 +266,8 @@ export default function CreateCampaign() {
                               <p className='payment-inner-input-text' style={{color:'#ccc'}}>
                                   {`Privacy Preference:`}
                               </p>
-                              <div className='payment-inner-button-container' style={{paddingTop:"0em",transform:"translateY(.25em)"}}>
-                                  <span className={`create-campaign-share-button`} onClick={()=>setShareName(!shareName)}>
-                                      <div className={`payment-inner-option-content-alt ${shareName?'create-inner-option-content-on':''}`}>
-                                              Share your name
-                                          {(shareName)?
-                                              <BsCheckLg className="payment-check-icon"/>
-                                              :null
-                                          }
-                                      </div>
-                                  </span>
-                                
+                              <div className='payment-inner-button-container ' style={{paddingTop:"0em",transform:"translateY(.25em)"}}>
+                                 <Dropdown categories={categories} onSelect={(selected)=> setCategory(selected)}/>
                               </div>
                             </div>
 

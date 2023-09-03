@@ -50,6 +50,7 @@ export default function Campaign() {
   const [firstRender, setFirstRender] = useState(true)
   const [isActive, setIsActive] = useState(true)  // background is active
   const [loading, setLoading] = useState(true)
+  const [postActive, setPostActive] = useState(false)
   const [paymentActive, setPaymentActive] = useState(null)
   const [charityInfo, setCharityInfo] = useState(null)
   const [shouldArchive, setShouldArchive] = useState()
@@ -117,6 +118,15 @@ export default function Campaign() {
   const handleBlur = () => {
     setIsActive(true)
   }
+  const handlePost = (type) => {
+    setFirstRender(false)
+    setPostActive(type)
+    setIsActive(false)
+  }
+  const onClosePost = () => {
+    setPostActive(null)
+    handleBlur()
+  }
   const handlePayment = () => {
     setFirstRender(false)
     setPaymentActive(true)
@@ -129,8 +139,8 @@ export default function Campaign() {
   function handleTest() {
     //console.log(charityInfo)
     navigate(`/createcampaign/${campaignid}`)
-
   }
+
 
   useEffect(() => {
     if (!loading) {
@@ -188,14 +198,19 @@ export default function Campaign() {
         </div>:
         <>
       {<AnimatePresence>
-          {(paymentActive!==null)&&<CreatePost name={'Milestone'} theme={campaignInfo?hexToRgba('#'+campaignInfo.theme.substring(0,6),0.6):"#5a5a5abd"}
-          onClose={()=>onClosePayment()}/>}
+          {(postActive!==null)&&
+          <CreatePost 
+            name={campaignInfo?campaignInfo.campaignname:"No Info"} 
+            theme={campaignInfo?hexToRgba('#'+campaignInfo.theme.substring(0,6),0.6):"#5a5a5abd"}
+            type={postActive}
+            onClose={()=>onClosePost()}
+          />}
           {/*<Payment charityid={paymentActive} edit={null} onClose={onClosePayment} onBlur={handleBlur}/>*/}
         </AnimatePresence>
       }
       {(campaignInfo)&&
       <div className={`header-blur`} style={{background:
-     `linear-gradient(180deg, ${hexToRgba('#'+campaignInfo.theme.substring(0,6),0.6)}, rgba(238, 77, 93, 0))`}}/>
+     `linear-gradient(180deg, ${hexToRgba('#'+campaignInfo.theme.substring(0,6),0.60)}, rgba(238, 77, 93, 0))`}}/>
       }
         <SideNavigation route={'campaign'}/>
           <motion.div 
@@ -238,14 +253,14 @@ export default function Campaign() {
                     </div>
                     <div className='campaign-page-donate-subcontainer'>
                         <span className={`campaign-page-like-icon-wrapper`}
-                        onClick={()=>handlePayment()}>
+                        onClick={()=>handlePost("create")}>
                             <FaPenNib className="charity-page-like-icon" style={{width:"1.25em", height:"1.25em"}}/>
                         </span>
                         <span className={`${(shouldArchive)?'campaign-page-like-icon-wrapper-alt':'campaign-page-like-icon-wrapper'}`}
                         onClick={()=>setShouldArchive(!shouldArchive)}>
                             <AiFillHeart className="charity-page-like-icon"/>
                         </span>
-                        <span className='campaign-page-donate-button' onClick={()=>handlePayment()}>
+                        <span className='campaign-page-donate-button' onClick={()=>handlePost("create")}>
                             <div className="donate-page-link-button">
                                 <p className="charity-confirm-checkout-text">
                                     {
@@ -398,7 +413,11 @@ export default function Campaign() {
                             View this campaign's projects, updates, and more. 
                         </p>
                     </div>
-                    <CampaignPost name={'Milestone'} theme={campaignInfo?hexToRgba('#'+campaignInfo.theme.substring(0,6),0.6):"#5a5a5abd"}/>
+                    <CampaignPost 
+                        name={campaignInfo?campaignInfo.campaignname:"No Info"} 
+                        theme={campaignInfo?hexToRgba('#'+campaignInfo.theme.substring(0,6),0.6):"#5a5a5abd"}
+                        onEdit={()=>handlePost("edit")}
+                    />
                 </div>
                 <div className='campaign-stats-container '>
                     <div className="donation-details-container">

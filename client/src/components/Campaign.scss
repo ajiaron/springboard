@@ -260,18 +260,19 @@
 }
 .campaign-post-content {
   width: 89%;
-  height: 91.5%;
+  height: 92%;
   display: flex;
  // padding: 2.5%;
-  padding-left: 2.5%;
-  padding-right: 2.5%;
+  padding-left: 2.75%;
+  padding-right: 2.75%;
   padding-bottom: 1.25%;
   padding-top: 1.75%;
   flex-direction: column;
   align-self: flex-end;
   justify-content: center;
   background-color: rgb(34,34,34);
-  border-radius: 20px;
+ // background-color: #51cd9d;
+  border-radius: 16px;
  // background-color: #252525bd;
   transform: translateX(-.25em);
 
@@ -304,7 +305,7 @@
   flex-direction: "column";
   width: 100%;
  // padding-bottom: 1%;
-  height: 24.25%;
+  height: 25%;
 
 }
 .campaign-post-caption-wrapper {
@@ -313,6 +314,7 @@
   flex-direction: column;
   gap:.5em;
   padding-top: 1.35em;
+
   padding-left: .35em;
 
 }
@@ -324,8 +326,8 @@
   margin-left: auto;
   margin-right: auto;
 
-  border-radius: 20px;
-  height:64.5%;
+  border-radius: 16px;
+  height:64%;
   display: flex;
 }
 .campaign-post-image {
@@ -336,7 +338,7 @@
   background-size: cover;
   width: 100%;
   height: 100%;
-  border-radius: 20px;
+  border-radius: 16px;
   //box-shadow: 2px 2px 3px 2px rgba(0,0,0,0.15);
 //  background:linear-gradient(35deg, steelblue, seagreen);
 
@@ -345,7 +347,7 @@
   display: flex;
   width: 98%;
   height: 10%;
-  padding-top: 1.25%;
+  padding-top: 1%;
 
   //background-color: #202020;
   margin-top: auto;
@@ -372,10 +374,10 @@
 .campaign-post-caption-subtext {
   font-size: clamp(10px, 3vw, 15px);
   font-family: "Rubik";// padding-left: .025em;
- // line-height: 20px;
+  line-height: 20px;
   letter-spacing: -.25px;
   font-weight: 400;
-  color: #a0a0a0;
+  color: #aaa;
   user-select: none;
   -webkit-user-select: none; 
   -moz-user-select: none; 
@@ -436,6 +438,11 @@
   height: 1rem;
   color:#ccc;
 }
+.campaign-post-image-icon {
+  width: .875rem;
+  height: .875rem;
+  color:#ccc;
+}
 .campaign-post-icon-repost {
   width: 1rem;
   height: 1rem;
@@ -447,6 +454,13 @@
   height: 1rem;
   color:#ccc;
   transform: scaleX(1.1) scaleY(1.15);
+}
+.campaign-post-icon-views-allow {
+  width: 1rem;
+  height: 1rem;
+  color:#ddd;
+  transform: scaleX(1.125) scaleY(1.2) translateY(0.02em);
+
 }
 .campaign-post-icon-views-alt {
   min-width: 1em;
@@ -471,13 +485,27 @@
 }
 
 .campaign-post-edit-icon {
-  width: 100%;
-  height: 100%;
-  //color:#555;
-  color: transparent;
-
+  width: 1.6em;
+  height: 1.6em;
+  border-radius: 1.6em;
+  position: absolute;
+  transition: all .15s linear;
+  align-items: center;
+  right: .8em;
+  display: flex;
+  background-color: #ddd;
+  box-shadow: 2px 2px 1px 2px rgb(10,10,10, 0.2);
+  justify-content: center;
+  transform: translateX(-155%) translateY(65%);
 }
-
+.campaign-post-edit-icon:hover {
+  transform: translateX(-155%) translateY(65%) scale(1.15);
+}
+.edit-image-icon {
+  width: 65%;
+  height: 65%;
+  color:rgb(34, 34, 34);
+}
 
 .campaign-page-donate-button {
   width: 52%;
@@ -530,7 +558,7 @@
   animation-fill-mode: forwards;
 }
 .campaign-post-link-input {
-  //background-color: transparent;
+  background-color: transparent;
  // height: fit-content;  
   border:none;
   outline:none;
@@ -542,7 +570,7 @@
 
   //background-color: rgba(255, 0, 0, 0.25);
  //background-color: red;
- background-color: transparent;
+ //background-color: transparent;
   margin:0;
   overflow: hidden;
   font-size: clamp(10px, 3vw, 15px);
@@ -562,8 +590,6 @@
 }
 .campaign-post-link-input-wrapper {
   background-color: #353535;
-
-
   //background-color: rgba(234, 0, 255, 0.238);
 }
 

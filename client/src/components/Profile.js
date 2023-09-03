@@ -455,13 +455,12 @@ const removeRequest = async(recipientid, requesterid) => {
                                 }
                             </div>
                         </span>
-                        {(userData&&userData.accountid!==null&&userData.charges&&userData.payouts)?
-                        <span onClick={()=>(userData&&isFollowing==="not following")?
-                        handleRequest():
-                        removeRequest(userData&&userData.userid, id)}
+                        {(userData&&userData.accountid!==null&&userData.campaignid&&userData.payouts&&userData.charges)?
+                        <span 
+                        onClick={()=> navigateCampaign(userData.campaignid, true)}
                         className={`profile-campaign-donate-button follow-inactive`} 
                         style={{marginLeft:(userData&&isFollower==="pending")?"none":"auto",
-                        minWidth:(isFollowing==="following"?"93%":"100%")}}>
+                        minWidth:(isFollowing==="following"?"92%":"100%")}}>
                             <div className={`profile-support-link-button`}>
                                 <p className={`profile-follow-text-alt`} style={{color:"#eee"}}>
                                     Support

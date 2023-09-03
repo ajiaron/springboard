@@ -2,16 +2,16 @@ import React, {useState, useEffect, useRef} from 'react'
 import './Campaign.scss'
 import './CreatePost.scss'
 import {AiOutlineHeart, AiOutlineLink, AiOutlinePlus, AiFillHeart, AiFillEye} from 'react-icons/ai'
-import {BiRepost, BiSolidEdit, BiMessageSquareEdit, BiSolidPencil} from 'react-icons/bi'
+import {BiRepost, BiSolidEdit, BiMessageSquareEdit, BiSolidImageAdd, BiSolidPencil} from 'react-icons/bi'
 import {VscEye} from 'react-icons/vsc'
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
-import {BsEye, BsStars, BsFillPencilFill} from 'react-icons/bs'
+import {BsEye, BsStars, BsImageAlt, BsImage} from 'react-icons/bs'
 import {HiOutlineEye} from 'react-icons/hi'
 import {FiEdit} from 'react-icons/fi'
 import {FaRegEye,FaRegEdit} from 'react-icons/fa'
 import {TiArrowRepeat} from 'react-icons/ti'
 
-export default function CreatePost({name, theme, onClose}) {
+export default function CreatePost({name, theme, type, onClose}) {
     const controls = useAnimation()
     const [showLink, setShowLink] = useState(false)
     const [title, setTitle] = useState("")
@@ -69,7 +69,7 @@ export default function CreatePost({name, theme, onClose}) {
                             </span>
                             <span style={{display:"flex"}}>
                                 <p className='campaign-post-header-text' 
-                                style={{fontFamily:"Inter",transform:"translateY(-0.05em)", fontSize:"clamp(9px, 3vw, 14px)"}}>
+                                style={{fontFamily:"Inter",transform:"translateY(-0.025em)", fontSize:"clamp(9px, 3vw, 14px)"}}>
                                     @
                                 </p>
                                 <p className='campaign-post-header-text'>
@@ -97,6 +97,7 @@ export default function CreatePost({name, theme, onClose}) {
                             />
                         </div>
                     </div>
+                    {(type==="edit")&&
                     <div className='create-post-media-wrapper'>
                         <div className='campaign-create-post-image-wrapper'>
                             <div className='campaign-create-post-image'/>
@@ -105,6 +106,7 @@ export default function CreatePost({name, theme, onClose}) {
                                 <BiSolidPencil className='edit-image-icon'/>
                         </div>
                     </div>
+                    }
                 </div>
                 <div className='create-post-footer ' >
                     <div className='create-post-footer-wrapper'>
@@ -145,27 +147,24 @@ export default function CreatePost({name, theme, onClose}) {
                         <div className='campaign-post-footer-item-wrapper' style={{ backgroundColor:theme, gap:".65em"}}>
                             <AiOutlinePlus className='campaign-post-icon-views' style={{color:'#eee'}}/>
                             <p className='campaign-post-caption-subtext' style={{color:"#eee",fontWeight:"600", paddingTop:".0145em"}}>
-                                Update
+                                {type==="edit"?'Update':"Create"}
                             </p>
                         </div>
-                        <div className='campaign-post-footer-item-wrapper'>
-                            <VscEye className='campaign-post-icon-views'/>
+
+                        <div className='campaign-post-footer-item-wrapper'  style={{ gap:".5em" }}>
+                            <VscEye className='campaign-post-icon-views-allow'/>
                             <p className='campaign-post-caption-subtext' style={{color:"#ccc",fontWeight:"600", paddingTop:".0145em"}}>
-                                64
+                                Allow
                             </p>
                         </div>
-                        <div className='campaign-post-footer-item-wrapper'>
-                            <AiOutlineHeart className='campaign-post-icon'/>
-                            <p className='campaign-post-caption-subtext' style={{color:"#ccc", fontWeight:"600", paddingTop:".0145em"}}>
-                                8
+
+                        <div className='campaign-post-footer-item-wrapper'  style={{ paddingLeft:".825em", gap:".75em" }}>
+                            <BsImage className='campaign-post-image-icon'/>
+                            <p className='campaign-post-caption-subtext' style={{color:"#ccc",fontWeight:"600", paddingTop:".0145em"}}>
+                                Image
                             </p>
                         </div>
-                        <div className='campaign-post-footer-item-wrapper'>
-                            <BiRepost className='campaign-post-icon-repost'/>
-                            <p className='campaign-post-caption-subtext' style={{color:"#ccc", fontWeight:"600", paddingTop:".0145em"}}>
-                                4
-                            </p>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
