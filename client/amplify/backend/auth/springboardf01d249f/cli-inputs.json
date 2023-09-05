@@ -1,6 +1,8 @@
 {
   "version": "1",
   "cognitoConfig": {
+    "identityPoolName": "springboardf01d249f_identitypool_7376ceca",
+    "allowUnauthenticatedIdentities": true,
     "resourceNameTruncated": "springf01d249f",
     "userPoolName": "springboardf01d249f_userpool_f01d249f",
     "autoVerifiedAttributes": [
@@ -33,7 +35,7 @@
     "userpoolClientSetAttributes": false,
     "sharedId": "f01d249f",
     "resourceName": "springboardf01d249f",
-    "authSelections": "userPoolOnly",
+    "authSelections": "identityPoolAndUserPool",
     "useDefault": "manual",
     "userPoolGroupList": [],
     "serviceName": "Cognito",

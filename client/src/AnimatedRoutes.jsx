@@ -19,8 +19,9 @@ import CreateCampaign from './components/CreateCampaign';
 import Charity from './components/Charity';
 import CharityItem from './components/CharityItem';
 import Campaign from './components/Campaign'
-import { Auth } from 'aws-amplify';
-
+import { Amplify, Auth } from 'aws-amplify';
+import awsmobile from './aws-exports';
+Amplify.configure(awsmobile)
 function ProtectedRoute({ children }) {
     const [isLoading, setIsLoading] = useState(true);
     const [isAuthenticated, setIsAuthenticated] = useState(false);

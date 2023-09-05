@@ -50,7 +50,7 @@ export default function Campaign() {
   const [firstRender, setFirstRender] = useState(true)
   const [isActive, setIsActive] = useState(true)  // background is active
   const [loading, setLoading] = useState(true)
-  const [postActive, setPostActive] = useState(false)
+  const [postActive, setPostActive] = useState(null)
   const [paymentActive, setPaymentActive] = useState(null)
   const [charityInfo, setCharityInfo] = useState(null)
   const [shouldArchive, setShouldArchive] = useState()

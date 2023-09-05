@@ -1,0 +1,15 @@
+{
+  "resourceName": "springboard",
+  "policyUUID": "b0dd39a6",
+  "bucketName": "springboard2445b550ca774313bf4ed5a18579906f",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "READ"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {}
+}
