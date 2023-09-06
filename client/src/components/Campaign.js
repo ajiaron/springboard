@@ -6,12 +6,15 @@ import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import {AiOutlineHeart, AiOutlinePlus, AiFillHeart} from 'react-icons/ai'
 import './Charity.scss'
 import './Campaign.scss'
+import Popup from './Popup';
 import CampaignPost from './CampaignPost';
 import {GoArrowRight} from 'react-icons/go'
 import {FiPlus} from 'react-icons/fi'
 import {RiQuillPenFill} from 'react-icons/ri'
 import {FaPlus,FaPenNib} from 'react-icons/fa'
 import {BiPen} from 'react-icons/bi'
+import { useInView } from 'react-intersection-observer';
+import _, { debounce } from 'lodash'; 
 import SideNavigation from './SideNavigation';
 import UserContext from '../contexts/UserContext';
 import Payment from './Payment';
@@ -55,6 +58,12 @@ export default function Campaign() {
   const [charityInfo, setCharityInfo] = useState(null)
   const [shouldArchive, setShouldArchive] = useState()
   const [campaignInfo, setCampaignInfo] = useState(null)
+  const [status, setStatus] = useState("")
+  const [renderStatus, setRenderStatus] = useState(false)
+  const pageSize = 5
+  const [page, setPage] = useState(1)
+  const loadingRef = useRef(null)
+  const [postList, setPostList] = useState([])
   const { campaignid } = useParams()
   function hexToRgba(hex, a){
     var c;
@@ -115,6 +124,10 @@ export default function Campaign() {
         }
       }
   }
+  const closePopup = () => {
+    setRenderStatus(false)
+    setStatus(false)
+  }
   const handleBlur = () => {
     setIsActive(true)
   }
@@ -150,6 +163,18 @@ export default function Campaign() {
       });
     }
   }, [loading, controls]);
+  const loadPosts = async() => {
+    try {
+        const res = await axios.get(`${connection}/api/getcampaignposts/${campaignid}/${pageSize}/${(page-1)*pageSize}`)
+        if (res.data) {
+            console.log(res)
+            setPostList(res.data)
+        }
+    } catch(e) {
+        console.log(e)
+    }
+    setLoading(false)
+  }
   useEffect(()=> {
     const loadCampaign = async() => {
         setLoading(true)
@@ -159,7 +184,7 @@ export default function Campaign() {
                 console.log(res.data)
                 setCampaignInfo(res.data[0])
                 setTheme(res.data[0].theme)
-                setLoading(false)
+                loadPosts()
                 // handle whether or not the campaign is archived here
             }
         } catch(e) {
@@ -167,9 +192,11 @@ export default function Campaign() {
         }
     }
     loadCampaign()
-
   }, [])
 
+  useEffect(()=> {
+    loadPosts()
+  }, [page])
   useEffect(()=>{
     if (paymentActive !== null) {
         document.body.style.overflow='hidden'
@@ -178,10 +205,33 @@ export default function Campaign() {
         document.body.style.overflow='auto'
     }
   }, [paymentActive])
+  useEffect(()=> {  // for loading status bar
+    if (status.length>0) {
+      setRenderStatus(true)
+      if (status!=='loading') {
+        setTimeout(() => {
+          setRenderStatus(false)
+          setStatus('')
+        }, 3000);
+      }
+    }
+  }, [status])
+  const { ref:loadRef, inView: loadInView} = useInView({
+    threshold:0,
+    triggerOnce:false
+  });
+  /*
+  useEffect(() => {
+    if (loadInView) {
+        setPage((prev)=>prev+1)
+    }
+  }, [loadInView]);
+  */
   return (
-    <div className={`charity-page`}>
+    <div className={`campaign-page`}>
         {(loading || campaignInfo === null)?
-        <div className="create-campaign-loading-container">
+        <div className="create-campaign-loading-container"
+        style={{marginTop:"20%"}}>
             <Oval
                 color="#959595"
                 wrapperStyle={{}}
@@ -197,24 +247,31 @@ export default function Campaign() {
             </p>
         </div>:
         <>
-      {<AnimatePresence>
-          {(postActive!==null)&&
-          <CreatePost 
-            name={campaignInfo?campaignInfo.campaignname:"No Info"} 
-            theme={campaignInfo?hexToRgba('#'+campaignInfo.theme.substring(0,6),0.6):"#5a5a5abd"}
-            type={postActive}
-            onClose={()=>onClosePost()}
-          />}
-          {/*<Payment charityid={paymentActive} edit={null} onClose={onClosePayment} onBlur={handleBlur}/>*/}
+        <AnimatePresence>     
+        {(renderStatus && status.length > 0)&&  // gives request status
+          <Popup status={status} onClose={()=>closePopup()}/>
+        }
         </AnimatePresence>
-      }
-      {(campaignInfo)&&
-      <div className={`header-blur`} style={{background:
-     `linear-gradient(180deg, ${hexToRgba('#'+campaignInfo.theme.substring(0,6),0.60)}, rgba(238, 77, 93, 0))`}}/>
-      }
+        {<AnimatePresence>
+            {(postActive!==null)&&
+            <CreatePost 
+                name={campaignInfo?campaignInfo.campaignname:"No Info"} 
+                theme={campaignInfo?hexToRgba('#'+campaignInfo.theme.substring(0,6),0.6):"#5a5a5abd"}
+                type={postActive}
+                campaignid={campaignid}
+                onChangeStatus={(e)=>setStatus(e)}
+                onCloseStatus={()=>closePopup()}
+                onClose={()=>onClosePost()}
+            />}
+            {/*<Payment charityid={paymentActive} edit={null} onClose={onClosePayment} onBlur={handleBlur}/>*/}
+            </AnimatePresence>
+        }
+        {(campaignInfo)&&
+        <div className={`header-blur`} style={{background:`linear-gradient(180deg, ${hexToRgba('#'+campaignInfo.theme.substring(0,6),0.60)}, rgba(238, 77, 93, 0))`}}/>
+        }
         <SideNavigation route={'campaign'}/>
-          <motion.div 
-            className={`campaign-page-container  ${!isActive?(!firstRender)?'inactive-landing-container':'dim-landing-container':(!firstRender)?'active-container':''}`}
+        <motion.div 
+            className={`campaign-page-container ${!isActive?(!firstRender)?'inactive-landing-container':'dim-landing-container':(!firstRender)?'active-container':''}`}
             initial={{opacity:0, y:15}}
             animate={controls}
             transition={{
@@ -241,7 +298,7 @@ export default function Campaign() {
                   </div>
                 </div>
             </div>
-            <div className="manage-charity-container">
+            <div className="manage-charity-container" style={{overflow:"hidden"}}>
                 <div className="manage-charity-header-container">
                     <div style={{display:'flex', flexDirection:'column'}}>
                         <p className="manage-header-text">
@@ -413,11 +470,28 @@ export default function Campaign() {
                             View this campaign's projects, updates, and more. 
                         </p>
                     </div>
-                    <CampaignPost 
-                        name={campaignInfo?campaignInfo.campaignname:"No Info"} 
-                        theme={campaignInfo?hexToRgba('#'+campaignInfo.theme.substring(0,6),0.6):"#5a5a5abd"}
-                        onEdit={()=>handlePost("edit")}
-                    />
+                    <div className="campaign-post-list ">
+
+                    {postList.map((item, index)=>(
+                        <CampaignPost 
+                            name={campaignInfo?campaignInfo.campaignname:"No Info"} 
+                            theme={campaignInfo?hexToRgba('#'+campaignInfo.theme.substring(0,6),0.6):"#5a5a5abd"}
+                            title={item.title}
+                            description={item.description}
+                            image={item.image}
+                            link={item.link}
+                            date={item.date}
+                            campaignid={campaignid}
+                            index={index}
+                            onEdit={()=>handlePost("edit")}
+                        />
+                    ))}
+                        <div ref={loadRef} style={{width:"95%"}}className='loading-text-container' onClick={()=>handleTest()}>
+                            <p className="loading-text" style={{color:"transparent"}}>
+                                 {`${(loading)?'Loading...':`Showing all matching results`}`} 
+                            </p>
+                        </div>
+                    </div>
                 </div>
                 <div className='campaign-stats-container '>
                     <div className="donation-details-container">

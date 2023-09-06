@@ -9,7 +9,7 @@ import {FiEdit} from 'react-icons/fi'
 import {FaRegEye,FaRegEdit} from 'react-icons/fa'
 import { motion, AnimatePresence, useAnimation } from 'framer-motion'
 import {TiArrowRepeat} from 'react-icons/ti'
-export default function CampaignPost({name, theme, onEdit}) {
+export default function CampaignPost({name, theme, title, description, image, link, date, campaignid, index, onEdit}) {
     const [isHovered, setIsHovered] = useState(false)
     const ref = useRef(null)
     const handleMouseEnter = () => {
@@ -51,7 +51,8 @@ export default function CampaignPost({name, theme, onEdit}) {
                             <p className='campaign-post-header-subtext' 
                             style={{  alignSelf:"center",
                                 fontSize: "clamp(10px, 3vw, 14.5px)",paddingLeft:".8em", fontFamily:"Rubik", color:"#707070"}}>
-                                {`5 days ago`}
+                                {/*`5 days ago`*/
+                                `${date}`}
                             </p>
                         </span>
                        
@@ -59,10 +60,10 @@ export default function CampaignPost({name, theme, onEdit}) {
                     </div>
                     <div className='campaign-post-caption-wrapper '>
                         <p className='campaign-post-caption-title'>
-                            Testing Posts 
+                            {(title&&title.length>0)?title:`Testing Posts`}
                         </p>
                         <p className='campaign-post-caption-subtext'>
-                            great day to do that amiright
+                            {(description&&description.length>0)?description:`great day to do that amiright`}
                         </p>
                     </div>
                 </div>
@@ -71,7 +72,8 @@ export default function CampaignPost({name, theme, onEdit}) {
                     onMouseEnter={handleMouseEnter} 
                     onMouseLeave={handleMouseLeave}
                     ref={ref}>
-                    <div className='campaign-post-image'>
+                    <div className='campaign-post-image'
+                    style={{backgroundImage:`url(${image?image:'./assets/v9.png'})`}}>
                       
                     </div>
                     <AnimatePresence>

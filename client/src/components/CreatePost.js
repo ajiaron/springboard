@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react'
 import './Campaign.scss'
 import './CreatePost.scss'
+import { v4 as uuidv4 } from 'uuid';
 import {AiOutlineHeart, AiOutlineLink, AiOutlinePlus, AiFillHeart, AiFillEye} from 'react-icons/ai'
 import {BiRepost, BiSolidEdit, BiMessageSquareEdit, BiSolidImageAdd, BiSolidPencil} from 'react-icons/bi'
 import {VscEye} from 'react-icons/vsc'
@@ -9,12 +10,16 @@ import {BsEye, BsStars, BsImageAlt, BsImage} from 'react-icons/bs'
 import {HiOutlineEye} from 'react-icons/hi'
 import {FiEdit} from 'react-icons/fi'
 import Popup from "./Popup";
+import axios from 'axios';
 import {FaRegEye,FaRegEdit} from 'react-icons/fa'
 import {TiArrowRepeat} from 'react-icons/ti'
 import {Storage} from 'aws-amplify'
 
-export default function CreatePost({name, theme, type, onClose}) {
+export default function CreatePost({name, theme, type, campaignid, onChangeStatus, onCloseStatus, onClose}) {
     const controls = useAnimation()
+    const userid = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0
+    const url = process.env.REACT_APP_CDN
+    const connection = process.env.REACT_APP_API_URL
     const [showLink, setShowLink] = useState(false)
     const [title, setTitle] = useState("")
     const [selectedImage, setSelectedImage] = useState(null);
@@ -27,16 +32,10 @@ export default function CreatePost({name, theme, type, onClose}) {
     const [renderStatus, setRenderStatus] = useState(false)
     function handleClose() {
         onClose()
-      }
-      const closePopup = () => {
-        setRenderStatus(false)
-        setStatus(false)
-      }
-    
+    }
     const handleButtonClick = () => {
         fileInput.current.click();
     };
-    
     const dataURLtoBlob = (dataurl) => {
         const arr = dataurl.split(',');
         const mime = arr[0].match(/:(.*?);/)[1];
@@ -48,19 +47,35 @@ export default function CreatePost({name, theme, type, onClose}) {
         }
         return new Blob([u8arr], { type: mime });
     };
+    const submitData = async(uri) => {
+        try {
+            const res = await axios.post(`${connection}/api/createpost`,
+            {postid:uuidv4(), campaignid:campaignid, ownerid:userid, title:title, description:description,
+            image:`${url}/public/${uri}`, link:link!==null?link:''})
+            if (res.data) {
+                onChangeStatus("success")
+                console.log("post saved to db")
+                onClose()
+            }
+        } catch(e) {
+            onChangeStatus("error")
+            console.log(e)
+        }
+    }
     const handleSubmit = async() => {
+        onChangeStatus("loading")
+        const filename = `post-${Math.random()}.png`
         const blob = dataURLtoBlob(selectedImage);
-        // Convert Blob to File
-        setStatus("loading")
         const newFile = new File([blob], fileobj.name, { type: blob.type });
         try {
-          // Upload the file to S3
-          const result = await Storage.put(newFile.name, newFile, {
+          // upload the file to s3
+          const result = await Storage.put(filename, newFile, {
             contentType: newFile.type,
           });
-          setStatus("success")
+          submitData(filename)
           console.log('Successfully uploaded file:', result);
         } catch (err) {
+          onChangeStatus("error")
           console.error('Error uploading file:', err);
         }
     } 
@@ -97,18 +112,8 @@ export default function CreatePost({name, theme, type, onClose}) {
             y: 0
           });
         }
-      }, [loading, controls]);
-      useEffect(()=> {  // for loading status bar
-        if (status.length>0) {
-          setRenderStatus(true)
-          if (status!=='loading') {
-            setTimeout(() => {
-              setRenderStatus(false)
-              setStatus('')
-            }, 3000);
-          }
-        }
-      }, [status])
+    }, [loading, controls]);
+   
   return (
     <motion.div
         ref={modalRef}
@@ -121,11 +126,6 @@ export default function CreatePost({name, theme, type, onClose}) {
           duration:.3
         }}
         >
-    <AnimatePresence>     
-        {(renderStatus && status.length > 0)&&  // gives request status
-          <Popup status={status} onClose={()=>closePopup()}/>
-        }
-      </AnimatePresence>
         <div className='campaign-post-container'>
             <div className='create-post-wrapper'>
                 <div className='create-post-content-container '>
@@ -165,6 +165,8 @@ export default function CreatePost({name, theme, type, onClose}) {
                             placeholder='Untitled Post'>
                             </input>
                             <textarea id='post-description' className='create-post-caption-content' rows={5}
+                                onChange={(e)=>setDescription(e.target.value)}
+                                value={description}
                                 placeholder={'What would you like to talk about?'}
                             />
                         </div>

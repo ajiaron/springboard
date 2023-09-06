@@ -926,6 +926,91 @@ app.post('/api/addarchive', (req, res) => {
         }
     })
 })
+// new
+app.post('/api/createpost', (req, res) => {
+    const postid = req.body.postid
+    const campaignid = req.body.campaignid
+    const ownerid = req.body.ownerid
+    const title = req.body.title
+    const description = req.body.description
+    const image = req.body.image
+    const link = req.body.link
+    db.query('INSERT INTO posts (postid, campaignid, ownerid, title, description, image, link) VALUES (?,?,?,?,?,?,?)', 
+    [postid, campaignid, ownerid, title, description, image, link], (err, result) => {
+        if(err) {
+            console.log(err)
+        } else {
+            res.send("successfully created post")
+        }
+    })
+})
+
+app.put('/api/editpost', (req, res) => {     
+    const ownerid = req.body.ownerid
+    const campaignid = req.body.campaignid
+    const postid = req.body.postid
+    const title = req.body.title
+    const description = req.body.description
+    const image = req.body.image
+    const link = req.body.link
+    const sql = `UPDATE posts SET title = ?, description = ?, image = ?, link = ? `+
+    `WHERE ownerid = ? AND campaignid = ? AND postid = ?;`
+    db.query(sql, [title, description, image, link, ownerid, campaignid, postid],
+    (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+
+app.delete('/api/deletepost', (req, res) => {
+    const postid = req.body.postid
+    db.query("DELETE FROM posts WHERE postid = ?", [postid], (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send('deleted post')
+        }
+    })
+})
+app.get('/api/getposts/:next/:current', (req,res)=> {
+    const next = Number(req.params.next)
+    const current = Number(req.params.current)
+    const sql = `SELECT posts.*, campaigns.campaignname FROM posts `+
+    `INNER JOIN campaigns ON campaigns.campaignid = posts.campaignid `+
+    `ORDER BY posts.date DESC `+
+    `LIMIT ? OFFSET ?`
+    db.query(sql, [next, current],
+    (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+app.get('/api/getcampaignposts/:campaignid/:next/:current', (req,res)=> {
+    const campaignid = req.params.campaignid
+    const next = Number(req.params.next)
+    const current = Number(req.params.current)
+    const sql = `SELECT posts.*, campaigns.campaignname FROM posts `+
+    `INNER JOIN campaigns ON campaigns.campaignid = posts.campaignid `+
+    `WHERE campaigns.campaignid = ? `+
+    `ORDER BY posts.date DESC `+
+    `LIMIT ? OFFSET ?;`
+    db.query(sql, [campaignid, next, current],
+    (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+
+// end of new
 
 app.put('/api/acceptrequest', (req, res) => {     
     const recipientid = req.body.recipientid
