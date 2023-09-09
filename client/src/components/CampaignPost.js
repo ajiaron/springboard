@@ -52,7 +52,7 @@ export default function CampaignPost({name, theme, title, description, image, li
                             style={{  alignSelf:"center",
                                 fontSize: "clamp(10px, 3vw, 14.5px)",paddingLeft:".8em", fontFamily:"Rubik", color:"#707070"}}>
                                 {/*`5 days ago`*/
-                                `${date}`}
+                                `${date.substring(0,10).toLocaleString("en-US")}`}
                             </p>
                         </span>
                        

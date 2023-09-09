@@ -157,13 +157,13 @@ app.put('/api/confirmcampaign', (req,res) => {
     const campaignname = req.body.campaignname
     const goal = req.body.goal
     const description = req.body.description
-    const shareName = req.body.shareName
+    const category = req.body.category
     const theme = req.body.theme
     const sql = `UPDATE campaigns SET `+
-    `campaignname = ?, goal = ?, description = ?, shareName = ?, theme = ?, verified = true ` +
+    `campaignname = ?, goal = ?, description = ?, category = ?, theme = ?, verified = true ` +
     `WHERE campaignid = ? AND ownerid = ?;` 
     db.query(sql, 
-    [campaignname, goal, description, shareName, theme, campaignid, ownerid],
+    [campaignname, goal, description, category, theme, campaignid, ownerid],
     (err, result)=> {
         if (err) {
             console.log(err)

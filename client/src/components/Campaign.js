@@ -50,6 +50,7 @@ export default function Campaign() {
   const connection = process.env.REACT_APP_API_URL
   const navigate = useNavigate()
   const controls = useAnimation()
+  const [isOwner, setIsOwner] = useState(false)
   const [firstRender, setFirstRender] = useState(true)
   const [isActive, setIsActive] = useState(true)  // background is active
   const [loading, setLoading] = useState(true)
@@ -184,6 +185,7 @@ export default function Campaign() {
                 console.log(res.data)
                 setCampaignInfo(res.data[0])
                 setTheme(res.data[0].theme)
+                setIsOwner(res.data[0].ownerid === userid)
                 loadPosts()
                 // handle whether or not the campaign is archived here
             }
@@ -198,13 +200,13 @@ export default function Campaign() {
     loadPosts()
   }, [page])
   useEffect(()=>{
-    if (paymentActive !== null) {
+    if (postActive !== null) {
         document.body.style.overflow='hidden'
     }
     else {
         document.body.style.overflow='auto'
     }
-  }, [paymentActive])
+  }, [postActive])
   useEffect(()=> {  // for loading status bar
     if (status.length>0) {
       setRenderStatus(true)
@@ -228,10 +230,15 @@ export default function Campaign() {
   }, [loadInView]);
   */
   return (
+    <div className='campaign-content'>
+      
+
+     <SideNavigation route={'campaign'}/>
+
     <div className={`campaign-page`}>
+ 
         {(loading || campaignInfo === null)?
-        <div className="create-campaign-loading-container"
-        style={{marginTop:"20%"}}>
+        <div className="create-campaign-loading-container">
             <Oval
                 color="#959595"
                 wrapperStyle={{}}
@@ -266,10 +273,7 @@ export default function Campaign() {
             {/*<Payment charityid={paymentActive} edit={null} onClose={onClosePayment} onBlur={handleBlur}/>*/}
             </AnimatePresence>
         }
-        {(campaignInfo)&&
-        <div className={`header-blur`} style={{background:`linear-gradient(180deg, ${hexToRgba('#'+campaignInfo.theme.substring(0,6),0.60)}, rgba(238, 77, 93, 0))`}}/>
-        }
-        <SideNavigation route={'campaign'}/>
+
         <motion.div 
             className={`campaign-page-container ${!isActive?(!firstRender)?'inactive-landing-container':'dim-landing-container':(!firstRender)?'active-container':''}`}
             initial={{opacity:0, y:15}}
@@ -278,7 +282,12 @@ export default function Campaign() {
               type: "tween",
               duration:.3
             }}>
-            <div className="charity-header-container">
+                      {(campaignInfo)&&
+            <div style={{width:"100vw", position:"relative",  backgroundColor: "hsla(0,0%,8%,.753)", height:"fit-content"}}>
+                <div className={`campaign-blur`} style={{background:`linear-gradient(180deg, ${hexToRgba('#'+campaignInfo.theme.substring(0,6),0.15)}, rgba(238, 77, 93, 0))`}}/>
+            </div>
+        }    
+            <div className="charity-header-container" style={{paddingTop:"3.925em"}}>
                 <div style={{display:"flex", justifyContent:"center", height:"fit-content", alignItems:"center", gap:"2em", width:"fit-content"}}>
                   <span className="profile-image-wrapper" style={{backgroundColor:`${hexToRgba('#'+campaignInfo.theme.substring(0,6),0.7)}`}} onClick={()=>handleTest()}>
                       <p className="profile-image-text">
@@ -298,9 +307,9 @@ export default function Campaign() {
                   </div>
                 </div>
             </div>
-            <div className="manage-charity-container" style={{overflow:"hidden"}}>
-                <div className="manage-charity-header-container">
-                    <div style={{display:'flex', flexDirection:'column'}}>
+            <div className="manage-campaign-container">
+                <div className="manage-campaign-header-container">
+                    <div style={{display:'flex', flexDirection:'column', alignSelf:"flex-start"}}>
                         <p className="manage-header-text">
                             Organization Profile
                         </p>
@@ -308,16 +317,20 @@ export default function Campaign() {
                             Learn about the impact of this organization.
                         </p>
                     </div>
-                    <div className='campaign-page-donate-subcontainer'>
+                    <div className='campaign-page-donate-subcontainer'
+                    style={{width:(isOwner)?"24.25%":"18.75%"}}>
+                        {(isOwner)&&
                         <span className={`campaign-page-like-icon-wrapper`}
                         onClick={()=>handlePost("create")}>
                             <FaPenNib className="charity-page-like-icon" style={{width:"1.25em", height:"1.25em"}}/>
                         </span>
+                        }
                         <span className={`${(shouldArchive)?'campaign-page-like-icon-wrapper-alt':'campaign-page-like-icon-wrapper'}`}
                         onClick={()=>setShouldArchive(!shouldArchive)}>
                             <AiFillHeart className="charity-page-like-icon"/>
                         </span>
-                        <span className='campaign-page-donate-button' onClick={()=>handlePost("create")}>
+                        <span className='campaign-page-donate-button'
+                        style={{width:(isOwner)?"52%":"64%"}} onClick={()=>handlePost("create")}>
                             <div className="donate-page-link-button">
                                 <p className="charity-confirm-checkout-text">
                                     {
@@ -333,7 +346,7 @@ export default function Campaign() {
             <div className='loading-text-container' onClick={()=>handleTest()}>
                 <p className="loading-text"> {`${(loading)?'Loading...':`Showing all matching results`}`} </p>
             </div>:
-            <div className="campaign-details-container">
+            <section className="campaign-details-container">
              
    
                     <div className='campaign-donations-wrapper'>
@@ -458,9 +471,9 @@ export default function Campaign() {
                        </div>
                     </div>
                     }       
-              </div>
+              </section>
             }
-            <div className="campaign-details-container-low">
+            <section className="campaign-details-container-low ">
                 <div className="campaign-donations-container">
                     <div className="donation-details-container">
                         <p className="donation-details-text">
@@ -512,9 +525,10 @@ export default function Campaign() {
                       </div>
                    </div>
                 </div>
-            </div>
+            </section>
         </motion.div>
         </>}
+    </div>
     </div>
   )
 }

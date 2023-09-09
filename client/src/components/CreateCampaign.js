@@ -12,18 +12,100 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { Oval } from 'react-loader-spinner'
 import { motion, AnimatePresence, useAnimation } from 'framer-motion'
 
-const Dropdown = ({categories, onSelect}) => {
-  const [selected, setSelected] = useState(false)
+const Dropdown = ({categories, category, onSelect, onToggle}) => {
+  const [selected, setSelected] = useState(category&&category.length>0?category:categories[categories.length-1])
+  const [isActive, setIsActive] = useState(false)
+  function toggleDropdown() {
+    onToggle()
+    setIsActive(!isActive)
+  }
+  function handleSelect(e) {
+    onSelect(e)
+    setSelected(e)
+    toggleDropdown()
+  }
+  const [isHovered, setIsHovered] = useState(false)
+  const ref = useRef(null)
+  const handleMouseEnter = (item) => {
+      setIsHovered(item);
+  };
+  const handleMouseLeave = (item) => {
+      setIsHovered(item);
+  };
+
+  const container = {
+    hidden: { height: 0 },
+    show: {
+      height: "auto",
+      transition: {
+        staggerChildren: 0.25
+      }
+    }
+  }
+
   return (
-    <span className={`create-campaign-share-button `} onClick={()=>setSelected()}>
-    <div className={`payment-inner-option-content-alt ${selected?'create-inner-option-content-on':''}`}>
-            Choose a category
-        {(selected)?
-            <BsCheckLg className="payment-check-icon"/>
-            :null
+    <div className={`create-campaign-share-button `}>
+      <span style={{ transitionDelay: (isActive)?".8s":"0"}}
+        onMouseEnter={()=>handleMouseEnter(selected)} 
+        onMouseLeave={()=>handleMouseLeave(selected)}
+        className={`create-inner-option-content-main ${'option-hovered'} ${isActive?'top-option':''}${selected?'create-inner-option-content-on':''}`}
+        onClick={()=>toggleDropdown()}>
+          {selected}
+          {
+              <BsCheckLg className="payment-check-icon"/>
+          }
+      </span>
+
+
+    
+      <AnimatePresence>
+      {(isActive)&&
+        <motion.ul
+         className="category-dropdown-list"
+         initial="hidden"
+         animate="show"
+         exit={{height:"0"}}
+         variants={container}
+         //exit={{height:'0'}}
+         transition={{
+           type: "tween",
+           duration:.2
+         }}
+        >
+       
+          {
+          categories.filter((item)=>item!==selected).map((item,index)=> (
+            <motion.li 
+            variants={item}
+            initial={{opacity:'0'}}
+            animate={{opacity:"1"}}
+            exit={{y:(index===0)?0:-10, opacity:'0',
+            transition:{duration:.1, delay:.1*(7-index)}}}
+            transition={{
+              type: "tween",
+           //   duration:.2,
+              delay:index*0.1
+            }}
+            ref={ref}
+            onMouseEnter={()=>handleMouseEnter(item)} 
+            onMouseLeave={()=>handleMouseLeave(item)}
+            className={`create-inner-option-content-item 
+            ${index===categories.length-2?"bottom-option":''} ${isHovered===item?"option-hovered":''} 
+            ${selected===item?'create-inner-option-content-on':''}`}
+            onClick={()=>handleSelect(item)}>
+                {item}
+                {(selected===item)?
+                    <BsCheckLg className="payment-check-icon"/>
+                    :null
+                }
+            </motion.li>
+          ))
+      }
+        </motion.ul>
         }
+        </AnimatePresence>
+
     </div>
-</span>
 
   )
 }
@@ -51,6 +133,7 @@ export default function CreateCampaign() {
   const [themeColor, setThemeColor] = useState('151515')
   const [shouldNotify, setShouldNotify] = useState(false)
   const [prompt, setPrompt] = useState("")
+  const [dropdownActive, setDropdownActive] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
   const [submitLoading, setSubmitLoading] = useState(false)
   const [status, setStatus] = useState("")
@@ -65,7 +148,7 @@ export default function CreateCampaign() {
     try {
       const res = await axios.put(`${connection}/api/confirmcampaign`,
       {ownerid:id, campaignid:campaignid, campaignname:campaignName, 
-       goal:goal, description:description, shareName:shareName, theme:themeColor})
+       goal:goal, description:description, category:category, theme:themeColor})
       if (res.data) {
         console.log("successfully confirmed campaign")
         setStatus('success')
@@ -150,6 +233,7 @@ export default function CreateCampaign() {
           setDescription(res.data[0].description)
           setShareName(res.data[0].sharename)
           setThemeColor(res.data[0].theme)
+          setCategory(res.data[0].category)
           setLoading(false)
         } else {
           setStatus("error")
@@ -162,7 +246,15 @@ export default function CreateCampaign() {
 
   }, [])
   return (
-    <div className="settings-container ">
+    <motion.div 
+    initial={{paddingBottom:0}}
+    animate={{paddingBottom:(dropdownActive)?"10em":"0"}}
+    exit={{paddingBottom:0}}
+    transition={{
+      type:"tween",
+      duration:.2
+    }}
+    className="create-campaign-container ">
       {<AnimatePresence>
       {
           (shouldNotify)&&
@@ -178,10 +270,10 @@ export default function CreateCampaign() {
       {<SideNavigation route={"createcampaign"}/>}
       <div className={`create-campaign-content ${shouldNotify?(!firstRender)?'inactive-landing-container':'dim-landing-container':(!firstRender)?'active-container':''}`}>
         {(loading || campaignData===null)?
-          <div className="create-campaign-loading-container">
+          <div className="create-campaign-loading-container"
+          style={{marginTop:"20%"}}>
           <Oval
                color="#959595"
-               wrapperStyle={{}}
                wrapperClass=""
                visible={true}
                ariaLabel='oval-loading'
@@ -195,17 +287,17 @@ export default function CreateCampaign() {
             </p>
            
            </div>:
-          <>
+      
           <AnimatePresence>
             {(!shouldScroll)&&
-            <motion.div className={`create-campaign-inner-wrapper `}
+            <motion.div className="create-campaign-inner-wrapper"
             initial={{opacity:0, y:15}}
             animate={controls}
             transition={{
               type: "tween",
               duration:.3
             }}>
-                <div className='register-header-container'>
+                <div className='create-campaign-header-container'>
                     <p className='create-campaign-inner-text'>
                     {`${(campaignData&&campaignData.verified)?'Update':'Register'} your campaign.`}
                     </p>
@@ -219,7 +311,7 @@ export default function CreateCampaign() {
                             <p className='payment-inner-input-text' style={{color:'#ccc'}}>
                                 Enter the display name of your campaign:
                             </p>
-                            <div className='payment-inner-input-wrapper'>                
+                            <div className='create-campaign-inner-input-wrapper' style={{minHeight:"10%"}}>                
                                 <input type="text" id="campaignname"
                                     onChange={(e)=> setCampaignName(e.target.value)}
                                     value={campaignName}
@@ -231,7 +323,7 @@ export default function CreateCampaign() {
                             <p className='payment-inner-input-text' style={{color:'#ccc'}}>
                                 Set your crowdfunding goal:
                             </p>
-                            <div className='payment-inner-input-wrapper'>                
+                            <div className='create-campaign-inner-input-wrapper'>                
                                 <p style={{color:'#656565', paddingBottom:".05em", paddingRight:".1em"}}>
                                     $
                                 </p>
@@ -246,7 +338,7 @@ export default function CreateCampaign() {
                             </div>
                         </div>
 
-                        <div className='payment-inner-input-container'>
+                        <div className='create-campaign-inner-input-container'>
                             <p className='payment-inner-input-text' style={{color:'#ccc'}}>
                                 Give a short description of your campaign:
                             </p>
@@ -264,10 +356,10 @@ export default function CreateCampaign() {
                       
                             <div className="create-campaign-field-alt">
                               <p className='payment-inner-input-text' style={{color:'#ccc'}}>
-                                  {`Privacy Preference:`}
+                                  {`Campaign Category:`}
                               </p>
-                              <div className='payment-inner-button-container ' style={{paddingTop:"0em",transform:"translateY(.25em)"}}>
-                                 <Dropdown categories={categories} onSelect={(selected)=> setCategory(selected)}/>
+                              <div className='create-inner-button-container ' style={{paddingTop:"0em",transform:"translateY(.25em)"}}>
+                                 <Dropdown categories={categories} category={category} onSelect={(selected)=> setCategory(selected)} onToggle={()=>setDropdownActive(!dropdownActive)}/>
                               </div>
                             </div>
 
@@ -275,7 +367,7 @@ export default function CreateCampaign() {
                               <p className='payment-inner-input-text' style={{width:"90%", marginLeft:"auto", color:"#ccc"}}>
                                   {`Theme Color:`}
                               </p>
-                              <div className='payment-inner-button-container' style={{paddingTop:"0em",transform:"translateY(.25em)"}}>
+                              <div className='create-campaign-inner-button-container' style={{paddingTop:"0em",transform:"translateY(.25em)"}}>
                                   <span className={`create-campaign-color-button`}>
                                       <input type="color" className={`create-campaign-color-option`} value={'#'+themeColor} onChange={(e)=>setThemeColor(e.target.value.slice(1))}
                                       style={{transform:"translateX(.75em)",
@@ -295,21 +387,37 @@ export default function CreateCampaign() {
                             </div>
                           </div>
                         </div>
-                        <span className='create-campaign-confirm-button' onClick={()=>handleSubmit()}>
-                            <p className='confirm-register-text'>
-                                {`${(loading)?'Loading...':'Create Campaign'}`}
-                            </p>
-                            <GoArrowRight className="register-icon"/>
-                        </span>
+                        {
+                        <AnimatePresence>
+                          <motion.span 
+                          style={{pointerEvents:(dropdownActive)?"none":"auto"}}
+                          initial={{y:0, opacity:1}}
+                          animate={{opacity:(!dropdownActive)?1:0}}
+                          exit={{opacity:1}}
+                          transition={{
+                            type: "tween",
+                            duration:.2,
+                            delay:(!dropdownActive)?.8:0
+                          }}
+                          className='create-campaign-confirm-button' onClick={()=>handleSubmit()}>
+                              <p className='confirm-register-text'>
+                                  {`${(loading)?'Loading...':'Create Campaign'}`}
+                              </p>
+                              <GoArrowRight className="register-icon"/>
+                          </motion.span>
+                        </AnimatePresence>
+                        }
                     </div>
                 </div>
             </motion.div>
 
             }
           </AnimatePresence>
-          </>
+
         }
+   
       </div>
-    </div>
+
+    </motion.div>
   )
 }

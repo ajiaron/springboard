@@ -1,34 +1,66 @@
-body {
-  overflow: visible;
+.campaign-content {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+
+  flex-direction: column;
 }
+
 .campaign-page-container {
   height: 100%;
   width: 90%;
-  padding-top: 3.925em;
   padding-left: 10%;
   display: flex;
-  z-index: 0;
+  z-index: 2;
   flex-direction: column;
-//    padding-left: .75%;
+  //flex:1;
+  //padding-top: 3.925rem;
+ // padding-top: 3.925em;
+  //overflow-y: scroll;
 
   overflow-x: hidden;
-//  margin:0;
-  overflow-y: scroll;
-  //overscroll-behavior-y:none;
+  //margin:0;
+  //overflow-y: auto;
+  //overscroll-behavior-y:contain;
  // background-color: rgba(255, 0, 0, 0.213);
+}
+.campaign-blur {
+  width:  100vw;
+  //left:.5%;
 
-
-  align-self: flex-start
+  left:-10%;
+ // background-color: red;
+  //background: linear-gradient(180deg,rgba(247, 77, 165, 0.6),rgba(238, 77, 93, 0));
+//  height:13vh;
+  //background-color: rgba(200, 79, 91, 0.8);
+  transform: translateY(-1vh);
+ // box-shadow: 0 0 20vh rgba(214, 72, 86, 0.85); 
+  filter: blur(6px);
+  //top:0;
+  position: absolute;
+ // overflow-y: hidden;
+  //left:0;
+//  border-bottom-right-radius: 25%;
+//  border-bottom-left-radius: 25%;
+  z-index: -1;
+  animation-name: animate-blur;
+  animation-duration: .4s;
+  animation-delay: .1s;
+  animation-fill-mode: forwards;
+  animation-timing-function:ease-out;
 }
 .campaign-page {
-  min-width: 100vw;
-  min-height: 100%;
+  width: 100vw;
   display: flex;
+  flex-direction: column;
+
+ // overscroll-behavior-y:contain;
+//box-sizing: border-box;
+  height: 100vh;
+  overflow-y: scroll;
   background-color: hsla(0,0%,8%,.753);
  // overflow-x: hidden;
- // overflow-y: visible;
 
-  
 }
 .campaign-stats-container {
     width: 41.5%;
@@ -40,14 +72,14 @@ body {
   //  transform: translateX(-.5em);
     flex-direction: column;
     margin-left: auto;
-    overflow-y: hidden;
+  //  overflow-y: hidden;
 }
 
 .campaign-details-container {
-   //overflow-y: hidden;
+  // overflow-y: hidden;
     padding-top: .5em;
     width: 92.25%;
-    height: 36vh;
+    min-height: 36vh;
    // overflow: hidden;
    // padding-left: .125em;
    // background-color: rgba(0, 139, 139, 0.228);
@@ -55,13 +87,37 @@ body {
   
 }
 .campaign-donations-wrapper {
-  overflow-y: hidden;
+//  overflow-y: hidden;
     height: 90%;
   //  background-color: rgba(255, 0, 0, 0.211);
     width: 40%;
    // margin-top: .25em;
     display: flex;
     padding-top: 1.25em;
+
+}
+.manage-campaign-container {
+  max-width: 92.25%;
+  min-height: 10vh;
+  display: flex;
+  padding-top: 2.75em;
+  justify-content: center;
+  align-items: flex-start;
+  overflow-y: hidden;
+  border-bottom: 1px dashed #5a5a5a;
+ // justify-content: center;
+ // background-color: rgba(46, 139, 86, 0.422);
+}
+.manage-campaign-header-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  //flex-direction: column;
+  justify-content: flex-start;
+// padding-right: 2.25em;
+// align-items: center;
+ //background-color: rgba(117, 46, 139, 0.422);
+  //padding-bottom: 1em;
 
 }
 .campaign-figure-wrapper {
@@ -75,17 +131,16 @@ body {
     display: flex;
 }
 .campaign-insights-wrapper {
-  overflow-y: hidden;
+  overflow: hidden;
     //margin-top: 1.25em;
     width: 100%;
     border-radius: 20px;
    // background-color: rgba(70, 131, 180, 0.27);
     height:100%;
-
     //height:57.25%
 }
 .campaign-doughnut-container {
-  overflow-y: hidden;
+//  overflow-y: hidden;
   width: 94.5%;
   background-color: #252525bd;
   overflow-x: hidden;
@@ -100,7 +155,7 @@ body {
   transition: all .15s linear;
 }
 .campaign-insights-wrapper-alt {
-  overflow-y: hidden;
+  //overflow: hidden;
     margin-top: 1.25em;
     width: 96%;
     margin-left: auto;
@@ -138,7 +193,7 @@ body {
     background-color: #252525bd;
 }
 .campaign-page-donations-container {
-  overflow-y: hidden;
+//  overflow-y: hidden;
     height: 100%;
   //  background-color: rgba(0, 255, 217, 0.211);
     width: 100%;  
@@ -146,7 +201,7 @@ body {
    // padding-left: .125em;
 }
 .campaign-insight-container {
-  overflow-y: hidden;
+//  overflow-y: hidden;
     width: 94.5%;
     background-color: #252525bd;
     overflow-x: hidden;
@@ -162,7 +217,7 @@ body {
   //  box-shadow: 3px 3px 2px 4px rgba(0,0,0,0.2);
   }
   .campaign-insights-subcontent-header {
-    overflow-y: hidden;
+  //  overflow-y: hidden;
     font-size: clamp(14px, 3vw, 16px);
     font-family: "Rubik";
     letter-spacing: -.25px;
@@ -172,7 +227,7 @@ body {
    // width: 70%;
 }
 .campaign-insights-subcontent-subtext {
-  overflow-y: hidden;
+ // overflow-y: hidden;
     font-size: clamp(10px, 3vw, 16px);
     font-family: "Rubik";
     letter-spacing: -.25px;
@@ -182,7 +237,7 @@ body {
     //line-height:22px;
 }
   .campaign-insights-subcontent-text {
-    overflow-y: hidden;
+   // overflow-y: hidden;
     font-size:clamp(24px, 3vw, 34px);
     color:#eee;
     font-family: 'Inter';
@@ -192,7 +247,7 @@ body {
     line-height: 40px;
 }
 .campaign-page-like-icon-wrapper {
-  overflow-y: hidden;
+//  overflow-y: hidden;
   min-width:2.75em;
   min-height: 2.75em;
   background-color: #5a5a5a;
@@ -208,7 +263,7 @@ body {
   filter: brightness(1.2);
 }
 .campaign-page-like-icon-wrapper-alt {
-  overflow-y: hidden;
+ // overflow-y: hidden;
   transition: all .2s linear;
   min-width:2.75em;
   min-height: 2.75em;
@@ -224,7 +279,7 @@ body {
 }
 
 .campaign-donation-item {
-  overflow-y: hidden;
+ // overflow-y: hidden;
   display: flex;
  // padding-bottom: .1em;
   border-bottom: 1px dashed #2e2e2e;
@@ -241,23 +296,25 @@ body {
 .campaign-details-container-low {
  // overflow-x: hidden;
  //overflow-y: hidden;
+// overflow-y: hidden;
  // overflow-y: visible;
+
   width: 92.25%;
   display: flex;
   //height: 55vh;
-  min-height:auto;
- // margin-top: 1em;
+  min-height:fit-content;
+  margin-top: .125em;
 }
 .campaign-donations-container {
 //  overflow-y: visible;
-  min-height: fit-content;
+  min-height: 100%;
  // max-height: 80vh;
   width: 57%;  
   padding-left: .25em;
  // overflow-x: hidden;
 }
 .campaign-donations-list {
-  overflow-y: hidden;
+  //overflow-y: hidden;
   width: 100%;
   height: 57vh;
   //height: 100%;
@@ -271,7 +328,7 @@ body {
 //  background-color: rgba(46, 139, 86, 0.198);
 }
 .campaign-donations-list-content {
-  overflow-y: hidden;
+  //overflow-y: hidden;
   width: 100%;
   height: 100%;
  // background-color: #252525bd;
@@ -298,13 +355,13 @@ body {
  // background-color: #515151bd;
 }
 .campaign-post-list {
-  overflow-y: visible;
+ // overflow-y: visible;
   display: flex;
   flex-direction: column;
   
   width: 100%;
   height: 100%;
-  gap:1em;
+  gap:.5em;
 }
 .campaign-post-content-container {
   width: 95%;
@@ -566,10 +623,10 @@ body {
   height: 65%;
   color:rgb(34, 34, 34);
 }
-
 .campaign-page-donate-button {
-  width: 52%;
-  height: 100%;
+  width: 64%;
+  //width: 54%;
+  min-height: 100%;
  // margin-top: .25em;
   border-radius: 20px;
   background-color: #eee;
@@ -583,8 +640,11 @@ body {
  // margin-bottom: .25em;
 }
 .campaign-page-donate-subcontainer {
-  width:24.25%;
-  align-self: center;
+  //width:24.25%;
+  width: 19.25%;
+  align-self: flex-start;
+  padding-top:.75em;
+  
   //background-color: rgba(255, 0, 0, 0.096);
   display: flex;
   margin-left: auto;
