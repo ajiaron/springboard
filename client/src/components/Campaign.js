@@ -64,6 +64,7 @@ export default function Campaign() {
   const pageSize = 5
   const [page, setPage] = useState(1)
   const loadingRef = useRef(null)
+  const [postData, setPostData] = useState(null)
   const [postList, setPostList] = useState([])
   const { campaignid } = useParams()
   function hexToRgba(hex, a){
@@ -132,9 +133,10 @@ export default function Campaign() {
   const handleBlur = () => {
     setIsActive(true)
   }
-  const handlePost = (type) => {
+  const handlePost = (type, data) => {
     setFirstRender(false)
     setPostActive(type)
+    setPostData(data)
     setIsActive(false)
   }
   const onClosePost = () => {
@@ -260,12 +262,13 @@ export default function Campaign() {
         }
         </AnimatePresence>
         {<AnimatePresence>
-            {(postActive!==null)&&
+            {(postActive==="create" || (postActive==="edit" && postData!==null))&&
             <CreatePost 
                 name={campaignInfo?campaignInfo.campaignname:"No Info"} 
                 theme={campaignInfo?hexToRgba('#'+campaignInfo.theme.substring(0,6),0.6):"#5a5a5abd"}
                 type={postActive}
                 campaignid={campaignid}
+                postData={postData}
                 onChangeStatus={(e)=>setStatus(e)}
                 onCloseStatus={()=>closePopup()}
                 onClose={()=>onClosePost()}
@@ -487,6 +490,7 @@ export default function Campaign() {
 
                     {postList.map((item, index)=>(
                         <CampaignPost 
+                            postid={item.postid}
                             name={campaignInfo?campaignInfo.campaignname:"No Info"} 
                             theme={campaignInfo?hexToRgba('#'+campaignInfo.theme.substring(0,6),0.6):"#5a5a5abd"}
                             title={item.title}
@@ -496,7 +500,7 @@ export default function Campaign() {
                             date={item.date}
                             campaignid={campaignid}
                             index={index}
-                            onEdit={()=>handlePost("edit")}
+                            onEdit={(data)=>handlePost("edit", data)}
                         />
                     ))}
                         <div ref={loadRef} style={{width:"95%"}}className='loading-text-container' onClick={()=>handleTest()}>

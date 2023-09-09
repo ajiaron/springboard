@@ -9,8 +9,9 @@ import {FiEdit} from 'react-icons/fi'
 import {FaRegEye,FaRegEdit} from 'react-icons/fa'
 import { motion, AnimatePresence, useAnimation } from 'framer-motion'
 import {TiArrowRepeat} from 'react-icons/ti'
-export default function CampaignPost({name, theme, title, description, image, link, date, campaignid, index, onEdit}) {
+export default function CampaignPost({postid, name, theme, title, description, image, link, date, campaignid, index, onEdit}) {
     const [isHovered, setIsHovered] = useState(false)
+    const [showLink, setShowLink] = useState(false)
     const ref = useRef(null)
     const handleMouseEnter = () => {
         setIsHovered(true);
@@ -18,7 +19,9 @@ export default function CampaignPost({name, theme, title, description, image, li
     const handleMouseLeave = () => {
         setIsHovered(false);
     };
-
+    function handleNavigate() {
+        window.location.href = `${link}`
+    }
   return (
     <div className='campaign-post-container'>
         <div className='campaign-post-content'>
@@ -60,7 +63,7 @@ export default function CampaignPost({name, theme, title, description, image, li
                     </div>
                     <div className='campaign-post-caption-wrapper '>
                         <p className='campaign-post-caption-title'>
-                            {(title&&title.length>0)?title:`Testing Posts`}
+                            {(title&&title.length>0)?title:``}
                         </p>
                         <p className='campaign-post-caption-subtext'>
                             {(description&&description.length>0)?description:`great day to do that amiright`}
@@ -78,7 +81,7 @@ export default function CampaignPost({name, theme, title, description, image, li
                     </div>
                     <AnimatePresence>
                         {(isHovered)&&
-                        <motion.span onClick={()=>onEdit()}
+                        <motion.span onClick={()=>onEdit({postid:postid, title:title, description:description, image:image, link:link, date:date})}
                         className='campaign-post-edit-icon'
                         initial={{opacity:0}}
                         animate={{opacity:1}}
@@ -95,10 +98,41 @@ export default function CampaignPost({name, theme, title, description, image, li
                 <div className='campaign-post-footer' >
    
                     <div className='campaign-post-footer-item-wrapper' style={{marginRight:"auto", marginLeft:".5em", gap:".75em"}}>
-                        <AiOutlineLink className='campaign-post-icon-views' style={{color:'#ccc'}}/>
-                        <p className='campaign-post-caption-subtext' style={{color:"#ccc",fontWeight:"600", paddingTop:".0145em"}}>
-                            Link
-                        </p>
+                        <span style={{display:"flex", width:"100%", height:"auto", alignItems:"center",gap:".75em"}}
+                            onClick={()=>setShowLink(!showLink)}>
+                                <AiOutlineLink className='campaign-post-icon-views-alt' style={{color:'#ccc'}}/>
+                                <p className={`campaign-post-caption-subtext post-footer-text`} style={{color:"#ccc",fontWeight:"600", paddingTop:".0145em"}}>
+                                    Link
+                                </p>
+                            </span>
+                            <AnimatePresence>
+                                {(showLink)&&
+                                <motion.span
+                                    onClick={()=>(link&&link.length>0)?handleNavigate():console.log("no link")}
+                                    exit={{width:0}}
+                                    transition={{
+                                        type: "tween",
+                                        duration:.2
+                                    }}
+                                    className='campaign-post-link-input-wrapper'>
+                                    <motion.input className='campaign-post-link-input'
+                                        initial={{width:0}}
+                                        animate={{width:"auto"}}
+                                        exit={{width:0}}
+                                        transition={{
+                                            type: "tween",
+                                            duration:.2
+                                        }}
+                                        value={link}
+                                        placeholder={link&&link.length>0?link:"No shared links"}
+                                        disabled={true}
+                                      />
+                          
+                          
+                                </motion.span>
+                                }
+                            </AnimatePresence>
+                 
                     </div>
 
                     <div className='campaign-post-footer-item-wrapper'>

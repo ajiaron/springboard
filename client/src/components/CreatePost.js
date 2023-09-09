@@ -15,18 +15,18 @@ import {FaRegEye,FaRegEdit} from 'react-icons/fa'
 import {TiArrowRepeat} from 'react-icons/ti'
 import {Storage} from 'aws-amplify'
 
-export default function CreatePost({name, theme, type, campaignid, onChangeStatus, onCloseStatus, onClose}) {
+export default function CreatePost({name, theme, type, campaignid, postData, onChangeStatus, onCloseStatus, onClose}) {
     const controls = useAnimation()
     const userid = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0
     const url = process.env.REACT_APP_CDN
     const connection = process.env.REACT_APP_API_URL
     const [showLink, setShowLink] = useState(false)
-    const [title, setTitle] = useState("")
-    const [selectedImage, setSelectedImage] = useState(null);
+    const [title, setTitle] = useState(postData&&postData.title.length>0?postData.title:'')
+    const [selectedImage, setSelectedImage] = useState(postData&&postData.image!==null&&postData.image.length>0?postData.image:null);
     const [fileobj, setFileobj] = useState(null)
     const fileInput = useRef(null);
     const [link, setLink] = useState("")
-    const [description, setDescription] = useState('')
+    const [description, setDescription] = useState(postData&&postData.description.length>0?postData.description:'')
     const [loading, setLoading] = useState(false)
     const [status, setStatus] = useState("")
     const [renderStatus, setRenderStatus] = useState(false)
@@ -47,14 +47,31 @@ export default function CreatePost({name, theme, type, campaignid, onChangeStatu
         }
         return new Blob([u8arr], { type: mime });
     };
+    const updateData = async(uri) => {
+        try {
+            const res = await axios.put(`${connection}/api/editpost`,
+            {postid:postData.postid, campaignid:campaignid, ownerid:userid, title:title, description:description,
+            image:uri, link:link!==null?link:''})
+            if (res.data) {
+                onChangeStatus("success")
+                console.log("post saved to db")
+                window.location.reload();
+                onClose()
+            }
+        } catch(e) {
+            onChangeStatus("error")
+            console.log(e)
+        }
+    }
     const submitData = async(uri) => {
         try {
             const res = await axios.post(`${connection}/api/createpost`,
             {postid:uuidv4(), campaignid:campaignid, ownerid:userid, title:title, description:description,
-            image:`${url}/public/${uri}`, link:link!==null?link:''})
+            image:uri, link:link!==null?link:''})
             if (res.data) {
                 onChangeStatus("success")
                 console.log("post saved to db")
+                window.location.reload();
                 onClose()
             }
         } catch(e) {
@@ -65,18 +82,27 @@ export default function CreatePost({name, theme, type, campaignid, onChangeStatu
     const handleSubmit = async() => {
         onChangeStatus("loading")
         const filename = `post-${Math.random()}.png`
-        const blob = dataURLtoBlob(selectedImage);
-        const newFile = new File([blob], fileobj.name, { type: blob.type });
-        try {
-          // upload the file to s3
-          const result = await Storage.put(filename, newFile, {
-            contentType: newFile.type,
-          });
-          submitData(filename)
-          console.log('Successfully uploaded file:', result);
-        } catch (err) {
-          onChangeStatus("error")
-          console.error('Error uploading file:', err);
+        if (fileobj) {
+            const blob = dataURLtoBlob(selectedImage);
+            const newFile = new File([blob], fileobj.name, { type: blob.type });
+            try {
+                // upload the file to s3
+                if (selectedImage !== null || (type==="edit"&&postData!==null&&selectedImage!==postData.image)) {
+                    const result = await Storage.put(filename, newFile, {
+                        contentType: newFile.type,
+                    });
+                    console.log('Successfully uploaded file:', result);
+                }
+            } catch (err) {
+                onChangeStatus("error")
+                console.error('Error uploading file:', err);
+            }
+        }
+        if (type==="create") {
+            submitData(selectedImage?`${url}/public/${filename}`:'')
+        } else {
+            updateData(postData.image!==null&&postData.image.length>0&&selectedImage===postData.image?postData.image:
+                (selectedImage!==null)?`${url}/public/${filename}`:'')
         }
     } 
     const handleImageChange = async (e) => {
@@ -171,15 +197,17 @@ export default function CreatePost({name, theme, type, campaignid, onChangeStatu
                             />
                         </div>
                     </div>
-                    {(type==="edit" || selectedImage)&&
+                    {(type==="edit" || selectedImage) &&
                     <div className='create-post-media-wrapper'>
                         <div className='campaign-create-post-image-wrapper'>
                             <div className='campaign-create-post-image'
                             style={{backgroundImage:`url(${selectedImage!==null?selectedImage:'./assets/v9.png'})`}}/>
                         </div>
-                        <div className='campaign-create-post-edit-icon'>
+                        <span className='campaign-create-post-edit-icon'
+                        onClick={handleButtonClick}
+                        >
                                 <BiSolidPencil className='edit-image-icon'/>
-                        </div>
+                        </span>
                     </div>
                     }
                 </div>
@@ -219,7 +247,7 @@ export default function CreatePost({name, theme, type, campaignid, onChangeStatu
                             </AnimatePresence>
                  
                         </span>
-                        <span onClick={()=>(fileobj && selectedImage)?handleSubmit():console.log("not yet")}
+                        <span onClick={()=>handleSubmit()}
                         className='campaign-post-footer-item-wrapper' style={{ backgroundColor:theme, gap:".65em"}}>
                             <AiOutlinePlus className='campaign-post-icon-views' style={{color:'#eee'}}/>
                             <p className='campaign-post-caption-subtext' style={{color:"#eee",fontWeight:"600", paddingTop:".0145em"}}>
