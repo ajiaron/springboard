@@ -48,16 +48,13 @@ const Dropdown = ({categories, category, onSelect, onToggle}) => {
       <span style={{ transitionDelay: (isActive)?".8s":"0"}}
         onMouseEnter={()=>handleMouseEnter(selected)} 
         onMouseLeave={()=>handleMouseLeave(selected)}
-        className={`create-inner-option-content-main ${'option-hovered'} ${isActive?'top-option':''}${selected?'create-inner-option-content-on':''}`}
+        className={`create-inner-option-content-main ${'option-hovered'} top-option ${selected?'create-inner-option-content-on':''}`}
         onClick={()=>toggleDropdown()}>
           {selected}
           {
               <BsCheckLg className="payment-check-icon"/>
           }
-      </span>
-
-
-    
+      </span>    
       <AnimatePresence>
       {(isActive)&&
         <motion.ul
@@ -72,7 +69,6 @@ const Dropdown = ({categories, category, onSelect, onToggle}) => {
            duration:.2
          }}
         >
-       
           {
           categories.filter((item)=>item!==selected).map((item,index)=> (
             <motion.li 
@@ -90,7 +86,8 @@ const Dropdown = ({categories, category, onSelect, onToggle}) => {
             onMouseEnter={()=>handleMouseEnter(item)} 
             onMouseLeave={()=>handleMouseLeave(item)}
             className={`create-inner-option-content-item 
-            ${index===categories.length-2?"bottom-option":''} ${isHovered===item?"option-hovered":''} 
+            ${index===categories.length-2?"bottom-option":index===0?'top-option':''} 
+            ${isHovered===item?"option-hovered":''} 
             ${selected===item?'create-inner-option-content-on':''}`}
             onClick={()=>handleSelect(item)}>
                 {item}

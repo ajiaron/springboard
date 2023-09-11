@@ -20,11 +20,15 @@ export default function CampaignPost({postid, name, theme, title, description, i
         setIsHovered(false);
     };
     function handleNavigate() {
-        window.location.href = `${link}`
+        window.location.href = `https://${link}`
     }
   return (
-    <div className='campaign-post-container'>
-        <div className='campaign-post-content'>
+    <div 
+    onMouseEnter={(!image || image.length === 0)?handleMouseEnter:()=>{}} 
+    onMouseLeave={(!image || image.length === 0)?handleMouseLeave:()=>{}}
+    ref={(!image || image.length === 0)?ref:null}
+    className={`${(image && image.length > 0)?'campaign-post-container':'campaign-post-container-alt'}`}>
+        <div className={`${(image && image.length > 0)?'campaign-post-content':'campaign-post-content-alt'}`}>
             <div className='campaign-post-content-container'>
 
          
@@ -58,6 +62,21 @@ export default function CampaignPost({postid, name, theme, title, description, i
                                 `${date.substring(0,10).toLocaleString("en-US")}`}
                             </p>
                         </span>
+                    <AnimatePresence>
+                        {(isHovered&&(!image||image.length===0))&&
+                        <motion.span onClick={()=>onEdit({postid:postid, title:title, description:description, image:image, link:link, date:date})}
+                        className='campaign-post-edit-icon-alt'
+                        initial={{opacity:0}}
+                        animate={{opacity:1}}
+                        exit={{opacity:0}}
+                        transition={{
+                          type: "tween",
+                          duration:.15
+                        }}>
+                            <BiSolidPencil className='edit-image-icon'/>
+                        </motion.span>
+                        }
+                    </AnimatePresence>
                        
                        
                     </div>
@@ -70,14 +89,13 @@ export default function CampaignPost({postid, name, theme, title, description, i
                         </p>
                     </div>
                 </div>
-
+                {(image && image.length > 0)&&
                 <div className='campaign-post-image-wrapper'
                     onMouseEnter={handleMouseEnter} 
                     onMouseLeave={handleMouseLeave}
                     ref={ref}>
                     <div className='campaign-post-image'
                     style={{backgroundImage:`url(${image?image:'./assets/v9.png'})`}}>
-                      
                     </div>
                     <AnimatePresence>
                         {(isHovered)&&
@@ -95,9 +113,10 @@ export default function CampaignPost({postid, name, theme, title, description, i
                         }
                     </AnimatePresence>
                 </div>
+                }
                 <div className='campaign-post-footer' >
    
-                    <div className='campaign-post-footer-item-wrapper' style={{marginRight:"auto", marginLeft:".5em", gap:".75em"}}>
+                    <div className='campaign-post-footer-item-wrapper' style={{marginRight:"auto", marginLeft:".25em", gap:".75em"}}>
                         <span style={{display:"flex", width:"100%", height:"auto", alignItems:"center",gap:".75em"}}
                             onClick={()=>setShowLink(!showLink)}>
                                 <AiOutlineLink className='campaign-post-icon-views-alt' style={{color:'#ccc'}}/>

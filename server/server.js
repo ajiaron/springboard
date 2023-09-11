@@ -927,6 +927,30 @@ app.post('/api/addarchive', (req, res) => {
     })
 })
 // new
+app.get('/api/getcampaigns', (req,res)=> {
+    const sql = `SELECT DISTINCT * FROM campaigns WHERE verified = true;`
+    db.query(sql,
+    (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+app.get('/api/getcampaignbatch/:next/:current', (req,res)=> {
+    const next = Number(req.params.next)
+    const current = Number(req.params.current)
+    const sql = `SELECT DISTINCT * FROM campaigns WHERE verified = true LIMIT ? OFFSET ?`
+    db.query(sql,[next, current],
+    (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
 app.post('/api/createpost', (req, res) => {
     const postid = req.body.postid
     const campaignid = req.body.campaignid

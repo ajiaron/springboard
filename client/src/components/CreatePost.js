@@ -197,17 +197,19 @@ export default function CreatePost({name, theme, type, campaignid, postData, onC
                             />
                         </div>
                     </div>
-                    {(type==="edit" || selectedImage) &&
+                    {(type==="edit" || (selectedImage&&selectedImage.length>0)) &&
                     <div className='create-post-media-wrapper'>
                         <div className='campaign-create-post-image-wrapper'>
                             <div className='campaign-create-post-image'
                             style={{backgroundImage:`url(${selectedImage!==null?selectedImage:'./assets/v9.png'})`}}/>
                         </div>
+                        { (selectedImage&&selectedImage.length>0)&&
                         <span className='campaign-create-post-edit-icon'
                         onClick={handleButtonClick}
                         >
                                 <BiSolidPencil className='edit-image-icon'/>
                         </span>
+                        }
                     </div>
                     }
                 </div>

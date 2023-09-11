@@ -193,6 +193,7 @@ html {
     transition: all .15s linear;
     padding:1px;
     user-select: none;
+    filter:brightness(1.15)
    // justify-content: center;
 }
 .create-campaign-share-button :hover {
@@ -215,7 +216,7 @@ html {
     align-items: center;
     justify-content: center;
     transition: all .15s linear;
-    border-radius: 10px;
+   // border-radius: 10px;
     font-size: clamp(10px, 3vw, 15px);
     font-family: "Rubik";
    //@at-root 
@@ -247,12 +248,12 @@ html {
     }
 }
 .create-inner-option-content-main {
-    background-color: #252525;
+   // background-color: #252525;
     width: 100%;
     min-height: 5vh;
     gap:.6em;
     display: flex;
- 
+   
     align-items: center;
     justify-content: center;
     transition: all .15s linear;
@@ -288,7 +289,7 @@ html {
     //filter: brightness(1.075);
     transition: all .15s linear;
    // padding-left: 1.5em;
-    border-radius: 10px;
+  //  border-radius: 10px;
     filter: brightness(1.15);
     //gap:.7em;
 }
@@ -307,9 +308,7 @@ html {
   //  gap:1em;
   filter:brightness(1.15)
 }
-.create-campaign-share-button :hover {
-   // filter: brightness(1.25);
-}
+
 
 .create-campaign-color-option {
     width: 1em;
@@ -392,6 +391,7 @@ html {
     list-style: none;
     padding:0;
     margin:0;
+    margin-top: .35em;
    // max-height: 35vh;
     //min-height: fit-content;
   }

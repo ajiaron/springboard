@@ -15,7 +15,60 @@ import { BsStars } from 'react-icons/bs'
 import { Link } from "react-router-dom";
 import {HiOutlineSwitchHorizontal} from 'react-icons/hi'
 import { AiOutlineLink, AiOutlineEdit,AiOutlineClockCircle } from 'react-icons/ai'
+import CampaignTab from "./CampaignTab";
 
+const CampaignRow = ({rowIndex, remainder, campaignData}) => {  
+    const userid = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0 
+    const [isLast, setIsLast] = useState(remainder===0?false:Math.ceil(campaignData.length/3) === rowIndex+1)
+    return (
+        <div className="personal-archive-container">             
+            <div className="archive-history-container">
+                {(!isLast)?
+                    (campaignData&&campaignData.length>0)?
+                        campaignData.slice(rowIndex*3,(rowIndex+1)*3).map((item, index)=> (
+                            <CampaignTab 
+                            id={campaignData&&item.campaignid} 
+                            category={campaignData&&item.category} 
+                            goal={campaignData&&item.goal}
+                            raised={20}
+                            name={campaignData&&item.campaignname} 
+                            theme={campaignData&&item.theme}
+                            type={0}
+                            index={campaignData&&campaignData.indexOf(item)}
+                            isEmpty={false}
+                        />
+                        ))
+                        :
+                        <div className='loading-text-container'>
+                            <p className="loading-text"> {`No charity data`} </p>
+                        </div>
+                :
+                (campaignData&&campaignData.length>0)?
+                <>
+                    {
+                    campaignData.slice(rowIndex*3,(rowIndex+1)*3).map((item, index)=> (
+                        <CampaignTab 
+                            id={campaignData&&item.campaignid} 
+                            category={campaignData&&item.category} 
+                            goal={campaignData&&item.goal}
+                            raised={20}
+                            name={campaignData&&item.campaignname} 
+                            theme={campaignData&&item.theme}
+                            index={campaignData&&campaignData.indexOf(item)}
+                            isEmpty={false}
+                        />
+                    ))
+                    }
+                </>
+                    :
+                    <div className='loading-text-container'>
+                        <p className="loading-text"> {`No charity data`} </p>
+                    </div>
+                }
+            </div>
+        </div>
+    )
+}
 
 const ArchiveRow = ({rowIndex, remainder, charityData, favorites, shouldFavorite, onHandleRemove, onHandleFavorite}) => {  
     const userid = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0 
@@ -71,15 +124,6 @@ const ArchiveRow = ({rowIndex, remainder, charityData, favorites, shouldFavorite
                         onFavorite={(selected, status)=>onHandleFavorite(selected, status)}/>
                     ))
                     }
-                    {/*
-                        (remainder > 1)?
-                        <CharityTab id={0} type={'default'} value={0} name={'none'} size={'none'} isEmpty={true} onRemove={(selected)=>onHandleRemove(selected)}/>
-                        :
-                        <>
-                        <CharityTab id={0} type={'default'} value={0} name={'none'} size={'none'} isEmpty={true} onRemove={(selected)=>onHandleRemove(selected)}/>
-                        <CharityTab id={0} type={'default'} value={0} name={'none'} size={'none'} isEmpty={true} onRemove={(selected)=>onHandleRemove(selected)}/>
-                        </>
-                */}
                 </>
                     :
                     <div className='loading-text-container'>
@@ -102,8 +146,12 @@ export default function Archive() {
     const name = localStorage.getItem("firstname")?JSON.parse(localStorage.getItem("firstname")):'none'
     const username = localStorage.getItem("username")?JSON.parse(localStorage.getItem("username")):'none'
     const connection = process.env.REACT_APP_API_URL
+    const [campaignData, setCampaignData] = useState([])
+    const [remainderAlt, setRemainderAlt] = useState(0)
     const [charityData, setCharityData] = useState()
     const [removeFavorite, setRemoveFavorite] = useState(0)
+    
+
     const handleRemove = (charityid) => {
         axios.delete(`${connection}/api/removearchiveitem`, {
             data: {
@@ -134,9 +182,21 @@ export default function Archive() {
             console.log(e)
         })*/
     }
+    const loadCampaigns = async() => {
+        try {
+            const url = `${connection}/api/getcampaigns`
+            const res = await axios.get(url)
+            if (res.data) {
+                setCampaignData(res.data)
+                setRemainderAlt(res.data.length % 3)
+            }
+        } catch(e) {
+            console.log(e)
+        }
+    }
+
     useEffect(()=> {
         const loadCharity = async() => {
-            console.log(connection)
           setLoading(true)
           try {
             const url = `${connection}/api/getarchive/${userid}`;
@@ -150,6 +210,7 @@ export default function Archive() {
             setRemainder(res.data.length % 3)
             setHasFavorites(res.data.filter((item)=>item.isfavorite).length>0)
             setFavorites(res.data.filter((item)=>item.isfavorite).map((item)=>item.charityid).slice(0,4))
+            loadCampaigns()
           }
           catch(e) {
             console.log(e)
@@ -233,7 +294,34 @@ export default function Archive() {
                         }
                     </div>
                     }
+                    {/* */}
+                    <div className="manage-settings-container" >
+                        <div className="manage-settings-header-container">
+                            <p className="manage-header-settings-text">
+                                {`Saved Campaigns`}
+                            </p>
+                            <p className="manage-header-subtext">
+                                View all of the crowdfunding campaigns you've saved for later.
+                            </p>
+                        </div>
+                    </div>
+                    {(loading)?    
+                    <div className='loading-text-container'>
+                        <p className="loading-text"> {`${(loading)?'Loading...':`Showing all matching results`}`} </p>
+                    </div>:
+                    <div className="personal-archive-grid">
+                        {
+                            Array.apply(null, Array(charityData&&charityData.length>0?Math.ceil(charityData.length/3):0))
+                            .map((item, index)=> (
+                                <CampaignRow rowIndex={index} remainder={remainderAlt} campaignData={campaignData} />
+                            ))
+                        }
+                    </div>
+                    }
+                    {/* */}
+
                 </div>
+
             </div>
         </div>
       
