@@ -151,6 +151,66 @@ const ConfirmationStatus = ({loading, confirmed, onHandleBasket}) => {
         </>
     )
 }
+const CampaignItem = ({campaignname, category, subkey, amount, message, theme, shareName, shareEmail, index}) => {
+
+    return (
+        <div className={`${index===0?'confirmation-first-item':'confirmation-page-item'}`}>
+            
+            <div className="confirmation-page-item-info">
+                <p className="cart-page-item-title">
+                    {campaignname}
+                </p>
+                <p className="cart-page-item-text">
+                    {`SKU: ${subkey}`}
+                </p>   
+                <div className={`cart-page-item-type-wrapper`}
+                style={{backgroundColor:theme}}>
+                    <p className="cart-donation-item-type-text">
+                        {`${category}`}
+                    </p>
+                </div>
+            </div>
+            <div className="confirmation-page-item-details">
+                <div style={{display:"flex", justifyContent:"flex-start", gap:".5em"}}>
+                    <p className="cart-page-item-text">
+                        {`Includes message`}
+                    </p>   
+                    {(message.length > 0)?
+                    <BsCheckLg className="cart-check-icon"/>
+                    :
+                    <LiaTimesSolid className="cart-cross-icon"/>
+                    }
+                </div> 
+                <div style={{display:"flex", justifyContent:"flex-start", gap:".5em"}}>
+                    <p className="cart-page-item-text">
+                        {`Share name`}
+                    </p>  
+                    {(shareName)?
+                    <BsCheckLg className="cart-check-icon"/>:
+                    <LiaTimesSolid className="cart-cross-icon"/>
+                    }
+                </div>
+                <div style={{display:"flex", justifyContent:"flex-start", gap:".5em"}}>
+                    <p className="cart-page-item-text">
+                        {`Share email`}
+                    </p>   
+                    {(shareEmail)?
+                     <BsCheckLg className="cart-check-icon"/>:
+                    <LiaTimesSolid className="cart-cross-icon"/>
+                    }
+                </div> 
+            </div>
+            <div className={`confirmation-page-item-price`}>
+            
+                <p className="item-price-text">
+                    {`$${parseFloat(amount).toLocaleString(undefined,
+                    {minimumFractionDigits:2, maximumFractionDigits:2})}`}
+                </p>
+                
+            </div>
+        </div>
+    )
+}
 const CartItem = ({basketid, charityid, charityname, type, subkey, amount, message, shareName, shareEmail, index, count}) => {
 
     return (
@@ -216,6 +276,7 @@ export default function Confirmation() {
     const [loading, setLoading] = useState(true)
     const [basketList, setBasketList] = useState([])
     const [total, setTotal] = useState(0)
+    const [basketData, setBasketData] = useState(null)
     const [emptyList, setEmptyList] = useState([0,1,2,3,4])
     const [reload, setReload] = useState(false)
     const [confirmed, setConfirmed] = useState(true)
@@ -243,6 +304,18 @@ export default function Confirmation() {
         }
     }
     useEffect(()=> {
+        const loadDonation = async() => {
+            setLoading(true)
+            try {
+                const res = await axios.get(`${connection}/api/getcampaigndonation/${params.giftid}`)
+                if (res.data) {
+                    setBasketData(res.data[0])
+                    setTotal(parseFloat(res.data[0].amount).toFixed(2))
+                }
+            } catch(e) {
+                console.log(e)
+            }
+        }
         const loadBasket = async() => {
             setLoading(true)
             try {
@@ -260,7 +333,11 @@ export default function Confirmation() {
                 console.log(e)
             }
         }
-        loadBasket()
+        if (params.accountid) {
+            loadDonation()
+        } else {
+            loadBasket()
+        }
         setLoading(false)
         console.log("reloaded")
     }, [reload, params])
@@ -278,6 +355,17 @@ export default function Confirmation() {
                 (!loading)&&
                     <>
                     {
+                        (params.accountid && basketData)?
+                        <CampaignItem campaignname={basketData.campaignname}
+                        category={basketData.category}
+                        subkey={`${basketData.giftid.slice(0,3).toUpperCase()}-${basketData.campaignid.slice(0,7).toUpperCase()}`}
+                        amount={basketData.amount}
+                        message={basketData.message}
+                        theme={basketData.theme}
+                        shareName={basketData.shareName}
+                        shareEmail={basketData.shareEmail}
+                        index={0}
+                        />:
                     basketList.slice(0,3).map((item, index)=> (
                         <CartItem 
                         basketid={item.basketid} charityid={item.charityid} 

@@ -16,9 +16,11 @@ import _, { debounce } from 'lodash';
 import { FiMail } from "react-icons/fi";
 import {useStripe, useElements, Elements, PaymentElement} from '@stripe/react-stripe-js';
 import {loadStripe} from '@stripe/stripe-js';
+import DonationItem from "./DonationItem";
 const stripePromise = loadStripe('pk_test_51NbpB6H1mJlHYnBWRw9lhg4y7T8j2ORYSxbpGqaZSOyL1rabFvBnOmKVnuQpd2c3la3R6Nj9LsXR9aLqrPNW0Owy00tGbZTXh2');
 
 const CheckoutForm = ({testStripe, secret, loading, url, toggleStripe, onCheckout, onCancel}) => {
+    const isProduction = process.env.REACT_APP_ENV === 'production'
     const stripe = useStripe();
     const elements = useElements();
     const navigate = useNavigate()  
@@ -65,6 +67,7 @@ const CheckoutForm = ({testStripe, secret, loading, url, toggleStripe, onCheckou
                 </div>
             </div>
             <div className="checkout-footer-wrapper">
+                {(!isProduction)&&
                 <div className="checkout-terms-footer">
                         <p className="terms-text">
                             {/*By confirming your order you agree to the */}
@@ -78,6 +81,7 @@ const CheckoutForm = ({testStripe, secret, loading, url, toggleStripe, onCheckou
                             </p>
                         </span> 
                 </div>
+                }
                 <div className="checkout-confirm-container">
                     <span className="confirm-checkout-button" onClick={(e)=>(loading || confirmLoading)?console.log("loading"):(testStripe && stripe)?
                     handleSubmit(e):onCheckout()}>
@@ -92,6 +96,32 @@ const CheckoutForm = ({testStripe, secret, loading, url, toggleStripe, onCheckou
             </div>
         </div>
         </>
+    )
+}
+const CampaignItem = ({campaignname, category, subkey, amount, theme}) => {
+    return (
+        <div className={`cart-item`}>
+            <div className="donate-page-item-info">
+                <p className="cart-page-item-title">
+                    {campaignname}
+                </p>
+                <p className="cart-page-item-text">
+                    {`SKU: ${subkey}`}
+                </p>   
+                <div className={`cart-page-item-type-wrapper`}
+                style={{backgroundColor:theme}}>
+                    <p className="cart-donation-item-type-text">
+                        {`${category}`}
+                    </p>
+                </div>
+            </div>
+            <div className={`donate-page-item-price`}>
+                <p className="item-price-text" style={{marginLeft:'auto', marginRight:'auto'}}>
+                    {`$${parseFloat(amount).toLocaleString(undefined,
+                    {minimumFractionDigits:2, maximumFractionDigits:2})}`}
+                </p>
+            </div>
+        </div>
     )
 }
 const CartItem = ({basketid, charityid, charityname, type, subkey, amount, index}) => {
@@ -127,14 +157,32 @@ export default function Donate() {
     const [secret, setSecret] = useState(null)
     const [testStripe, setTestStripe] = useState(true)
     const [loading, setLoading] = useState(true)
+    const [donationData, setDonationData] = useState(null)
+    const [type, setType] = useState(params.accountid?"campaign":"charity")
     const [errorMessage, setErrorMessage] = useState(null)
     const userid = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0
-    const destination = process.env.REACT_APP_ENV === 'production'?'https://demo-springboard.netlify.app':'http://localhost:3000'
+    const destination = process.env.REACT_APP_ENV === 'production'?'https://springboard.gift':'http://localhost:3000'
     const connection = process.env.REACT_APP_API_URL
     function handleTest() {
         console.log(params)
     }
+
     useEffect(()=> {
+        const handleCampaignIntent = async(total) => {
+            try {
+                if (total) {
+                    const res = await axios.post(`${connection}/api/createintent`,
+                    {amount:Math.round(total*100), userid:userid, accountid:params.accountid})
+                    if (res.data) {
+                        setSecret(res.data.client_secret)
+                    }
+                    console.log(res.data.client_secret)
+                }
+            } catch(e) {
+                console.log(e)
+            }
+            setLoading(false)
+        }
         const handleIntent = async(total) => {
             try {
                 if (total) {
@@ -149,6 +197,19 @@ export default function Donate() {
                 console.log(e)
             }
             setLoading(false)
+        }
+        const loadCampaignDonations = async() => {
+            setLoading(true)
+            try {
+                const res = await axios.get(`${connection}/api/getcampaigndonation/${params.giftid?params.giftid:0}`)
+                if (res.data) {
+                    setDonationData(res.data[0])
+                    setTotal(parseFloat(res.data[0].amount).toFixed(2))
+                    handleCampaignIntent(parseFloat(res.data[0].amount).toFixed(2))
+                }
+            } catch(e) {
+                console.log(e)
+            }
         }
         const loadDonation = async() => {
             setLoading(true)
@@ -169,7 +230,11 @@ export default function Donate() {
                 console.log(e)
             }
         }
-        loadDonation()
+        if (params.accountid) {
+            loadCampaignDonations()
+        } else {
+            loadDonation()
+        }
     }, [])
     const cancelCheckout = async() => {
         try {
@@ -179,6 +244,17 @@ export default function Donate() {
             }})
             if (res) {
                 console.log("removed bad donations")
+            }
+        } catch(e) {
+            console.log(e)
+        }
+    }
+    const handleCampaignCheckout = async() => {
+        try {
+            const res = await axios.put(`${connection}/api/confirmcampaigndonation`,
+            {giftid:params.giftid})
+            if (res.data) {
+                console.log("donation successfully posted to database")
             }
         } catch(e) {
             console.log(e)
@@ -247,6 +323,12 @@ export default function Donate() {
                 padding: '10px 12px 8px 12px',
                 border: 'none'
               },
+              '.TabLabel': {
+                color:'#eee'
+              },
+              '.TabLabel--selected': {
+                color:'#a0a0a0'
+              },
               '.Tab:hover': {
                 border: 'none',
                 boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.03), 0px 3px 7px rgba(18, 42, 66, 0.04)'
@@ -304,9 +386,9 @@ export default function Donate() {
                       <CheckoutForm 
                         testStripe={testStripe} 
                         secret={secret} 
-                        url={`${destination}/confirmation/${params.groupid}`}
+                        url={(params.accountid)?`${destination}/confirmation/${params.giftid}/${params.accountid}`:`${destination}/confirmation/${params.groupid}`}
                         toggleStripe={()=>setTestStripe(!testStripe)}
-                        onCheckout={()=>handleCheckout()}
+                        onCheckout={()=>(params.accountid)?handleCampaignCheckout():handleCheckout()}
                         onCancel = {()=>cancelCheckout()}
                       />
                      
@@ -328,7 +410,12 @@ export default function Donate() {
                                 <p className="loading-text"> {`${(loading)?'Loading...':`Showing all items in your basket`}`} </p>
                             </div>:
                              <>
-                             {
+                             {(params.accountid)?
+                                <CampaignItem campaignname={donationData.campaignname}
+                                category={donationData.category}
+                                subkey={`${donationData.giftid.slice(0,3).toUpperCase()}-${donationData.campaignid.slice(0,7).toUpperCase()}`}
+                                amount={donationData.amount}
+                                theme={donationData.theme}/>:
                                 donationList.map((item, index)=> (
                                     <CartItem 
                                     basketid={item.basketid} charityid={item.charityid} 

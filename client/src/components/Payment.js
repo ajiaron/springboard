@@ -5,7 +5,7 @@ import axios from "axios";
 import SideBar from "./SideBar";
 import { BsStars } from 'react-icons/bs'
 import UserContext from "../contexts/UserContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useInView } from 'react-intersection-observer';
 import { FiMail } from "react-icons/fi";
 import {GoArrowRight} from 'react-icons/go'
@@ -18,9 +18,10 @@ import { v4 as uuidv4 } from 'uuid';
 import styled from 'styled-components'
 
 
-export default function Payment({charityid, edit, onClose, onBlur}) {
+export default function Payment({charityid, edit, type, accountid, campaignname, category, theme, onClose, onBlur}) {
     const userid = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0
     const connection = process.env.REACT_APP_API_URL
+    const navigate = useNavigate()
     const [value, setValue] = useState(10)
     const [message, setMessage] = useState('')
     const modalRef = useRef(null);
@@ -65,8 +66,27 @@ export default function Payment({charityid, edit, onClose, onBlur}) {
           setShouldScroll(!shouldScroll)
         }, 250)
       }
+    const handleCampaignConfirm = async() => {
+        try {
+            console.log(category)
+            const giftid = uuidv4()
+            const res = await axios.post(`${connection}/api/donatecampaign`, 
+            {giftid:giftid, userid:localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0,
+            campaignid:charityid,accountid:accountid, amount:value, campaignname:campaignname,
+            message:message,category:category, theme:theme, shareName:shareName, shareEmail:shareEmail})
+            if (res.data) {
+                console.log(res.data)
+                navigate(`/donate/${giftid}/${accountid}`)
+            } else {
+                console.log("no")
+            }
+        }
+        catch(e) {
+            console.log(e)
+        }
+    }
     const handleConfirm = () => {
-        handleTest()
+       // handleTest()
         axios.post(`${connection}/api/pushbasket`, 
         {basketid:uuidv4(), userid:localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0, charityid:charityid, charityname:charityInfo[0].charity_name,
         type:charityInfo[0].type1, amount:value, message:message, shareEmail:shareEmail, shareName:shareName})
@@ -93,6 +113,7 @@ export default function Payment({charityid, edit, onClose, onBlur}) {
             console.log(e)
         })
     } 
+   
     useEffect(()=> {
         const loadCharity = async() => {
             setLoading(true)
@@ -123,11 +144,16 @@ export default function Payment({charityid, edit, onClose, onBlur}) {
             }
             setLoading(false)
         }
-        if (edit!==null) {
-            loadBasketItem()
+        if ((!type) || type !== "campaign") {
+            if (edit!==null) {
+                loadBasketItem()
+            } else {
+                loadCharity()  
+            }
         } else {
-            loadCharity()  
+            setLoading(false)
         }
+       
     }, [charityid, edit])
     useEffect(()=> {
         if (value) {
@@ -172,9 +198,14 @@ export default function Payment({charityid, edit, onClose, onBlur}) {
                         <p className='payment-inner-text'>
                         Make your impact.
                         </p>
-                        <p className='payment-inner-subtext'>
-                        {`Donate to ${loading ? 'Loading...' : (charityInfo.length > 0 ? edit!==null?charityInfo[0].charityname:charityInfo[0].charity_name : 'No charity info')}`}
-                        </p>
+                        {(type && type==="campaign")?
+                          <p className='payment-inner-subtext'>
+                            {`Donate to ${loading ? 'Loading...' : campaignname}`}
+                          </p>:
+                          <p className='payment-inner-subtext'>
+                            {`Donate to ${loading ? 'Loading...' : (charityInfo.length > 0 ? edit!==null?charityInfo[0].charityname:charityInfo[0].charity_name : 'No charity info')}`}
+                          </p>
+                        }
                     </div>
                     
                     <div className='payment-inner-content'>
@@ -281,9 +312,11 @@ export default function Payment({charityid, edit, onClose, onBlur}) {
                                 <GoArrowRight className="register-icon"/>
                             </Link>
                             */}
-                            <span className='payment-inner-confirm-button' onClick={()=>edit!==null?handleChanges():handleConfirm()}>
+                            <span //style={{background:(type==='campaign')?theme:'background: linear-gradient(90deg, rgba(28, 190, 166, 0.875), rgba(211, 184, 116, 0.875))'}}
+                            className='payment-inner-confirm-button' onClick={()=>(type==="campaign")?handleCampaignConfirm():edit!==null?handleChanges():handleConfirm()}>
                                 <p className='confirm-register-text'>
-                                    {` ${(loading)?'Loading...':(edit!==null)?'Edit Donation Basket':'Add to Donation Basket'}`}
+                                    {` ${(type==='campaign')?'Confirm Your Donation':
+                                        (loading)?'Loading...':(edit!==null)?'Edit Donation Basket':'Add to Donation Basket'}`}
                                 </p>
                                 <GoArrowRight className="register-icon"/>
                             </span>

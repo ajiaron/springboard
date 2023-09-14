@@ -261,6 +261,20 @@ export default function Campaign() {
           <Popup status={status} onClose={()=>closePopup()}/>
         }
         </AnimatePresence>
+        {
+          (paymentActive!==null && campaignInfo.accountid && campaignInfo.accountid.length>0)
+          &&<Payment 
+           charityid={campaignid} 
+           edit={null} 
+           type={'campaign'}
+           accountid={campaignInfo.accountid} 
+           campaignname={campaignInfo?campaignInfo.campaignname:"No campaign data"}
+           category={campaignInfo?campaignInfo.category:"Just for Fun"}
+           theme={campaignInfo?hexToRgba('#'+campaignInfo.theme.substring(0,6),0.65):"#5a5a5abd"}
+           onClose={onClosePayment}
+           onBlur={handleBlur}
+           />
+        }
         {<AnimatePresence>
             {(postActive==="create" || (postActive==="edit" && postData!==null))&&
             <CreatePost 
@@ -333,7 +347,7 @@ export default function Campaign() {
                             <AiFillHeart className="charity-page-like-icon"/>
                         </span>
                         <span className='campaign-page-donate-button'
-                        style={{width:(isOwner)?"52%":"64%"}} onClick={()=>handlePost("create")}>
+                        style={{width:(isOwner)?"52%":"64%"}} onClick={()=>handlePayment()}>
                             <div className="donate-page-link-button">
                                 <p className="charity-confirm-checkout-text">
                                     {

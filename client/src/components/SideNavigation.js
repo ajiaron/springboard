@@ -152,7 +152,7 @@ export default function SideNavigation({route}) {
                      Updates
                 </p>
             </Link>
-            <Link className="console-content-wrapper " to={`#`}>
+            <Link className="console-content-wrapper " to={`/campaigns`}>
                 <AiOutlineQuestionCircle className="home-icon"/>
                 <p className="console-item-subtext">
                     Help {'&'} feedback

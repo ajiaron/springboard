@@ -5,6 +5,7 @@ import UserProvider from "./contexts/UserProvider";
 import Landing from './components/Landing'
 import Dashboard from './components/Dashboard';
 import Catalog from './components/Catalog';
+import CampaignCatalog from './components/CampaignCatalog';
 import Cart from './components/Cart'
 import Feed from './components/Feed'
 import Donate from './components/Donate';
@@ -55,6 +56,7 @@ function AnimatedRoutes() {
                         </ProtectedRoute>
                     }/>
                     <Route path='/catalog' element={<Catalog/>}/>
+                    <Route path='/campaigns' element={<CampaignCatalog/>}/>
                     <Route path='/profile/:username' element={
                         <ProtectedRoute>
                             <Profile/>
@@ -102,7 +104,17 @@ function AnimatedRoutes() {
                             <Donate/>
                         </ProtectedRoute>
                     }/>
+                    <Route path='/donate/:giftid/:accountid' element={
+                        <ProtectedRoute>
+                            <Donate/>
+                        </ProtectedRoute>
+                    }/>
                      <Route path='/confirmation/:groupid' element={
+                        <ProtectedRoute>
+                            <Confirmation/>
+                        </ProtectedRoute>
+                    }/>
+                      <Route path='/confirmation/:giftid/:accountid' element={
                         <ProtectedRoute>
                             <Confirmation/>
                         </ProtectedRoute>

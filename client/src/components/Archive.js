@@ -311,7 +311,7 @@ export default function Archive() {
                     </div>:
                     <div className="personal-archive-grid">
                         {
-                            Array.apply(null, Array(charityData&&charityData.length>0?Math.ceil(charityData.length/3):0))
+                            Array.apply(null, Array(campaignData&&campaignData.length>0?Math.ceil(campaignData.length/3):0))
                             .map((item, index)=> (
                                 <CampaignRow rowIndex={index} remainder={remainderAlt} campaignData={campaignData} />
                             ))

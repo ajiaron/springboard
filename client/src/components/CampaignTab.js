@@ -17,7 +17,7 @@ import { FiMail } from "react-icons/fi";
 import { set } from "lodash";
 
 
-export default function CampaignTab({ id, category, goal, raised, name, theme, type, index, isEmpty}) {
+export default function CampaignTab({ id, category, goal, raised, name, theme, type, index, isEmpty, route}) {
     const navigate = useNavigate()
     const figures = ["GOAL", "TOTAL", "PROGRESS"]
     const connection = process.env.REACT_APP_API_URL
@@ -78,7 +78,7 @@ export default function CampaignTab({ id, category, goal, raised, name, theme, t
 
     return (
         <span ref={ref} onClick={()=>(isHovered)?console.log("toggling figure"):handleNavigate()}
-        style={{opacity:`${isEmpty?'0':'1'}`, pointerEvents:`${isEmpty?'none':'auto'}`}}
+        style={{opacity:`${isEmpty?'0':'1'}`, paddingBottom:(route)?".25em":'0',pointerEvents:`${isEmpty?'none':'auto'}`}}
         className={`archive-favorite-item-container`}>
             <div className="archive-favorite-item-category">
                 <p className={`category-favorite-text`} style={{color:theme?hexToRgba('#'+theme.substring(0,6),1):"#5a5a5abd"}}>
@@ -95,18 +95,22 @@ export default function CampaignTab({ id, category, goal, raised, name, theme, t
             </div>
             <div className="archive-favorite-item-figure">
                 <div className="archive-favorite-item-figure-wrapper">
-                    <p className="archive-favorite-figure-text">
+                    <p className="archive-favorite-figure-text"
+                    style={{fontSize:(route)?'clamp(24px, 4vw, 38px)':'clamp(34,4vw,40px)'}}>
                         {figure===0?formatGoal(goal):
                         figure===1?formatGoal(raised):formatGoal(raised/goal)}
                     </p>
-                    <span className="archive-favorite-subtext-wrapper"
-                      onClick={()=>handleFigure()}
-                      onMouseEnter={handleMouseEnter} 
-                      onMouseLeave={handleMouseLeave}>
-                        <p className="archive-favorite-figure-subtext">
-                            {`${(figure===1)?'CROWDFUNDING':'CAMPAIGN'}`} <br/>{`${figures[figure]}`}
-                        </p>
-                    </span>
+                    {(route === undefined)&&
+                         <span className="archive-favorite-subtext-wrapper"
+                         onClick={()=>handleFigure()}
+                         onMouseEnter={handleMouseEnter} 
+                         onMouseLeave={handleMouseLeave}>
+                           <p className="archive-favorite-figure-subtext">
+                               {`${(figure===1)?'CROWDFUNDING':'CAMPAIGN'}`} <br/>{`${figures[figure]}`}
+                           </p>
+                       </span>
+                    }
+                   
                 </div>
 
             </div>
@@ -116,7 +120,7 @@ export default function CampaignTab({ id, category, goal, raised, name, theme, t
                     {name}
                 </p>
             </div>
-            <div className="archive-favorite-type-container">
+            <div className="archive-favorite-type-container" style={{marginTop:(route)?".05em":"0"}}>
             {(!shouldRemove)?
                 <div className={`profile-favorite-item-type-wrapper mid-favorite-wrapper`}
                     style={{transition:"all .15s linear",backgroundColor:theme?hexToRgba('#'+theme.substring(0,6),.5):"#5a5a5abd"}}>

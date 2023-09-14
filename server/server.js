@@ -438,6 +438,35 @@ app.get('/api/searchfiltered/:next/:current/:query', (req,res)=> {
     })
 })
 
+app.get('/api/fetchcampaigns/:next/:current', (req,res)=> {
+    const next = Number(req.params.next)
+    const current = Number(req.params.current)
+    const categories = req.query.categories
+    db.query('SELECT * FROM campaigns WHERE category IN (?) LIMIT ? OFFSET ?', [categories, next, current],
+    (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+
+app.get('/api/filtercampaigns/:next/:current/:query', (req,res)=> {
+    const next = Number(req.params.next)
+    const current = Number(req.params.current)
+    const query = String(req.params.query)
+    const categories = req.query.categories
+    db.query('SELECT * FROM campaigns WHERE category IN (?) AND campaignname LIKE ? LIMIT ? OFFSET ?', [categories,`%${query}%`, next, current],
+    (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+
 // auth
 // check if username or email is already taken
 app.get('/api/validate', (req,res)=> {
@@ -923,6 +952,49 @@ app.post('/api/addarchive', (req, res) => {
             console.log(err)
         } else {
             res.send("successfully added to archive")
+        }
+    })
+})
+app.post('/api/donatecampaign', (req, res) => {
+    const userid = req.body.userid
+    const giftid = req.body.giftid
+    const campaignid = req.body.campaignid
+    const accountid = req.body.accountid
+    const amount = req.body.amount
+    const campaignname = req.body.campaignname
+    const message = req.body.message
+    const category = req.body.category
+    const theme = req.body.theme
+    const shareName = req.body.shareName
+    const shareEmail = req.body.shareEmail
+    db.query('INSERT INTO campaigndonations (giftid, userid, campaignid, accountid, amount, campaignname, message, category, theme, shareName, shareEmail) VALUES (?,?,?,?,?,?,?,?,?,?,?)', 
+    [giftid, userid, campaignid, accountid, amount, campaignname, message, category, theme, shareName, shareEmail], (err, result) => {
+        if(err) {
+            console.log(err)
+        } else {
+            res.send("successfully added to archive")
+        }
+    })
+})
+app.get('/api/getcampaigndonation', (req, res) => {
+    const giftid = req.params.giftid
+    const sql = `SELECT DISTINCT * FROM campaigndonations WHERE giftid = ?`
+    db.query(sql, [giftid], (err, result)=> {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+app.put('/api/confirmcampaigndonation', (req, res)=> {
+    const giftid = req.body.giftid
+    const sql = `UPDATE donations SET confirmed = true WHERE giftid = ?`
+    db.query(sql, [giftid], (err, result) => {
+        if(err) {
+            console.log(err)
+        } else {
+            res.send("successfully confirmed donations")
         }
     })
 })
