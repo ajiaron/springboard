@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef} from "react"
-import './Feed.scss'
-import './Profile.scss'
-import './Settings.scss'
+import '../styles/Feed.scss'
+import '../styles/Profile.scss'
+import '../styles/Settings.scss'
 import Navbar from "./Navbar";
 import SideNavigation from "./SideNavigation";
 import Footer from "./Footer";

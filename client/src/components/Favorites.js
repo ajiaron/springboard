@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from "react"
-import './Landing.scss'
-import './Favorites.scss'
+import '../styles/Landing.scss'
+import '../styles/Favorites.scss'
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import SideBar from "./SideBar";

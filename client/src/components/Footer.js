@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from "react"
 import { Link } from "react-router-dom";
-import './Footer.scss'
+import '../styles/Footer.scss'
 export default function Footer({route}) {
     return (
         <div className={`${route && (route === 'profile' || route==='settings')?'icon-container-profile':'icon-container'}`}>

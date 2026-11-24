@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef, useContext} from "react"
-import './Landing.scss'
-import './Dashboard.scss'
+import '../styles/Landing.scss'
+import '../styles/Dashboard.scss'
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import SideBar from "./SideBar";
@@ -16,6 +16,7 @@ import { useInView } from 'react-intersection-observer';
 import { FiMail } from "react-icons/fi";
 import { Auth } from 'aws-amplify'
 import axios from "axios";
+import { ensureDemoSession, isDemoMode } from "../demoAuth";
 
 export default function Dashboard() {
     const connection = process.env.REACT_APP_API_URL
@@ -37,7 +38,7 @@ export default function Dashboard() {
                     username:data&&data.username
                 }
             })
-            if (res.data) {
+            if (res.data && res.data[0]) {
               localStorage.setItem("userid", JSON.stringify(res.data[0].userid))
               localStorage.setItem("username", JSON.stringify(res.data[0].username))
               localStorage.setItem("email", JSON.stringify(res.data[0].email))
@@ -53,6 +54,12 @@ export default function Dashboard() {
         }
     }
     useEffect(()=> {
+        if (isDemoMode()) {
+            ensureDemoSession()
+            setIsAuthenticated(true)
+            setLoading(false)
+            return
+        }
         Auth.currentAuthenticatedUser()
         .then((res)=>handleSession(res))
         .then(() => setIsAuthenticated(true))
@@ -116,10 +123,10 @@ export default function Dashboard() {
                     </p>
                 </div>
                  <div className="dashboard-feed-list-container">
-                    <FeedItem id = {0} name={'Henry Zheng'} username={'hzenry'} charity={'American Heart Association'} charityid={171} type={"healthcare"} status={'approved'} caption={"ballin like a pacer"} date={'34m'} index={0} route={'dashboard'}/>
-                    <FeedItem id = {0} name={'An Truong'} username={'antruong_'} charity={'The Conservation Fund'} charityid={135} type={"environment"} status={'approved'} caption={"🗿"} date={'2d'} index={1} route={'dashboard'}/>
-                    <FeedItem id = {0} name={'Thompson Nguyen'} username={'tnompson'} charity={'World Forestry Center'} charityid={96} type={"environment"} status={'approved'} caption={"mr beast give me an m"} date={'1w'} index={2} route={'dashboard'}/>
-                    <FeedItem id = {0} name={'Jason Damasco'} username={'jdason'} charity={'Kids In Need Foundation'} charityid={107} type={"education"} status={'approved'} caption={"i get bucks like milwaukee"} date={'2w'} index={3} route={'dashboard'}/>
+                    <FeedItem id = {0} name={'Henry Zheng'} username={'hzenry'} charity={'American Heart Association'} charityid={171} type={"healthcare"} status={'approved'} caption={"test caption 1"} date={'34m'} index={0} route={'dashboard'}/>
+                    <FeedItem id = {0} name={'An Truong'} username={'antruong_'} charity={'The Conservation Fund'} charityid={135} type={"environment"} status={'approved'} caption={"test caption 2"} date={'2d'} index={1} route={'dashboard'}/>
+                    <FeedItem id = {0} name={'Thompson Nguyen'} username={'tnompson'} charity={'World Forestry Center'} charityid={96} type={"environment"} status={'approved'} caption={"test caption 3"} date={'1w'} index={2} route={'dashboard'}/>
+                    <FeedItem id = {0} name={'Jason Damasco'} username={'jdason'} charity={'Kids In Need Foundation'} charityid={107} type={"education"} status={'approved'} caption={"test caption 4"} date={'2w'} index={3} route={'dashboard'}/>
                 </div>
             </div>
         </div>

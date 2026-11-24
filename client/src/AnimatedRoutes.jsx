@@ -22,12 +22,20 @@ import CharityItem from './components/CharityItem';
 import Campaign from './components/Campaign'
 import { Amplify, Auth } from 'aws-amplify';
 import awsmobile from './aws-exports';
+import { ensureDemoSession, isDemoAuthenticated, isDemoMode } from './demoAuth';
 Amplify.configure(awsmobile)
 function ProtectedRoute({ children }) {
     const [isLoading, setIsLoading] = useState(true);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
   
     useEffect(() => {
+      if (isDemoMode()) {
+        // Demo builds: allow internal UI without Amplify/Cognito
+        ensureDemoSession()
+        setIsAuthenticated(true)
+        setIsLoading(false)
+        return
+      }
       Auth.currentAuthenticatedUser()
         .then(() => setIsAuthenticated(true))
         .catch(() => setIsAuthenticated(false))
@@ -35,7 +43,7 @@ function ProtectedRoute({ children }) {
     }, []);
     if (isLoading) return null; // or your loading state
 
-    return <>{!isLoading && isAuthenticated ? children : <Navigate to='/'/>}</>
+    return <>{!isLoading && (isAuthenticated || isDemoAuthenticated()) ? children : <Navigate to='/'/>}</>
 
   }
   

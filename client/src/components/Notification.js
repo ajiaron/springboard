@@ -1,8 +1,8 @@
 import React, {useState, useEffect, useRef} from "react"
-import './Landing.scss'
-import './Favorites.scss'
-import './Archive.scss'
-import './Notification.scss'
+import '../styles/Landing.scss'
+import '../styles/Favorites.scss'
+import '../styles/Archive.scss'
+import '../styles/Notification.scss'
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import SideBar from "./SideBar";

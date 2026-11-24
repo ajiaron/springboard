@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef, useContext} from "react"
-import './Profile.scss'
-import './Settings.scss'
+import '../styles/Profile.scss'
+import '../styles/Settings.scss'
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import CharityItem from './CharityItem'
@@ -89,10 +89,17 @@ export default function Settings() {
     }
     const handleSignOut = async() => {
         try {
+            const { clearDemoSession, isDemoMode } = await import('../demoAuth')
+            if (isDemoMode()) {
+                clearDemoSession()
+                navigate("/")
+                return
+            }
             await Auth.signOut()
             navigate("/")
         } catch(e) {
             console.log(e)
+            navigate("/")
         }
     }
     function handleClose() {

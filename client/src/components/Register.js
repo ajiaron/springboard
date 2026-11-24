@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef, useContext} from 'react'
-import './Register.scss'
-import './Signin.scss'
+import '../styles/Register.scss'
+import '../styles/Signin.scss'
 import axios from "axios";
 import UserContext from '../contexts/UserContext';
 import { useNavigate } from "react-router-dom";

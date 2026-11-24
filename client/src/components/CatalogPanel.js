@@ -1,4 +1,4 @@
-import './CatalogPanel.scss'
+import '../styles/CatalogPanel.scss'
 import React, {useState, useEffect, useRef} from "react"
 import Navbar from "./Navbar";
 import SideBar from "./SideBar";

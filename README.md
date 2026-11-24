@@ -1,70 +1,32 @@
-# Getting Started with Create React App
+# Springboard
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Springboard is a donation discovery platform I built as an undergraduate project (~3 years ago). The idea was to help donors find high-performing charities, compare them using Charity Navigator–sourced ratings, and contribute through a simple donation flow (catalog browsing, organization profiles, basket/checkout, and light social features like campaigns and donation feeds).
 
-## Available Scripts
+## What it was supposed to do
 
-In the project directory, you can run:
+- Browse and filter a catalog of curated nonprofits
+- View organization profiles with rating and financial-style metrics
+- Donate via Stripe (and related basket / confirmation flows)
+- Maintain a personal archive of saved charities
+- Support user accounts (originally via AWS Cognito / Amplify)
 
-### `npm start`
+## About this codebase
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+This is an early, independently built full-stack app (React + Express + MySQL). It reflects where I was as an engineer at the time. Recent work has focused on making it presentable again—responsive layout fixes and backend security hardening—without rewriting it into a new product.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Current status / limitations
 
-### `npm test`
+I no longer pay for the original production infrastructure or third-party subscriptions, so several pieces that worked in the live deployment are not available out of the box:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Custom domain** — no longer registered / pointed at this project
+- **AWS hosting** — Amplify / Cognito and related cloud resources are not actively maintained or funded
+- **Charity Navigator API key** — no longer subscribed; live pulls from [Charity Navigator’s developer API](https://developer.charitynavigator.org/) require your own key
 
-### `npm run build`
+Locally, the app can still run in demo mode with a seeded MySQL dataset. Charity Navigator sync (`npm run sync:charities` in `server/`) is wired up if you supply your own `CHARITY_NAVIGATOR_API_KEY`.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Stack
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **Client:** React (Create React App), SCSS, React Router, Amplify (optional)
+- **Server:** Express, MySQL, Stripe, JWT/Cognito auth (with demo-mode bypass)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+See `server/.env.example` and `client/.env.development` for local configuration placeholders.

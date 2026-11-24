@@ -4,8 +4,8 @@ import Footer from "./Footer";
 import CreatePost from './CreatePost'
 import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import {AiOutlineHeart, AiOutlinePlus, AiFillHeart} from 'react-icons/ai'
-import './Charity.scss'
-import './Campaign.scss'
+import '../styles/Charity.scss'
+import '../styles/Campaign.scss'
 import Popup from './Popup';
 import CampaignPost from './CampaignPost';
 import {GoArrowRight} from 'react-icons/go'

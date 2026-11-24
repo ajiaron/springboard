@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import './Charity.scss'
+import '../styles/Charity.scss'
 import { PolarArea, Doughnut, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, RadialLinearScale, BarElement, ArcElement, Tooltip, Legend, CategoryScale, LinearScale } from "chart.js";
 ChartJS.register(RadialLinearScale, CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend);

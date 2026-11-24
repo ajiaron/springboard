@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef, useContext} from "react"
-import './Payment.scss'
+import '../styles/Payment.scss'
 import Navbar from "./Navbar";
 import axios from "axios";
 import SideBar from "./SideBar";

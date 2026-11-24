@@ -3,7 +3,7 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { Link, useParams, useLocation } from "react-router-dom";
 import {AiOutlineHeart, AiFillHeart} from 'react-icons/ai'
-import './Charity.scss'
+import '../styles/Charity.scss'
 import {GoArrowRight} from 'react-icons/go'
 import SideNavigation from './SideNavigation';
 import UserContext from '../contexts/UserContext';

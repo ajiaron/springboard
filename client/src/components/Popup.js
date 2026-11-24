@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import "./Popup.scss"
+import "../styles/Popup.scss"
 import { motion } from "framer-motion";
 import {BsCheckLg} from 'react-icons/bs'
 import {BiTimeFive} from 'react-icons/bi'

@@ -1,0 +1,177 @@
+.donations-page-container {
+  height: 100vh;
+  max-width: 100vw;
+  overflow-y: scroll;
+ // background-color: rgba(70, 180, 132, 0.274);
+  overflow-x: hidden;
+  display: flex;
+
+}
+.donations-page-content {
+  min-height: 100vh;
+  width: 80%;
+  padding-top: 3.5em;
+  padding-bottom: 1em;
+  margin-left: auto;
+  
+  align-self: flex-start;
+}
+.donations-page-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  padding-left: 2.5%;
+
+}
+.donation-history-container {
+    width: 100%;
+    height: 100%;
+   // background-color: #2f8f78;
+    //margin-top: 3.25vh;
+    align-self: flex-start;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    //transform: translateX(-.1em);
+    gap:1.5em;
+    align-items: center;
+}
+.personal-donations-container {
+    width: 92.25%;
+    height: 21.5vh;
+    padding-top: .35em;
+    padding-bottom: 1.5em;
+    display: flex;
+    gap:1em;
+  }
+  .personal-donations-grid {
+    display: flex;
+    width:100%;
+    padding-top: 2em;
+    gap: 0em;
+    flex-direction: column;
+   // justify-content: center;
+    min-height: fit-content;
+  }
+.human-text {
+    color:rgb(98, 145, 233);
+}  
+.environment-text {
+    color:#40b499;
+}
+.animals-text {
+    color: #91d35cee;
+}
+.health-text {
+    color:rgb(242, 130, 130);
+}
+.education-text {
+    color:rgb(227, 172, 34);
+}
+.research-text {
+    color: rgba(80, 187, 191, 0.9);
+}
+.community-text {
+    color: #cea37bee;
+}
+
+.personal-donation-figure-text {
+    font-size:clamp(28px, 4vw, 34.5px);
+    color:#eee;
+    font-family: 'Inter';
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  .personal-donation-item-figure {
+    width: 100%;
+    height: 25%;
+    padding-left:1.45vw;
+    padding-top:2.45vh;
+    padding-bottom: .5vh;
+   // border-bottom: 1px dashed #353535;
+  }
+ 
+
+
+  .personal-donation-item-type-wrapper {
+    width: fit-content;
+    min-height: fit-content;
+
+    margin-left: 1.45em;
+    margin-right: auto;
+    display: flex;
+    //transform:  translateX(-.25em) ;
+    align-self: flex-start;
+    justify-content: flex-start;
+   // margin-bottom: .15em;
+   // padding-bottom:.3%;
+    border-radius:5px;
+    
+}
+.persona-donation-type-container {
+    height: fit-content;
+    width: 100%;
+   // background-color: red;
+    display: flex;
+  }
+.personal-donation-item-type-text {
+    font-size: clamp(10px, 3vw, 12px);
+    color:#bbb;
+    font-family: 'Rubik';
+   // letter-spacing: .1px;
+   // line-height: 24px;
+    font-weight: 400;
+}
+
+  .personal-donation-item-container {
+    width: 32.5%;
+    background-color: #202020;
+    overflow: hidden;
+    border-radius: 16px;
+    height: 100%;
+    border:1px solid #2e2e2e;
+    text-decoration: none;
+    transition: all .15s linear;
+    box-shadow: 3px 3px 2px 2px rgba(0,0,0,0.15);
+  }  
+  .personal-donation-item-name {
+    max-width: 100%;
+    //background-color: red;
+   // min-height: max-content;
+    display: flex;
+    align-items: flex-start;
+   // text-align: center;
+    padding-left: 1.35em;
+    padding-right: 1.5em;
+    justify-content: flex-start;
+    padding-top: .625em;
+   // border-top: 1px dashed #3e3e3e;
+    padding-bottom:.25em;
+  }
+
+@media (max-width: 768px) {
+  .donations-page-content {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding-left: 3.75rem;
+    padding-right: 1rem;
+  }
+  .donations-page-wrapper {
+    padding-left: 0;
+  }
+  .donation-history-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .personal-donations-container {
+    width: 100%;
+    height: auto;
+    flex-wrap: wrap;
+  }
+  .personal-donation-item-container {
+    width: 100%;
+  }
+}

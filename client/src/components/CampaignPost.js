@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react'
-import './Campaign.scss'
+import '../styles/Campaign.scss'
 import {AiOutlineHeart,AiOutlineLink, AiFillHeart,AiFillEye} from 'react-icons/ai'
 import {BiRepost,BiSolidEdit, BiSolidPencil, BiMessageSquareEdit} from 'react-icons/bi'
 import {VscEye} from 'react-icons/vsc'
@@ -20,7 +20,10 @@ export default function CampaignPost({postid, name, theme, title, description, i
         setIsHovered(false);
     };
     function handleNavigate() {
-        window.location.href = `https://${link}`
+        if (!link) return
+        const cleaned = String(link).replace(/^https?:\/\//i, '').trim()
+        if (!cleaned || /^(javascript:|data:)/i.test(cleaned)) return
+        window.location.href = `https://${cleaned}`
     }
   return (
     <div 

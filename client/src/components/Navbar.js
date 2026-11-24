@@ -7,7 +7,7 @@ import {FiSettings} from 'react-icons/fi'
 import {FaShoppingBasket, FaShoppingCart} from 'react-icons/fa'
 import {FaUserFriends,FaUserCircle} from 'react-icons/fa'
 import {RiSettings5Fill} from 'react-icons/ri'
-import './Navbar.scss'
+import '../styles/Navbar.scss'
 export default function Navbar({route, blur}) {
     const location = useLocation()
     const userid = localStorage.getItem("userid")?JSON.parse(localStorage.getItem("userid")):0

@@ -1,0 +1,377 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;600&display=swap');
+
+p {
+    margin: 0;
+}
+
+.charity-item-button {
+    border: 0;
+    outline: 0;
+    padding: 0;
+    margin: 0;
+    border-radius: 30px;
+    display: block;
+    width: 100%;
+    text-decoration: none;
+    color: inherit;
+    box-sizing: border-box;
+}
+
+.charity-item-container {
+    background-color: #252525;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    min-height: 8.5rem;
+    border: none;
+    padding: 1.15rem 1.25rem;
+    outline: none;
+    border-radius: 30px;
+    transition: filter 0.15s linear, background-color 0.15s linear;
+}
+
+.selected-container {
+    align-items: flex-start;
+    min-height: 0;
+}
+
+.charity-item-container:hover {
+    filter: brightness(1.125);
+}
+
+.charity-item-content {
+    display: flex;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.charity-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    max-width: 100%;
+    min-width: 0;
+    justify-content: center;
+}
+
+.charity-item-title-wrapper {
+    z-index: 10;
+    max-width: 100%;
+    display: flex;
+}
+
+.charity-tag-title {
+    color: #efefef;
+    font-size: clamp(1rem, 2.2vw, 1.25rem);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    font-family: "Inter", sans-serif;
+    letter-spacing: -0.25px;
+    font-weight: 700;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    line-height: 1.25;
+}
+
+.charity-location-wrapper {
+    display: flex;
+    z-index: 10;
+}
+
+.charity-location-text {
+    color: #aaaaaa;
+    font-size: clamp(0.8rem, 1.8vw, 0.9rem);
+    font-family: 'Rubik', sans-serif;
+    font-weight: 400;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.charity-categories-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.35rem;
+}
+
+.charity-categories-container {
+    border-radius: 5px;
+    align-items: center;
+    width: fit-content;
+    max-width: 100%;
+    min-height: 1.625em;
+    padding: 0.2rem 0.7rem;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.charity-category-text {
+    font-family: 'Rubik', sans-serif;
+    color: #fff;
+    font-weight: 500;
+    font-size: clamp(0.7rem, 1.5vw, 0.875rem);
+    white-space: nowrap;
+}
+
+.charity-figure-container {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 0;
+}
+
+.charity-score-container {
+    width: clamp(4.5rem, 8vw, 6.5rem);
+    height: clamp(4.5rem, 8vw, 6.5rem);
+    border-radius: 50%;
+    align-items: center;
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.progress-ring {
+    border-radius: 50%;
+    transform: rotateY(180deg) rotate(270deg);
+    z-index: 1;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.overall-score {
+    color: #eee;
+    letter-spacing: -0.5px;
+    font-size: clamp(0.95rem, 2vw, 1.35rem);
+    font-family: "Inter", sans-serif;
+    z-index: 2;
+    font-weight: 800;
+}
+
+.blur-wrapper {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+.circle-blur {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 0;
+    background-color: transparent;
+    border-radius: 50%;
+    animation-duration: 0.35s;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-in-out;
+    animation-delay: 0.75s;
+}
+
+.human-blur { animation-name: animate-blue; }
+.education-blur { animation-name: animate-gold; }
+.environment-blur { animation-name: animate-green; }
+.animals-blur { animation-name: animate-lime; }
+.healthcare-blur { animation-name: animate-red; }
+.community-blur { animation-name: animate-brown; }
+.research-blur { animation-name: animate-teal; }
+
+@keyframes animate-blue {
+    from { box-shadow: 0 0 0 rgba(105, 105, 105, 0.5); }
+    to { box-shadow: 0 0 20px rgba(83, 138, 190, 0.5); }
+}
+@keyframes animate-gold {
+    from { box-shadow: 0 0 0 rgba(105, 105, 105, 0.5); }
+    to { box-shadow: 0 0 20px rgba(200, 153, 35, 0.5); }
+}
+@keyframes animate-green {
+    from { box-shadow: 0 0 0 rgba(105, 105, 105, 0.5); }
+    to { box-shadow: 0 0 20px rgba(48, 162, 97, 0.5); }
+}
+@keyframes animate-lime {
+    from { box-shadow: 0 0 0 rgba(105, 105, 105, 0.5); }
+    to { box-shadow: 0 0 20px rgba(122, 188, 69, 0.5); }
+}
+@keyframes animate-red {
+    from { box-shadow: 0 0 0 rgba(105, 105, 105, 0.5); }
+    to { box-shadow: 0 0 20px rgba(198, 83, 93, 0.5); }
+}
+@keyframes animate-brown {
+    from { box-shadow: 0 0 0 rgba(105, 105, 105, 0.5); }
+    to { box-shadow: 0 0 20px rgba(144, 112, 103, 0.6); }
+}
+@keyframes animate-teal {
+    from { box-shadow: 0 0 0 rgba(105, 105, 105, 0.6); }
+    to { box-shadow: 0 0 20px rgba(63, 159, 152, 0.6); }
+}
+
+@keyframes draw-circle {
+    from { stroke-dashoffset: 0; }
+    to { stroke-dashoffset: var(--offset); }
+}
+
+.back-circle {
+    box-shadow: none;
+    border: 20px solid #252525;
+    overflow: hidden;
+}
+
+.human-container { background-color: rgb(53, 108, 153); }
+.environment-container { background-color: #5abb6fa4; }
+.animals-container { background-color: #7abc45a4; }
+.healthcare-container { background-color: #d75c5c99; }
+.education-container { background-color: rgb(159, 150, 45); }
+.research-container { background-color: rgb(50, 114, 110); }
+.community-container { background-color: #7c634cee; }
+.small-wrapper { background-color: #c875fb99; }
+.mid-wrapper { background-color: #f967c199; }
+.large-wrapper { background-color: #a76c23; }
+.international-wrapper { background-color: #606060; }
+
+.charity-info-expanded-container {
+    display: flex;
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 0.75rem;
+    flex-direction: column;
+    gap: 0.65rem;
+    box-sizing: border-box;
+}
+
+.charity-info-expanded {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    width: 100%;
+    text-align: left;
+}
+
+.lower-expanded {
+    padding-top: 0.25rem;
+}
+
+.expanded-info-content {
+    display: flex;
+    gap: 0.4rem;
+    align-items: baseline;
+    flex-wrap: wrap;
+    min-width: 0;
+}
+
+.deficit-info {
+    color: lightcoral;
+    font-size: clamp(0.75rem, 1.6vw, 0.95rem);
+    font-family: 'Rubik', sans-serif;
+    font-weight: 400;
+}
+
+.excess-info {
+    color: rgb(117, 182, 117);
+    font-size: clamp(0.75rem, 1.6vw, 0.95rem);
+    font-family: 'Rubik', sans-serif;
+    font-weight: 400;
+}
+
+.expanded-info-text {
+    font-size: clamp(0.75rem, 1.6vw, 0.95rem);
+    font-family: 'Rubik', sans-serif;
+    color: #ababab;
+    font-weight: 400;
+}
+
+.expanded-info-data {
+    font-size: clamp(0.75rem, 1.6vw, 0.95rem);
+    font-family: 'Rubik', sans-serif;
+    color: #eee;
+    font-weight: 400;
+    overflow-wrap: anywhere;
+}
+
+.donation-button-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 0.5rem;
+    align-items: center;
+}
+
+.like-icon-wrapper {
+    width: 2.5em;
+    height: 2.5em;
+    background-color: #5a5a5a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 2em;
+    flex: 0 0 auto;
+}
+
+.charity-like-icon,
+.charity-basket-icon,
+.charity-linkto-icon,
+.charity-arrow-icon {
+    color: #eee;
+    width: 1.3em;
+    height: 1.3em;
+}
+
+.charity-arrow-icon {
+    transform: rotate(-45deg);
+}
+
+.charity-details-toggle {
+    margin-top: 0.55rem;
+    align-self: flex-start;
+    background: transparent;
+    border: 1px solid #4a4a4a;
+    color: #cfcfcf;
+    border-radius: 999px;
+    padding: 0.35rem 0.8rem;
+    font-family: 'Rubik', sans-serif;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: background-color 0.15s linear, color 0.15s linear;
+}
+
+.charity-details-toggle:hover {
+    background-color: #3a3a3a;
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .charity-item-container {
+        padding: 1rem;
+        gap: 0.75rem;
+        min-height: 0;
+    }
+
+    .charity-score-container {
+        width: 4.25rem;
+        height: 4.25rem;
+    }
+
+    .charity-category-text {
+        white-space: normal;
+    }
+
+    .charity-info-expanded {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

@@ -12,8 +12,8 @@ import {LiaShoppingBasketSolid,LiaUserFriendsSolid} from 'react-icons/lia'
 import {BiBookmarks, BiBookHeart} from 'react-icons/bi'
 import {HiOutlineNewspaper} from 'react-icons/hi'
 import {CiSettings} from 'react-icons/ci'
-import './Navbar.scss'
-import './SideNavigation.scss'
+import '../styles/Navbar.scss'
+import '../styles/SideNavigation.scss'
 
 export default function SideNavigation({route}) {
   const navigate = useNavigate()

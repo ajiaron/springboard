@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react'
-import './Campaign.scss'
-import './CreatePost.scss'
+import '../styles/Campaign.scss'
+import '../styles/CreatePost.scss'
 import { v4 as uuidv4 } from 'uuid';
 import {AiOutlineHeart, AiOutlineLink, AiOutlinePlus, AiFillHeart, AiFillEye} from 'react-icons/ai'
 import {BiRepost, BiSolidEdit, BiMessageSquareEdit, BiSolidImageAdd, BiSolidPencil} from 'react-icons/bi'

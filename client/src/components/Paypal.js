@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef, useContext} from 'react'
 import {GoArrowRight} from 'react-icons/go'
 import UserContext from '../contexts/UserContext'
-import './Payment.scss'
+import '../styles/Payment.scss'
 import { debounce } from 'lodash'
 
 export default function Paypal({groupid, names, amount, type}) {

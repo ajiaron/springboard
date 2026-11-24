@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react'
-import './Signin.scss'
+import '../styles/Signin.scss'
 import Axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import Login from './Login';

@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef, useContext} from "react"
-import './Catalog.scss'
+import '../styles/Catalog.scss'
 import Navbar from "./Navbar";
 import Payment from "./Payment";
 import {BsSearch} from 'react-icons/bs'

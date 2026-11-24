@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react'
-import './SideBar.scss'
+import '../styles/SideBar.scss'
 import {FiSettings} from 'react-icons/fi'
 import {BsFillSuitHeartFill} from 'react-icons/bs'
 import {HiSpeakerphone} from 'react-icons/hi'
@@ -7,6 +7,7 @@ import {FaShoppingBasket, FaShoppingCart} from 'react-icons/fa'
 import UserContext from '../contexts/UserContext'
 import { Link, useParams } from "react-router-dom";
 import { Auth } from 'aws-amplify';
+import { DEMO_USER, isDemoMode, isDemoSession } from '../demoAuth';
 
 
 export default function SideBar({}) {
@@ -14,6 +15,11 @@ export default function SideBar({}) {
     const [userData, setUserData] = useState(null)
     const user = useContext(UserContext)
     useEffect(()=> {
+        if (isDemoMode() && isDemoSession()) {
+            setUserData(DEMO_USER)
+            setIsLoggedIn(true)
+            return
+        }
         Auth.currentAuthenticatedUser()
         .then((res) => setUserData(res))
         .then(()=>setIsLoggedIn(true))

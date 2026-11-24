@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef, useCallback} from "react"
-import './Donate.scss'
-import './Cart.scss'
+import '../styles/Donate.scss'
+import '../styles/Cart.scss'
 import Navbar from "./Navbar";
 import Payment from "./Payment";
 import Paypal from "./Paypal";

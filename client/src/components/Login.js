@@ -1,12 +1,13 @@
 import React, {useState, useEffect, useRef, useContext} from 'react'
-import './Login.scss'
-import './Signin.scss'
+import '../styles/Login.scss'
+import '../styles/Signin.scss'
 import UserContext from '../contexts/UserContext'
 import {GoArrowRight} from 'react-icons/go'
 import { useNavigate } from "react-router-dom";
 import axios from 'axios'
 import {Amplify, Auth } from "aws-amplify";
 import config from '../aws-exports';
+import { ensureDemoSession, isDemoMode, matchesDemoCredentials } from '../demoAuth';
 Amplify.configure(config);
 
 export default function Login() {
@@ -73,28 +74,40 @@ const signInAfter = async() => {
     setLoading(true)
     if (username.length > 0 && password.length > 0) {
       try {
+        // Local demo login when Amplify is unavailable
+        if (isDemoMode() && matchesDemoCredentials(username, password)) {
+          const demo = ensureDemoSession()
+          user.setUsername(demo.username)
+          user.setEmail(demo.email)
+          user.setFirstName(demo.firstname)
+          user.setLastName(demo.lastname)
+          user.setUserId(demo.userid)
+          navigate('/dashboard', { state: {userid:demo.userid, username:demo.username, firstName:demo.firstname, lastname:demo.lastname}})
+          setLoading(false)
+          return
+        }
+        // Authenticate with Cognito first — never compare passwords from the API
+        const response = await Auth.signIn(username, password);
         const url = `${connection}/api/getuser`;
         const res = await axios.get(url, {
           params: {
             username:username
           }
         })
-        if (res.data && res.data[0].password === password) {
+        if (res.data && res.data[0]) {
           user.setUsername(res.data[0].username)
           user.setEmail(res.data[0].email)
           user.setFirstName(res.data[0].firstname)
           user.setLastName(res.data[0].lastname)
           user.setUserId(res.data[0].userid)
-          const response = await Auth.signIn(username, password);
           if (response.attributes.email_verified || showMessage === 'confirmed') {
-            console.log(response.attributes.email_verified)
             navigate('/dashboard', { state: {userid:res.data[0].userid, username:username, firstName:res.data[0].firstname, lastname:res.data[0].lastname}})
           }
           else {
             toggleConfirm()
           }
         } else {
-          console.log("incorrect login credentials")
+          console.log("profile not found after Cognito sign-in")
         }
       } catch(e) {
         console.log(e)

@@ -1,26 +1,20 @@
-import React, {useState, useEffect, useRef} from "react"
-import './CharityItem.scss'
-import Navbar from "./Navbar";
-import SideBar from "./SideBar";
-import { BsStars } from 'react-icons/bs'
+import React, {useState} from "react"
+import '../styles/CharityItem.scss'
 import { Link } from "react-router-dom";
-import { useInView } from 'react-intersection-observer';
-import { FiMail } from "react-icons/fi";
-import {HiArrowTrendingUp} from 'react-icons/hi'
-import {AiOutlineHeart, AiFillHeart} from 'react-icons/ai'
-import {FaArrowRight,FaShoppingBasket, FaShoppingCart} from 'react-icons/fa'
-import { AiOutlineLink, AiOutlineEdit } from 'react-icons/ai'
+import {AiOutlineLink, AiFillHeart} from 'react-icons/ai'
+import {FaArrowRight, FaShoppingBasket} from 'react-icons/fa'
+
 const Circle = ({score, color}) => {
   const radius = 45;
   const circumference = 2 * Math.PI * radius;
-//  const offset = ((100 - score) / 100) * circumference;
   const offset = (score / 100) * circumference;
 
   return (
     <svg
       className="progress-ring"
-      width="160"
-      height="160">
+      width="120"
+      height="120"
+      viewBox="0 0 160 160">
         <circle
             stroke={color}
             fill="transparent"
@@ -30,9 +24,7 @@ const Circle = ({score, color}) => {
             r={radius}
             cx="80"
             cy="80"
-            style={{
-                boxShadow: `0 0 20px ${color}`
-        }}/>
+        />
         <circle
             className="animated-circle"
             stroke="#3a3a3a" 
@@ -43,7 +35,6 @@ const Circle = ({score, color}) => {
                 strokeDashoffset: circumference,
                 animation: `draw-circle 1s ease-in-out forwards`,
                 "--offset": offset, 
-                filter: 'url(#circleShadow)',
             }}
             r={radius}
             cx="80"
@@ -59,7 +50,6 @@ const Circle = ({score, color}) => {
                 strokeDashoffset: circumference,
                 animation: `draw-circle 1s ease-in-out forwards`,
                 "--offset": offset, 
-                filter: 'url(#circleShadow)',
             }}
             r={radius}
             cx="80"
@@ -69,12 +59,19 @@ const Circle = ({score, color}) => {
   );
 }
 
+function formatMoney(value) {
+    return `$${Number(value || 0).toLocaleString()}`
+}
+
 export default function CharityItem({
     index, charityid, title, location, category, size, isInternational, total, excess,
     assets, revenue, progExpense, adminExpense, fundExpense, adminRatio, focus, score, url,
     onHandlePayment}) {
     const [selected, setSelected] = useState(false)
-    const [expanded, setExpanded] = useState(false)
+    const categoryKey = (category || '').toLowerCase()
+    const sizeKey = (size || '').toLowerCase()
+    const charityPath = `/charity/${charityid}/${title}/${categoryKey}`
+
     function ringColor(category) {
         switch (category) {
             case 'Human':
@@ -95,153 +92,48 @@ export default function CharityItem({
                 return '#6a6a6a'
         }
     }
-    function handleExpand() {
-        if (!selected && !expanded) {
-            setExpanded(true)
-        }
-        setSelected(!selected)
+
+    function handleToggleDetails(e) {
+        e.preventDefault()
+        e.stopPropagation()
+        setSelected((prev) => !prev)
+    }
+
+    function handleActionClick(e) {
+        e.preventDefault()
+        e.stopPropagation()
     }
 
     return (
-        <span onClick={()=>handleExpand()} className='charity-item-button'>
-            <div className={`charity-item-container ${(selected&&expanded)?'selected-container':(!selected && expanded)?'unselected-container':''}`}>
-                <div className={`charity-item-content ${(selected&&expanded)?'selected-content':(!selected && expanded)?'unselected-content':''}`}>
+        <Link to={charityPath} className='charity-item-button'>
+            <div className={`charity-item-container ${selected ? 'selected-container' : ''}`}>
+                <div className="charity-item-content">
                     <div className="charity-item-info">
                         <div className="charity-item-title-wrapper">
-  
-                                <p className="charity-tag-title">
-                                    {title}
-                                </p>
-                   
+                            <p className="charity-tag-title">
+                                {title}
+                            </p>
                         </div>
                         <div className="charity-location-wrapper">
                             <p className="charity-location-text">
                                 {location}
                             </p>
                         </div>
-                        {(selected || expanded)&&
-                        <div className={`charity-info-expanded-container ${!selected&&expanded?'info-expand':(!selected && expanded)?'info-shrink':(!expanded)?'info-none':''}`}>
-                            <div className="charity-info-expanded">
-                                <div className="expanded-info-content">
-                                    <p className="expanded-info-text"> 
-                                        Organization Focus:
-                                    </p>
-                                    <p className="expanded-info-data">
-                                        {focus}
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="charity-info-expanded lower-expanded">
-                                <div className="expanded-info-content">
-                                    <p className="expanded-info-text"> 
-                                        Total Contributions:
-                                    </p>
-                                    <p className="expanded-info-data">
-                                        {`$${total.toLocaleString()}`}
-                                    </p>
-                                </div>
-                                <div className="expanded-info-content">
-                                    <p className="expanded-info-text"> 
-                                        Excess/Deficit:
-                                    </p>
-                                    <p className={`${excess<0?'deficit':'excess'}-info`}>
-                                    {`${excess < 0?'-':'+'}$${Math.abs(excess).toLocaleString()}`}
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="charity-info-expanded">
-                                <div className="expanded-info-content">
-                                    <p className="expanded-info-text"> 
-                                        Net Assets:
-                                    </p>
-                                    <p className="expanded-info-data">
-                                    {`$${assets.toLocaleString()}`}
-                                    </p>
-                                </div>
-            
-                                <div className="expanded-info-content">
-                                    <p className="expanded-info-text"> 
-                                        Other Revenue:
-                                    </p>
-                                    <p className="expanded-info-data">
-                                    {`$${revenue.toLocaleString()}`}
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="charity-info-expanded">
-                                <div className="expanded-info-content">
-                                    <p className="expanded-info-text"> 
-                                        Program Expenses:
-                                    </p>
-                                    <p className="expanded-info-data">
-                                    {`$${progExpense.toLocaleString()}`}
-                                    </p>
-                                </div>
-                                <div className="expanded-info-content">
-                                    <p className="expanded-info-text"> 
-                                        Administrative Expenses:
-                                    </p>
-                                    <p className="expanded-info-data">
-                                        {`$${adminExpense.toLocaleString()}`}
-                                    </p>
-                                </div>
-                            </div>
-        
-                            <div className="charity-info-expanded">
-                                <div className="expanded-info-content">
-                                    <p className="expanded-info-text"> 
-                                    Fundraising Expenses:
-                                    </p>
-                                    <p className="expanded-info-data">
-                                    {`$${fundExpense.toLocaleString()}`}
-                                    </p>
-                                </div>
-                                <div className="expanded-info-content">
-                                    <p className="expanded-info-text"> 
-                                        Admin Expense Ratio:
-                                    </p>
-                                    <p className="expanded-info-data">
-                                    {`${parseFloat(adminRatio).toFixed(2)}`}
-                                    </p>
-                                </div>
-                            </div>
-                   
-                            <div className="donation-button-container">
-                                <div className="like-icon-wrapper">
-                                    <AiFillHeart className="charity-like-icon"/>
-                                </div>
-                                <div className="like-icon-wrapper">
-                                    <FaShoppingBasket className="charity-basket-icon"/>
-                                </div>
-                                <div className="like-icon-wrapper">
-                                    <AiOutlineLink className="charity-linkto-icon"/>
-                                </div>
-                                <Link className="like-icon-wrapper" to={`/charity/${charityid}/${title}/${category.toLowerCase()}`}>
-                                    <FaArrowRight className="charity-arrow-icon"/>
-                                </Link>
-                                {/*
-                                <Link className={`link-donation-button`} to={url}>
-                                    <p className="link-donation-text">
-                                        Donate On-Site
-                                    </p>
-                                </Link>
-                        */}
-                            </div>
-                        </div>
-    }
-                        <div className={`charity-categories-wrapper ${(selected&&expanded)?'selected-categories':(!selected && expanded)?'unselected-categories':''}`}>
-                            <div className={`charity-categories-container ${category.toLowerCase()}-container`}>
+                        <div className="charity-categories-wrapper">
+                            <div className={`charity-categories-container ${categoryKey}-container`}>
                                 <p className="charity-category-text">
                                     {`${category==='Human'?'Human Rights & Services':
                                     (category==='Research')?'Research & Public Policy':
                                     (category === "Community")?'Community Development':category}`}
                                 </p>
                             </div>
-                            <div className={`charity-categories-container size-wrapper ${size.toLowerCase()}-wrapper`}>
+                            {size &&
+                            <div className={`charity-categories-container size-wrapper ${sizeKey}-wrapper`}>
                                 <p className="charity-category-text">
                                     {`${size}-Sized`}
                                 </p>
                             </div>
+                            }
                             {(isInternational)&&
                                 <div className={`charity-categories-container international-wrapper`}>
                                     <p className="charity-category-text">
@@ -250,24 +142,102 @@ export default function CharityItem({
                                 </div>
                             }
                         </div>
+
+                        {selected &&
+                        <div className="charity-info-expanded-container">
+                            <div className="charity-info-expanded">
+                                <div className="expanded-info-content">
+                                    <p className="expanded-info-text">Organization Focus:</p>
+                                    <p className="expanded-info-data">{focus || 'n/a'}</p>
+                                </div>
+                            </div>
+                            <div className="charity-info-expanded lower-expanded">
+                                <div className="expanded-info-content">
+                                    <p className="expanded-info-text">Total Contributions:</p>
+                                    <p className="expanded-info-data">{formatMoney(total)}</p>
+                                </div>
+                                <div className="expanded-info-content">
+                                    <p className="expanded-info-text">Excess/Deficit:</p>
+                                    <p className={`${Number(excess) < 0 ? 'deficit' : 'excess'}-info`}>
+                                        {`${Number(excess) < 0 ? '-' : '+'}$${Math.abs(Number(excess || 0)).toLocaleString()}`}
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="charity-info-expanded">
+                                <div className="expanded-info-content">
+                                    <p className="expanded-info-text">Net Assets:</p>
+                                    <p className="expanded-info-data">{formatMoney(assets)}</p>
+                                </div>
+                                <div className="expanded-info-content">
+                                    <p className="expanded-info-text">Other Revenue:</p>
+                                    <p className="expanded-info-data">{formatMoney(revenue)}</p>
+                                </div>
+                            </div>
+                            <div className="charity-info-expanded">
+                                <div className="expanded-info-content">
+                                    <p className="expanded-info-text">Program Expenses:</p>
+                                    <p className="expanded-info-data">{formatMoney(progExpense)}</p>
+                                </div>
+                                <div className="expanded-info-content">
+                                    <p className="expanded-info-text">Administrative Expenses:</p>
+                                    <p className="expanded-info-data">{formatMoney(adminExpense)}</p>
+                                </div>
+                            </div>
+                            <div className="charity-info-expanded">
+                                <div className="expanded-info-content">
+                                    <p className="expanded-info-text">Fundraising Expenses:</p>
+                                    <p className="expanded-info-data">{formatMoney(fundExpense)}</p>
+                                </div>
+                                <div className="expanded-info-content">
+                                    <p className="expanded-info-text">Admin Expense Ratio:</p>
+                                    <p className="expanded-info-data">{parseFloat(adminRatio || 0).toFixed(2)}</p>
+                                </div>
+                            </div>
+                            <div className="donation-button-container">
+                                <div className="like-icon-wrapper" onClick={handleActionClick}>
+                                    <AiFillHeart className="charity-like-icon"/>
+                                </div>
+                                <div className="like-icon-wrapper" onClick={(e)=>{
+                                    handleActionClick(e)
+                                    if (onHandlePayment) onHandlePayment(charityid)
+                                }}>
+                                    <FaShoppingBasket className="charity-basket-icon"/>
+                                </div>
+                                <div className="like-icon-wrapper" onClick={handleActionClick}>
+                                    <AiOutlineLink className="charity-linkto-icon"/>
+                                </div>
+                                <span className="like-icon-wrapper charity-open-hint">
+                                    <FaArrowRight className="charity-arrow-icon"/>
+                                </span>
+                            </div>
+                        </div>
+                        }
+
+                        <button
+                            type="button"
+                            className="charity-details-toggle"
+                            onClick={handleToggleDetails}
+                        >
+                            {selected ? 'Hide details' : 'Quick details'}
+                        </button>
                     </div>
                 </div>
 
-                <div className={`charity-figure-container ${(selected&&expanded)?'selected-score':(!selected && expanded)?'unselected-score':''}`}>
-                    <div className={`charity-score-container ${category.toLowerCase()}-circle`}>
+                <div className="charity-figure-container">
+                    <div className={`charity-score-container ${categoryKey}-circle`}>
                         <Circle 
-                            score={parseFloat(score)}
+                            score={parseFloat(score || 0)}
                             color={ringColor(category)}
                         />   
-                            <div className="blur-wrapper">
-                                <div className={`circle-blur ${category.toLowerCase()}-blur`}/>                
-                            </div>
+                        <div className="blur-wrapper">
+                            <div className={`circle-blur ${categoryKey}-blur`}/>                
+                        </div>
                         <p className="overall-score">
-                            {`${parseFloat(score).toFixed(1)}`}
+                            {`${parseFloat(score || 0).toFixed(1)}`}
                         </p>    
                     </div>
                 </div>
             </div>
-        </span>
+        </Link>
     )
 }

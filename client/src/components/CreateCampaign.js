@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from "react"
-import './CreateCampaign.scss'
+import '../styles/CreateCampaign.scss'
 import Notification from "./Notification";
 import Popup from "./Popup";
 import SideNavigation from "./SideNavigation";

@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef} from "react"
-import './Landing.scss'
-import './Dashboard.scss'
-import './Friends.scss'
+import '../styles/Landing.scss'
+import '../styles/Dashboard.scss'
+import '../styles/Friends.scss'
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import SideBar from "./SideBar";

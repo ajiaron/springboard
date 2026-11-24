@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from "react"
-import './Profile.scss'
-import './Donations.scss'
+import '../styles/Profile.scss'
+import '../styles/Donations.scss'
 import DonationItem from "./DonationItem";
 import SideNavigation from "./SideNavigation";
 import Navbar from "./Navbar";
