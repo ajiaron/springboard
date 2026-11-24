@@ -23,6 +23,7 @@ I no longer pay for the original production infrastructure or third-party subscr
 - **Charity Navigator API key** — no longer subscribed; live pulls from [Charity Navigator’s developer API](https://developer.charitynavigator.org/) require your own key
 
 Locally, the app can still run in demo mode with a seeded MySQL dataset. Charity Navigator sync (`npm run sync:charities` in `server/`) is wired up if you supply your own `CHARITY_NAVIGATOR_API_KEY`.
+The frontend UI can be viewed by running `npm start` within the client directory.
 
 ## Stack
 
